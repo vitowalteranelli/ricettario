@@ -95,7 +95,10 @@
     <section id="reader-view" hidden>
       <div class="topbar">
         <div><h1>Contenuto</h1><span id="role-badge" class="badge"></span></div>
-        <button id="logout-button" class="secondary" type="button">Esci</button>
+        <div class="actions">
+          <button id="show-admin-button" class="secondary" type="button" hidden>Torna al pannello Admin</button>
+          <button id="logout-button" class="secondary" type="button">Esci</button>
+        </div>
       </div>
       <article class="card">
         <p id="content-status" class="status" role="status" aria-live="polite">Caricamento…</p>
@@ -118,7 +121,11 @@
     <section id="admin-view" class="card" hidden>
       <div class="topbar">
         <div><h2>Pannello amministratore</h2><p class="muted">Il PAT è mantenuto solo nella memoria di questa scheda.</p></div>
-        <span id="repository-badge" class="badge"></span>
+        <div class="actions">
+          <span id="repository-badge" class="badge"></span>
+          <button id="show-reader-button" class="secondary" type="button">Apri ricettario</button>
+          <button id="admin-logout-button" class="secondary" type="button">Esci</button>
+        </div>
       </div>
       <div class="admin-grid">
         <section class="recipe-admin-panel" aria-labelledby="recipe-admin-title">
@@ -690,15 +697,32 @@
     function unlock(role) {
       session.role = role;
       loginView.hidden = true;
-      readerView.hidden = false;
-      adminView.hidden = role !== 'admin';
+      const isAdmin = role === 'admin';
+      readerView.hidden = isAdmin;
+      adminView.hidden = !isAdmin;
       $('#role-badge').textContent = role === 'admin' ? 'Amministratore' : 'Sola lettura';
+      $('#show-admin-button').hidden = !isAdmin;
       if (role === 'admin') {
         const repository = detectRepository();
         $('#repository-badge').textContent = `${repository.owner}/${repository.repo}`;
         accessRows = (appConfig.readOnlyPasswords || []).map((entry) => ({ ...entry }));
         renderAccessRows();
       }
+    }
+
+    function showAdminView() {
+      if (session.role !== 'admin') return;
+      adminView.hidden = false;
+      readerView.hidden = true;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showReaderView() {
+      if (!session.role) return;
+      adminView.hidden = true;
+      readerView.hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      $('#search-input').focus();
     }
 
     function logout() {
@@ -774,6 +798,9 @@
     });
 
     $('#logout-button').addEventListener('click', logout);
+    $('#admin-logout-button').addEventListener('click', logout);
+    $('#show-reader-button').addEventListener('click', showReaderView);
+    $('#show-admin-button').addEventListener('click', showAdminView);
     $('#search-input').addEventListener('input', renderRecipes);
     $('#category-filter').addEventListener('change', renderRecipes);
 
