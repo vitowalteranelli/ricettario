@@ -430,12 +430,25 @@
     }
 
     function normalizeRecipeDraft(data) {
-      const source = data?.recipe && typeof data.recipe === 'object' ? { ...data.recipe, warnings: data.warnings, uncertainFields: data.uncertainFields } : data;
+      const source = data?.recipe && typeof data.recipe === 'object'
+        ? { ...data.recipe, warnings: data.warnings ?? data.recipe.warnings, uncertainFields: data.uncertainFields ?? data.recipe.uncertainFields }
+        : data;
       if (!source || typeof source !== 'object') throw new Error('La risposta AI non contiene un oggetto ricetta.');
       const title = String(source.title || '').trim();
       const category = String(source.category || '').trim();
-      if (!title || !category) throw new Error('La risposta AI non contiene titolo o categoria.');
-      if (!Array.isArray(source.sections) || !source.sections.length) throw new Error('La risposta AI non contiene sezioni valide.');
+      const warnings = stringArray(source.warnings);
+      const uncertainFields = stringArray(source.uncertainFields);
+      if (!title) warnings.push('Titolo non riconosciuto: completalo manualmente.');
+      if (!category) warnings.push('Categoria non riconosciuta: completala manualmente.');
+      const sections = [];
+      for (const [index, section] of (Array.isArray(source.sections) ? source.sections : []).entries()) {
+        try {
+          sections.push(normalizeRecipeSection(section, `sections.${index}`));
+        } catch (error) {
+          warnings.push(`Sezione ${index + 1} non importata: ${error.message}`);
+        }
+      }
+      if (!sections.length) warnings.push('Nessuna sezione completa: aggiungila manualmente.');
       return {
         recipe: {
           id: '',
@@ -444,10 +457,10 @@
           subcategory: String(source.subcategory || '').trim(),
           tags: stringArray(source.tags),
           notes: stringArray(source.notes),
-          sections: source.sections.map((section, index) => normalizeRecipeSection(section, `sections.${index}`))
+          sections
         },
-        warnings: stringArray(source.warnings),
-        uncertainFields: stringArray(source.uncertainFields)
+        warnings: [...new Set(warnings)],
+        uncertainFields: [...new Set(uncertainFields)]
       };
     }
 
