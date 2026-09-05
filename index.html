@@ -17,8 +17,8 @@
     h2 { font-size:1.25rem; }
     p { margin:.5rem 0 1rem; }
     label { display:grid; gap:.35rem; color:var(--muted); font-size:.9rem; font-weight:650; }
-    input, textarea, button { font:inherit; }
-    input, textarea { width:100%; border:1px solid var(--line); border-radius:8px; padding:.7rem .8rem; color:var(--ink); background:#fff; }
+    input, textarea, select, button { font:inherit; }
+    input, textarea, select { width:100%; border:1px solid var(--line); border-radius:8px; padding:.7rem .8rem; color:var(--ink); background:#fff; }
     textarea { min-height:300px; resize:vertical; font: .9rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace; }
     button { border:0; border-radius:8px; padding:.7rem 1rem; background:var(--accent); color:#fff; cursor:pointer; font-weight:700; }
     button.secondary { background:#e9eef2; color:var(--ink); }
@@ -46,6 +46,9 @@
     .recipe-section ul,.recipe-section ol { margin:.35rem 0; padding-left:1.5rem; }
     .recipe-section li { margin:.3rem 0; }
     .recipe-count { color:var(--muted); font-size:.9rem; }
+    .recipe-import-panel { display:grid; gap:.65rem; padding:1rem; border:1px dashed var(--line); border-radius:10px; background:#fbfcfd; }
+    .recipe-import-panel h4 { margin:0; }
+    .recipe-import-panel input[type="file"] { padding:.55rem; }
     .recipe-admin-panel { display:grid; gap:1rem; }
     .admin-recipe-toolbar { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1rem; }
     .admin-recipe-list { display:grid; gap:.55rem; max-height:55vh; overflow:auto; padding-right:.25rem; }
@@ -133,6 +136,20 @@
             <div><h3 id="recipe-admin-title">Gestione ricette</h3><p class="muted">Le modifiche restano locali finché non pubblichi il dataset.</p></div>
             <button id="add-recipe-button" type="button">Nuova ricetta</button>
           </div>
+          <section class="recipe-import-panel" aria-labelledby="recipe-import-title">
+            <div>
+              <h4 id="recipe-import-title">Importa da foto o PDF</h4>
+              <p class="hint">L’AI crea una bozza: controlla sempre il form prima di salvarlo.</p>
+            </div>
+            <label for="recipe-source-file">Immagine o documento
+              <input id="recipe-source-file" type="file" accept="image/*,application/pdf" capture="environment" disabled>
+            </label>
+            <div class="actions">
+              <button id="extract-recipe-button" class="secondary" type="button" disabled>Analizza e compila</button>
+              <span id="recipe-source-name" class="hint"></span>
+            </div>
+            <p id="ai-status" class="status" role="status" aria-live="polite"></p>
+          </section>
           <div class="admin-recipe-toolbar">
             <label for="admin-recipe-search">Cerca nell’archivio
               <input id="admin-recipe-search" type="search" placeholder="Titolo, ingrediente…" autocomplete="off">
@@ -202,8 +219,12 @@
   <script>
     'use strict';
 
-    // Il token non viene mai scritto in localStorage, cookie o DOM: vive solo in session.
+    // I segreti non vengono mai scritti in localStorage, cookie o DOM: vivono solo in session.
     const CONFIG_PATH = 'config.json';
+    const AI_PROMPT_PATH = 'prompts/recipe-extraction.md';
+    const AI_SCHEMA_PATH = 'prompts/recipe-schema.json';
+    const AI_DEFAULT_MODEL = 'gemini-flash-latest';
+    const AI_MAX_FILE_BYTES = 20 * 1024 * 1024;
     const READER_SESSION_KEY = 'ricettario-reader-session-v1';
     const KDF_ITERATIONS = 120000;
     const textEncoder = new TextEncoder();
@@ -216,7 +237,7 @@
     let recipeFilePath = 'recipes.json';
     let recipeFileSha = null;
     let editingRecipeId = null;
-    let session = { role: null, token: null };
+    let session = { role: null, token: null, llmKey: null };
 
     const $ = (selector) => document.querySelector(selector);
     const loginView = $('#login-view');
@@ -254,6 +275,14 @@
         binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
       }
       return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+    }
+
+    function bytesToBase64(bytes) {
+      let binary = '';
+      for (let index = 0; index < bytes.length; index += 0x8000) {
+        binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+      }
+      return btoa(binary);
     }
 
     function base64ToBytes(value) {
@@ -299,12 +328,14 @@
       return null;
     }
 
-    async function decryptPat(password, payload) {
+    async function decryptSecret(password, payload) {
       const bits = await deriveBits(password, base64ToBytes(payload.salt), payload.iterations || KDF_ITERATIONS);
       const key = await crypto.subtle.importKey('raw', bits, { name: 'AES-GCM' }, false, ['decrypt']);
       const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: base64ToBytes(payload.iv) }, key, base64ToBytes(payload.ciphertext));
       return textDecoder.decode(plain);
     }
+
+    const decryptPat = decryptSecret;
 
     function validateRepoPath(path) {
       const clean = String(path || '').trim();
@@ -370,6 +401,106 @@
       if (config.setupRequired || !config.crypto?.salt || !config.crypto?.iv || !config.crypto?.ciphertext) throw new Error('Configurazione non inizializzata.');
       if (!Array.isArray(config.readOnlyPasswords)) throw new Error('config.json non valido.');
       return config;
+    }
+
+    function updateAiImportControls() {
+      const fileInput = $('#recipe-source-file');
+      const extractButton = $('#extract-recipe-button');
+      const configured = session.role === 'admin' && Boolean(session.llmKey) && appConfig?.ai?.provider === 'gemini';
+      fileInput.disabled = !configured;
+      extractButton.disabled = !configured || !fileInput.files.length;
+      if (!configured) setStatus($('#ai-status'), 'Importazione AI non configurata. Rigenera config.json con una API key Gemini.');
+    }
+
+    function stringArray(value) {
+      return Array.isArray(value) ? value.map((item) => String(item || '').trim()).filter(Boolean) : [];
+    }
+
+    function normalizeRecipeSection(section, path = 'sections') {
+      if (!section || typeof section !== 'object') throw new Error(`${path}: sezione non valida.`);
+      const title = String(section.title || '').trim();
+      if (!title) throw new Error(`${path}: titolo sezione mancante.`);
+      const allowedTypes = new Set(['text', 'ordered', 'unordered', 'group']);
+      const type = String(section.type || 'text');
+      if (!allowedTypes.has(type)) throw new Error(`${path}: tipo sezione non valido.`);
+      const children = Array.isArray(section.sections)
+        ? section.sections.map((child, index) => normalizeRecipeSection(child, `${path}.${index}`))
+        : [];
+      return { title, type, items: stringArray(section.items), sections: children };
+    }
+
+    function normalizeRecipeDraft(data) {
+      const source = data?.recipe && typeof data.recipe === 'object' ? { ...data.recipe, warnings: data.warnings, uncertainFields: data.uncertainFields } : data;
+      if (!source || typeof source !== 'object') throw new Error('La risposta AI non contiene un oggetto ricetta.');
+      const title = String(source.title || '').trim();
+      const category = String(source.category || '').trim();
+      if (!title || !category) throw new Error('La risposta AI non contiene titolo o categoria.');
+      if (!Array.isArray(source.sections) || !source.sections.length) throw new Error('La risposta AI non contiene sezioni valide.');
+      return {
+        recipe: {
+          id: '',
+          title,
+          category,
+          subcategory: String(source.subcategory || '').trim(),
+          tags: stringArray(source.tags),
+          notes: stringArray(source.notes),
+          sections: source.sections.map((section, index) => normalizeRecipeSection(section, `sections.${index}`))
+        },
+        warnings: stringArray(source.warnings),
+        uncertainFields: stringArray(source.uncertainFields)
+      };
+    }
+
+    function parseModelJson(text) {
+      const clean = String(text || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+      const start = clean.indexOf('{');
+      const end = clean.lastIndexOf('}');
+      if (start < 0 || end <= start) throw new Error('La risposta AI non contiene JSON.');
+      return JSON.parse(clean.slice(start, end + 1));
+    }
+
+    async function loadAiExtractionAssets() {
+      const version = encodeURIComponent(String(appConfig.version || Date.now()));
+      const [promptResponse, schemaResponse] = await Promise.all([
+        fetch(`${AI_PROMPT_PATH}?v=${version}`, { cache: 'no-store' }),
+        fetch(`${AI_SCHEMA_PATH}?v=${version}`, { cache: 'no-store' })
+      ]);
+      if (!promptResponse.ok || !schemaResponse.ok) throw new Error('Prompt o schema AI non disponibili.');
+      return { prompt: await promptResponse.text(), schema: await schemaResponse.json() };
+    }
+
+    async function extractRecipeFromFile(file) {
+      if (!file) throw new Error('Seleziona una foto o un PDF.');
+      const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+      if (!isPdf && !file.type.startsWith('image/')) throw new Error('Sono accettati solo immagini e PDF.');
+      if (file.size > AI_MAX_FILE_BYTES) throw new Error('Il file supera il limite di 20 MB.');
+      if (!session.llmKey || appConfig?.ai?.provider !== 'gemini') throw new Error('Importazione AI non configurata.');
+
+      const { prompt, schema } = await loadAiExtractionAssets();
+      const mimeType = isPdf ? 'application/pdf' : file.type;
+      const data = bytesToBase64(new Uint8Array(await file.arrayBuffer()));
+      const model = AI_DEFAULT_MODEL;
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+      const request = {
+        contents: [{ parts: [
+          { text: `${prompt}\n\nSchema JSON obbligatorio:\n${JSON.stringify(schema, null, 2)}\n\nRestituisci esclusivamente un oggetto JSON valido.` },
+          { inlineData: { mimeType, data } }
+        ] }],
+        generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 8192 }
+      };
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': session.llmKey },
+        body: JSON.stringify(request)
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error?.message || `Gemini API: HTTP ${response.status}`);
+      const modelText = (result.candidates?.[0]?.content?.parts || []).map((part) => part.text || '').join('');
+      const draft = normalizeRecipeDraft(parseModelJson(modelText));
+      openRecipeEditor(draft.recipe, 'new');
+      const warnings = [...draft.warnings, ...draft.uncertainFields.map((field) => `Verifica: ${field}`)];
+      setStatus($('#recipe-editor-status'), warnings.length ? `Bozza importata. Controlla: ${warnings.join(' · ')}` : 'Bozza importata. Controlla il form prima di salvare.', warnings.length ? '' : 'ok');
+      setStatus($('#ai-status'), `Analisi completata: ${file.name}.`, 'ok');
     }
 
     function normalizeSearch(value) {
@@ -721,6 +852,7 @@
         accessRows = (appConfig.readOnlyPasswords || []).map((entry) => ({ ...entry }));
         renderAccessRows();
       }
+      updateAiImportControls();
     }
 
     function showAdminView() {
@@ -739,7 +871,7 @@
     }
 
     function logout() {
-      session = { role: null, token: null };
+      session = { role: null, token: null, llmKey: null };
       clearReaderSession();
       recipeDataset = [];
       recipeFileSha = null;
@@ -752,6 +884,9 @@
       $('#admin-recipe-category').replaceChildren(new Option('Tutte', ''));
       $('#admin-recipe-list').replaceChildren();
       $('#recipe-form').hidden = true;
+      $('#recipe-source-file').value = '';
+      $('#recipe-source-name').textContent = '';
+      setStatus($('#ai-status'), '');
       $('#reader-password-list').replaceChildren();
       adminView.hidden = true;
       readerView.hidden = true;
@@ -791,16 +926,28 @@
         appConfig = JSON.parse(latestConfig.text);
         configSha = latestConfig.sha;
 
+        if (appConfig.ai?.crypto) {
+          authStage = 'ai-decrypt';
+          try {
+            session.llmKey = (await decryptSecret(password, appConfig.ai.crypto)).trim();
+          } catch {
+            throw new Error('API key AI non decifrabile: rigenera config.json con la stessa password Admin.');
+          }
+          if (!session.llmKey) throw new Error('API key AI vuota.');
+        }
+
         unlock('admin');
         authStage = 'github-recipes';
         await loadAdminRecipeDataset();
       } catch (error) {
-        session = { role: null, token: null };
+        session = { role: null, token: null, llmKey: null };
         let message = error.message || 'Errore sconosciuto.';
         if (authStage === 'github-config') {
           message = `PAT, repository o branch non accessibili: ${message}`;
         } else if (authStage === 'github-recipes') {
           message = `Accesso a recipes.json non riuscito: ${message}`;
+        } else if (authStage === 'ai-decrypt') {
+          message = `Configurazione AI non accessibile: ${message}`;
         } else if (authStage === 'reader') {
           message = `Accesso non riuscito: ${message}`;
         }
@@ -823,6 +970,27 @@
     $('#admin-recipe-category').addEventListener('change', renderAdminRecipeList);
 
     $('#add-recipe-button').addEventListener('click', () => openRecipeEditor(null, 'new'));
+
+    $('#recipe-source-file').addEventListener('change', () => {
+      const file = $('#recipe-source-file').files[0];
+      $('#recipe-source-name').textContent = file ? `${file.name} (${Math.ceil(file.size / 1024)} KB)` : '';
+      $('#extract-recipe-button').disabled = !file || !session.llmKey;
+      if (file) setStatus($('#ai-status'), 'File pronto per l’analisi.');
+    });
+
+    $('#extract-recipe-button').addEventListener('click', async () => {
+      const file = $('#recipe-source-file').files[0];
+      const button = $('#extract-recipe-button');
+      button.disabled = true;
+      try {
+        setStatus($('#ai-status'), `Analisi di ${file?.name || 'file'} in corso…`);
+        await extractRecipeFromFile(file);
+      } catch (error) {
+        setStatus($('#ai-status'), error.message, 'error');
+      } finally {
+        updateAiImportControls();
+      }
+    });
 
     $('#admin-recipe-list').addEventListener('click', (event) => {
       const button = event.target.closest('button[data-action]');
@@ -957,7 +1125,7 @@
       }
     });
 
-    window.addEventListener('pagehide', () => { session.token = null; });
+    window.addEventListener('pagehide', () => { session.token = null; session.llmKey = null; });
 
     (async function init() {
       try {

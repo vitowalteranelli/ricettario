@@ -10,17 +10,28 @@
     "algorithm": "AES-256-GCM",
     "kdf": "PBKDF2-HMAC-SHA-256",
     "iterations": 120000,
-    "salt": "_0K4cY1vVelPYz8dVE2bqA",
-    "iv": "jGbNt-i5OTOUaoso",
-    "ciphertext": "rp5QuGkmGqHUTZ3YAtqVWlIhPPN09_xx_f-p1Ky9S51F9WDGvJUVFYKc2aJUO4DKl-VplM4UVVWL8C7FZjP7FyOcTZGN_curwEC0WflbaGm6RsRRhyYTRqztFdL_HmDV_OevQd0YtK0BiaeNKg"
+    "salt": "mCCIUbtVY2p_kNDopOCGDQ",
+    "iv": "ivBgxGchsmeN_NYB",
+    "ciphertext": "Ij29NqXhGHDOdcIrkt-5K1QMoril5HgUm9z4TYMdw5bnGtCuU6FNBIAizXQO5YpTVrCBiPqB2uuQk3RKZRxq2uo4qHEkA0KUXhpgpPb2ROCoPWy0N_avD1aPDYYL01PgQgpcWQ-pIpMbqFzsSA"
   },
   "readOnlyPasswords": [
     {
-      "id": "c0b5384a-bf57-47e9-a80d-d564fcb440c6",
+      "id": "75d91af7-87bd-4e6c-8fbd-07e021874080",
       "label": "generica",
-      "salt": "CLho9TnyAGU5JVmnHMFB3w",
-      "hash": "8tIgVKU3ehckS0lAH0fOQecxGTTGFu4CepP7QOyJjNw",
+      "salt": "7LI6LGpT2Qkt0GuNVcz3xA",
+      "hash": "-fk32bFK7cQgpUqg1C1C7X3fEJC-29ZGgXwFARccbuU",
       "iterations": 120000
     }
-  ]
+  ],
+  "ai": {
+    "provider": "gemini",
+    "crypto": {
+      "algorithm": "AES-256-GCM",
+      "kdf": "PBKDF2-HMAC-SHA-256",
+      "iterations": 120000,
+      "salt": "bcy8LSUP2yI1y3xAmb1sRw",
+      "iv": "qwUBQaJYuYM944Vk",
+      "ciphertext": "QQjtTgpyClIHRyR-ZUTa8_o1hSIxd_XbLJOaqFRV1Dr82pnegUU77PNQJL9jtOeco6UXyUW-RI_Dj7gOGt1TX15EVPCs"
+    }
+  }
 }

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Generatore config.json</title>
+  <style>
+    :root { --bg:#f4f6f8; --card:#fff; --ink:#17212b; --muted:#647383; --accent:#b7352c; --line:#d9e0e7; --danger:#a12222; }
+    * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { width:min(780px,calc(100% - 2rem)); margin:2rem auto 4rem; } .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:clamp(1rem,3vw,2rem); box-shadow:0 8px 28px #17212b0d; }
+    h1,h2 { line-height:1.2; } form { display:grid; gap:1rem; } .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    label { display:grid; gap:.35rem; color:var(--muted); font-size:.9rem; font-weight:650; } input,textarea,button { font:inherit; } input,textarea { width:100%; padding:.7rem .8rem; border:1px solid var(--line); border-radius:8px; } textarea { min-height:180px; font: .85rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace; }
+    button { border:0; border-radius:8px; padding:.7rem 1rem; background:var(--accent); color:#fff; cursor:pointer; font-weight:700; } button.secondary { background:#e9eef2; color:var(--ink); } button.danger { background:#fbe8e8; color:var(--danger); }
+    .actions { display:flex; flex-wrap:wrap; gap:.65rem; } .hint,.status { color:var(--muted); } .field-hint { color:var(--muted); font-size:.8rem; font-weight:400; } .status.error { color:var(--danger); } .reader-row { display:grid; grid-template-columns:1fr 1fr auto; gap:.65rem; margin:.6rem 0; align-items:end; } [hidden] { display:none !important; }
+    @media (max-width:650px) { .grid,.reader-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <h1>Generatore locale di config.json</h1>
+      <p class="hint">Apri questo file solo sul tuo computer. Il PAT e la API key AI vengono usati in memoria per cifrare i payload e non vengono salvati né inviati da questo helper.</p>
+      <p class="hint"><strong>Owner GitHub</strong> = username GitHub o organizzazione, ad esempio <code>walter</code>.<br><strong>Repository</strong> = solo il nome del repository, ad esempio <code>ricettario</code>. Non inserire password, URL o <code>.git</code>. Lascia i campi vuoti se vuoi usare il rilevamento automatico da GitHub Pages.</p>
+      <form id="setup-form">
+        <div class="grid">
+          <label>Owner GitHub <span class="field-hint">username o organizzazione</span><input id="owner" placeholder="es. walter" autocomplete="username"></label>
+          <label>Repository GitHub <span class="field-hint">nome soltanto, senza URL</span><input id="repo" placeholder="es. ricettario" autocomplete="off"></label>
+          <label>Branch <span class="field-hint">normalmente main</span><input id="branch" value="main" autocomplete="off"></label>
+          <label>Percorso dataset <span class="field-hint">normalmente recipes.json</span><input id="content-path" value="recipes.json" autocomplete="off"></label>
+        </div>
+        <label>GitHub PAT fine-grained <span class="field-hint">Contents: Read and write sulla repository</span><input id="pat" type="password" autocomplete="off" required></label>
+        <div>
+          <h2>Importazione ricette da foto/PDF (opzionale)</h2>
+          <p class="hint">La chiave viene cifrata con la password Admin. Il modello viene chiamato direttamente dal browser solo durante una sessione Admin.</p>
+          <div class="grid">
+            <label>Provider AI
+              <select id="llm-provider">
+                <option value="gemini">Google Gemini</option>
+              </select>
+            </label>
+            <p class="hint">Modello: <code>gemini-flash-latest</code>. L’app usa automaticamente l’ultima versione Flash disponibile.</p>
+          </div>
+          <label>API key Gemini <span class="field-hint">lascia vuoto per disattivare l’importazione AI</span><input id="llm-api-key" type="password" autocomplete="off"></label>
+        </div>
+        <label>Password Admin <span class="field-hint">password dell’app, non la password GitHub</span><input id="admin-password" type="password" autocomplete="new-password" required></label>
+        <label>Conferma Password Admin<input id="admin-password-confirm" type="password" autocomplete="new-password" required></label>
+        <div>
+          <h2>Password di sola lettura</h2>
+          <p class="hint">Le password non vengono inserite nel JSON: vengono salvati solo hash PBKDF2 con salt casuale.</p>
+          <div id="reader-list"></div>
+          <div class="actions"><button id="add-reader" class="secondary" type="button">Aggiungi password lettore</button></div>
+        </div>
+        <div class="actions"><button type="submit">Genera config.json</button><button id="download" class="secondary" type="button" hidden>Scarica config.json</button></div>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+        <textarea id="output" aria-label="JSON generato" readonly hidden></textarea>
+      </form>
+    </section>
+  </main>
+  <script>
+    'use strict';
+    const ITERATIONS = 120000;
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    const $ = (selector) => document.querySelector(selector);
+    let rowId = 0;
+
+    function bytesToBase64Url(bytes) {
+      let binary = '';
+      for (let index = 0; index < bytes.length; index += 0x8000) binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+    }
+    function base64ToBytes(value) {
+      const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
+      const binary = atob(normalized + '='.repeat((4 - normalized.length % 4) % 4));
+      return Uint8Array.from(binary, (character) => character.charCodeAt(0));
+    }
+    // Tutta la preparazione avviene localmente: PAT e API key vengono solo cifrati.
+    async function deriveBits(password, salt) {
+      const material = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']);
+      return new Uint8Array(await crypto.subtle.deriveBits({ name:'PBKDF2', salt, iterations:ITERATIONS, hash:'SHA-256' }, material, 256));
+    }
+    async function hashPassword(password) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      return { salt:bytesToBase64Url(salt), hash:bytesToBase64Url(await deriveBits(password, salt)), iterations:ITERATIONS };
+    }
+    // Il payload AES-GCM contiene solo salt, IV e ciphertext; mai i segreti in chiaro.
+    async function encryptSecret(secret, password) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const bits = await deriveBits(password, salt);
+      const key = await crypto.subtle.importKey('raw', bits, { name:'AES-GCM' }, false, ['encrypt']);
+      const ciphertext = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, encoder.encode(secret));
+      return { algorithm:'AES-256-GCM', kdf:'PBKDF2-HMAC-SHA-256', iterations:ITERATIONS, salt:bytesToBase64Url(salt), iv:bytesToBase64Url(iv), ciphertext:bytesToBase64Url(new Uint8Array(ciphertext)) };
+    }
+    function setStatus(message, error = false) { $('#status').textContent = message; $('#status').className = `status${error ? ' error' : ''}`; }
+    function repositoryIdentity(value, label) {
+      const clean = value.trim();
+      if (clean && (/^https?:\/\//i.test(clean) || clean.includes('/') || /\s/.test(clean) || /\.git$/i.test(clean))) throw new Error(`${label}: inserisci solo il nome, non un URL.`);
+      return clean;
+    }
+    function addReaderRow() {
+      const id = ++rowId;
+      const row = document.createElement('div'); row.className = 'reader-row'; row.dataset.id = id;
+      row.innerHTML = `<label>Etichetta<input data-field="label" placeholder="Lettore ${id}"></label><label>Password<input data-field="password" type="password" autocomplete="new-password" required></label><button class="danger remove" type="button">Rimuovi</button>`;
+      $('#reader-list').appendChild(row);
+    }
+    $('#add-reader').addEventListener('click', addReaderRow);
+    $('#reader-list').addEventListener('click', (event) => { if (event.target.closest('.remove')) event.target.closest('.reader-row').remove(); });
+    $('#setup-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      try {
+        const adminPassword = $('#admin-password').value;
+        if (adminPassword !== $('#admin-password-confirm').value) throw new Error('Le password Admin non coincidono.');
+        if (adminPassword.length < 8) throw new Error('Usa una password Admin di almeno 8 caratteri.');
+        const pat = $('#pat').value.trim();
+        if (!pat) throw new Error('Inserisci un PAT.');
+        const llmApiKey = $('#llm-api-key').value.trim();
+        const owner = repositoryIdentity($('#owner').value, 'Owner GitHub');
+        const repo = repositoryIdentity($('#repo').value, 'Repository GitHub');
+        setStatus('Cifratura e hashing in corso…');
+        const readers = [];
+        for (const [index, row] of [...$('#reader-list').querySelectorAll('.reader-row')].entries()) {
+          const password = row.querySelector('[data-field="password"]').value;
+          if (!password) throw new Error(`Password lettore ${index + 1} vuota.`);
+          readers.push({ id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${index}`, label: row.querySelector('[data-field="label"]').value.trim() || `Lettore ${index + 1}`, ...await hashPassword(password) });
+        }
+        const config = {
+          version: 1,
+          repository: { owner, repo, branch: $('#branch').value.trim() || 'main', contentPath: $('#content-path').value.trim() || 'recipes.json' },
+          crypto: await encryptSecret(pat, adminPassword),
+          readOnlyPasswords: readers
+        };
+        if (llmApiKey) {
+          config.ai = {
+            provider: $('#llm-provider').value,
+            crypto: await encryptSecret(llmApiKey, adminPassword)
+          };
+        }
+        $('#output').value = JSON.stringify(config, null, 2) + '\n';
+        $('#output').hidden = false;
+        $('#download').hidden = false;
+        $('#pat').value = ''; $('#llm-api-key').value = ''; $('#admin-password').value = ''; $('#admin-password-confirm').value = '';
+        for (const input of $('#reader-list').querySelectorAll('[data-field="password"]')) input.value = '';
+        setStatus('config.json generato. Scaricalo e copialo nella root del repository.');
+      } catch (error) { setStatus(error.message, true); }
+    });
+    $('#download').addEventListener('click', () => {
+      const blob = new Blob([$('#output').value], { type:'application/json' });
+      const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'config.json'; link.click(); URL.revokeObjectURL(link.href);
+    });
+    addReaderRow();
+  </script>
+</body>
+</html>
