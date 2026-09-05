@@ -81,7 +81,7 @@
   <main>
     <section id="login-view" class="card login-card" aria-labelledby="login-title">
       <h1 id="login-title">Area privata</h1>
-      <p class="muted">Inserisci la password per continuare.</p>
+      <p class="muted">Inserisci la password per continuare. L’accesso lettore resta attivo fino alla chiusura della scheda.</p>
       <form id="login-form">
         <label for="login-password">Password
           <input id="login-password" type="password" autocomplete="current-password" required autofocus>
@@ -204,6 +204,7 @@
 
     // Il token non viene mai scritto in localStorage, cookie o DOM: vive solo in session.
     const CONFIG_PATH = 'config.json';
+    const READER_SESSION_KEY = 'ricettario-reader-session-v1';
     const KDF_ITERATIONS = 120000;
     const textEncoder = new TextEncoder();
     const textDecoder = new TextDecoder();
@@ -228,6 +229,18 @@
     function setStatus(element, message, kind = '') {
       element.textContent = message;
       element.className = `status${kind ? ` ${kind}` : ''}`;
+    }
+
+    function readerSessionIsActive() {
+      try { return sessionStorage.getItem(READER_SESSION_KEY) === 'active'; } catch { return false; }
+    }
+
+    function rememberReaderSession() {
+      try { sessionStorage.setItem(READER_SESSION_KEY, 'active'); } catch { /* Storage non disponibile: si resta con login per refresh. */ }
+    }
+
+    function clearReaderSession() {
+      try { sessionStorage.removeItem(READER_SESSION_KEY); } catch { /* Storage non disponibile. */ }
     }
 
     function randomId() {
@@ -727,6 +740,7 @@
 
     function logout() {
       session = { role: null, token: null };
+      clearReaderSession();
       recipeDataset = [];
       recipeFileSha = null;
       editingRecipeId = null;
@@ -756,6 +770,7 @@
         const password = loginPassword.value;
         const reader = await verifyReaderPassword(password);
         if (reader) {
+          rememberReaderSession();
           unlock('reader');
           await loadReaderContent();
           return;
@@ -947,7 +962,18 @@
     (async function init() {
       try {
         appConfig = await loadPublicConfig();
-        setStatus($('#login-status'), 'Pronto.');
+        if (readerSessionIsActive()) {
+          unlock('reader');
+          try {
+            await loadReaderContent();
+          } catch (error) {
+            clearReaderSession();
+            logout();
+            setStatus($('#login-status'), error.message, 'error');
+          }
+        } else {
+          setStatus($('#login-status'), 'Pronto.');
+        }
       } catch (error) {
         loginButton.disabled = true;
         setStatus($('#login-status'), error.message, 'error');
