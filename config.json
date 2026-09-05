@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "repository": {
+    "owner": "vitowalteranelli",
+    "repo": "ricettario",
+    "branch": "main",
+    "contentPath": "recipes.json"
+  },
+  "crypto": {
+    "algorithm": "AES-256-GCM",
+    "kdf": "PBKDF2-HMAC-SHA-256",
+    "iterations": 120000,
+    "salt": "_0K4cY1vVelPYz8dVE2bqA",
+    "iv": "jGbNt-i5OTOUaoso",
+    "ciphertext": "rp5QuGkmGqHUTZ3YAtqVWlIhPPN09_xx_f-p1Ky9S51F9WDGvJUVFYKc2aJUO4DKl-VplM4UVVWL8C7FZjP7FyOcTZGN_curwEC0WflbaGm6RsRRhyYTRqztFdL_HmDV_OevQd0YtK0BiaeNKg"
+  },
+  "readOnlyPasswords": [
+    {
+      "id": "c0b5384a-bf57-47e9-a80d-d564fcb440c6",
+      "label": "generica",
+      "salt": "CLho9TnyAGU5JVmnHMFB3w",
+      "hash": "8tIgVKU3ehckS0lAH0fOQecxGTTGFu4CepP7QOyJjNw",
+      "iterations": 120000
+    }
+  ]
+}

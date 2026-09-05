@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Area privata</title>
+  <style>
+    :root { color-scheme: light; --bg:#f4f6f8; --card:#fff; --ink:#17212b; --muted:#647383; --accent:#b7352c; --line:#d9e0e7; --ok:#176b43; --danger:#a12222; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { width:min(1120px,calc(100% - 2rem)); margin:2rem auto 4rem; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:clamp(1rem,3vw,2rem); box-shadow:0 8px 28px #17212b0d; }
+    .login-card { max-width:450px; margin:12vh auto 0; }
+    h1,h2,h3 { line-height:1.2; margin:0 0 .75rem; }
+    h1 { font-size:clamp(1.5rem,4vw,2.1rem); }
+    h2 { font-size:1.25rem; }
+    p { margin:.5rem 0 1rem; }
+    label { display:grid; gap:.35rem; color:var(--muted); font-size:.9rem; font-weight:650; }
+    input, textarea, button { font:inherit; }
+    input, textarea { width:100%; border:1px solid var(--line); border-radius:8px; padding:.7rem .8rem; color:var(--ink); background:#fff; }
+    textarea { min-height:300px; resize:vertical; font: .9rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace; }
+    button { border:0; border-radius:8px; padding:.7rem 1rem; background:var(--accent); color:#fff; cursor:pointer; font-weight:700; }
+    button.secondary { background:#e9eef2; color:var(--ink); }
+    button.danger { background:#fbe8e8; color:var(--danger); }
+    button:disabled { cursor:not-allowed; opacity:.55; }
+    form { display:grid; gap:1rem; }
+    .actions { display:flex; flex-wrap:wrap; gap:.65rem; align-items:center; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem; }
+    .muted { color:var(--muted); }
+    .status { min-height:1.5em; color:var(--muted); }
+    .status.error { color:var(--danger); }
+    .status.ok { color:var(--ok); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .admin-grid { display:grid; gap:1rem; grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr); align-items:start; }
+    .reader-toolbar { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1rem; margin:1rem 0; }
+    .recipe-list { display:grid; gap:1rem; }
+    .recipe-card { border:1px solid var(--line); border-radius:12px; padding:1.25rem; background:#fff; }
+    .recipe-card h3 { color:var(--accent); margin:.2rem 0 .25rem; }
+    .recipe-category { color:var(--muted); font-size:.78rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .recipe-subcategory { color:var(--muted); font-size:.9rem; margin:0 0 1rem; }
+    .recipe-note { padding:.75rem 1rem; border-left:3px solid var(--accent); background:#fff7f5; white-space:pre-wrap; }
+    .recipe-section { margin-top:1rem; }
+    .recipe-section h4 { margin:0 0 .45rem; font-size:1rem; }
+    .recipe-section p { margin:.35rem 0; white-space:pre-wrap; }
+    .recipe-section ul,.recipe-section ol { margin:.35rem 0; padding-left:1.5rem; }
+    .recipe-section li { margin:.3rem 0; }
+    .recipe-count { color:var(--muted); font-size:.9rem; }
+    .recipe-admin-panel { display:grid; gap:1rem; }
+    .admin-recipe-toolbar { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1rem; }
+    .admin-recipe-list { display:grid; gap:.55rem; max-height:55vh; overflow:auto; padding-right:.25rem; }
+    .admin-recipe-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:center; padding:.75rem; border:1px solid var(--line); border-radius:9px; }
+    .admin-recipe-row h4 { margin:0; font-size:1rem; }
+    .admin-recipe-meta { color:var(--muted); font-size:.85rem; }
+    .admin-recipe-actions { display:flex; flex-wrap:wrap; gap:.4rem; }
+    .admin-recipe-actions button { padding:.45rem .65rem; font-size:.85rem; }
+    .recipe-editor { border-top:1px solid var(--line); padding-top:1rem; }
+    .section-editor { min-width:0; margin:0; padding:.8rem; border:1px solid var(--line); border-radius:9px; }
+    .section-editor legend { padding:0 .35rem; font-weight:750; }
+    .section-editor-grid { display:grid; grid-template-columns:minmax(0,1fr) 170px; gap:.75rem; align-items:end; }
+    .section-children { display:grid; gap:.65rem; margin-top:.75rem; padding-left:1rem; border-left:2px solid var(--line); }
+    .section-editor textarea { min-height:100px; font: .9rem/1.45 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    .recipe-editor > label textarea { min-height:100px; font: .9rem/1.45 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    .section-actions { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.65rem; }
+    .section-actions button { padding:.45rem .65rem; font-size:.85rem; }
+    .reader-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; gap:.65rem; padding:.75rem 0; border-bottom:1px solid var(--line); align-items:end; }
+    .reader-row:last-child { border-bottom:0; }
+    .badge { display:inline-block; border-radius:999px; padding:.2rem .55rem; background:#e9eef2; color:var(--muted); font-size:.8rem; font-weight:700; }
+    .hint { font-size:.9rem; color:var(--muted); }
+    code { background:#eef2f5; border-radius:4px; padding:.1rem .3rem; }
+    [hidden] { display:none !important; }
+    @media (max-width:760px) {
+      main { width:min(100% - 1rem,1120px); margin-top:1rem; }
+      .grid,.admin-grid,.reader-toolbar,.admin-recipe-toolbar,.section-editor-grid { grid-template-columns:1fr; }
+      .reader-row { grid-template-columns:1fr; align-items:stretch; }
+      .topbar { align-items:flex-start; flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section id="login-view" class="card login-card" aria-labelledby="login-title">
+      <h1 id="login-title">Area privata</h1>
+      <p class="muted">Inserisci la password per continuare.</p>
+      <form id="login-form">
+        <label for="login-password">Password
+          <input id="login-password" type="password" autocomplete="current-password" required autofocus>
+        </label>
+        <button id="login-button" type="submit">Accedi</button>
+        <p id="login-status" class="status" role="status" aria-live="polite"></p>
+        <p id="setup-hint" class="hint" hidden>Configurazione non inizializzata. Usa <a href="setup.html">setup.html</a> localmente e pubblica il nuovo <code>config.json</code>.</p>
+      </form>
+    </section>
+
+    <section id="reader-view" hidden>
+      <div class="topbar">
+        <div><h1>Contenuto</h1><span id="role-badge" class="badge"></span></div>
+        <button id="logout-button" class="secondary" type="button">Esci</button>
+      </div>
+      <article class="card">
+        <p id="content-status" class="status" role="status" aria-live="polite">Caricamento…</p>
+        <div class="reader-toolbar">
+          <label for="search-input">Cerca ricetta
+            <input id="search-input" type="search" placeholder="Titolo, ingrediente o procedimento…" autocomplete="off">
+          </label>
+          <label for="category-filter">Categoria
+            <select id="category-filter">
+              <option value="">Tutte</option>
+            </select>
+          </label>
+        </div>
+        <p id="recipe-count" class="recipe-count"></p>
+        <div id="recipe-list" class="recipe-list"></div>
+        <p id="no-results" class="status" hidden>Nessuna ricetta trovata.</p>
+      </article>
+    </section>
+
+    <section id="admin-view" class="card" hidden>
+      <div class="topbar">
+        <div><h2>Pannello amministratore</h2><p class="muted">Il PAT è mantenuto solo nella memoria di questa scheda.</p></div>
+        <span id="repository-badge" class="badge"></span>
+      </div>
+      <div class="admin-grid">
+        <section class="recipe-admin-panel" aria-labelledby="recipe-admin-title">
+          <div class="topbar">
+            <div><h3 id="recipe-admin-title">Gestione ricette</h3><p class="muted">Le modifiche restano locali finché non pubblichi il dataset.</p></div>
+            <button id="add-recipe-button" type="button">Nuova ricetta</button>
+          </div>
+          <div class="admin-recipe-toolbar">
+            <label for="admin-recipe-search">Cerca nell’archivio
+              <input id="admin-recipe-search" type="search" placeholder="Titolo, ingrediente…" autocomplete="off">
+            </label>
+            <label for="admin-recipe-category">Categoria
+              <select id="admin-recipe-category"><option value="">Tutte</option></select>
+            </label>
+          </div>
+          <p id="admin-recipe-count" class="recipe-count"></p>
+          <div id="admin-recipe-list" class="admin-recipe-list"></div>
+
+          <form id="recipe-form" class="recipe-editor" hidden>
+            <h3 id="recipe-form-title">Nuova ricetta</h3>
+            <div class="grid">
+              <label for="recipe-title">Titolo
+                <input id="recipe-title" required>
+              </label>
+              <label for="recipe-category">Categoria
+                <input id="recipe-category" required>
+              </label>
+              <label for="recipe-subcategory">Sottocategoria
+                <input id="recipe-subcategory">
+              </label>
+              <label for="recipe-tags">Tag separati da virgole
+                <input id="recipe-tags" placeholder="es. manzo, sous-vide">
+              </label>
+            </div>
+            <label for="recipe-notes">Note (una per riga)
+              <textarea id="recipe-notes" rows="3" placeholder="Note introduttive o avvertenze…"></textarea>
+            </label>
+            <div>
+              <h4>Sezioni</h4>
+              <div id="section-editor-list"></div>
+              <div class="section-actions"><button id="add-section-button" class="secondary" type="button">Aggiungi sezione</button></div>
+            </div>
+            <div class="actions">
+              <button type="submit">Salva ricetta</button>
+              <button id="cancel-recipe-button" class="secondary" type="button">Annulla</button>
+            </div>
+            <p id="recipe-editor-status" class="status" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="actions">
+            <button id="reload-recipes-button" class="secondary" type="button">Ricarica da GitHub</button>
+            <button id="publish-recipes-button" type="button">Salva e pusha recipes.json</button>
+          </div>
+          <label for="recipe-commit-message">Messaggio commit dataset
+            <input id="recipe-commit-message" value="Aggiorna ricette" required>
+          </label>
+          <p id="recipe-admin-status" class="status" role="status" aria-live="polite"></p>
+        </section>
+
+        <form id="access-form">
+          <h3>Gestione Password Lettori</h3>
+          <p class="hint">Lascia vuoto il campo password per conservare l’hash esistente.</p>
+          <div id="reader-password-list"></div>
+          <div class="actions">
+            <button id="add-reader-button" class="secondary" type="button">Aggiungi lettore</button>
+            <button type="submit">Aggiorna password lettori</button>
+          </div>
+          <p id="access-status" class="status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    'use strict';
+
+    // Il token non viene mai scritto in localStorage, cookie o DOM: vive solo in session.
+    const CONFIG_PATH = 'config.json';
+    const KDF_ITERATIONS = 120000;
+    const textEncoder = new TextEncoder();
+    const textDecoder = new TextDecoder();
+    let appConfig = null;
+    let configSha = null;
+    let accessRows = [];
+    let recipeDataset = [];
+    let recipeDatasetSource = 'Ricettario_CBT.html';
+    let recipeFilePath = 'recipes.json';
+    let recipeFileSha = null;
+    let editingRecipeId = null;
+    let session = { role: null, token: null };
+
+    const $ = (selector) => document.querySelector(selector);
+    const loginView = $('#login-view');
+    const readerView = $('#reader-view');
+    const adminView = $('#admin-view');
+    const loginForm = $('#login-form');
+    const loginButton = $('#login-button');
+    const loginPassword = $('#login-password');
+
+    function setStatus(element, message, kind = '') {
+      element.textContent = message;
+      element.className = `status${kind ? ` ${kind}` : ''}`;
+    }
+
+    function randomId() {
+      if (crypto.randomUUID) return crypto.randomUUID();
+      return bytesToBase64Url(crypto.getRandomValues(new Uint8Array(12)));
+    }
+
+    function bytesToBase64Url(bytes) {
+      let binary = '';
+      for (let index = 0; index < bytes.length; index += 0x8000) {
+        binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+      }
+      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+    }
+
+    function base64ToBytes(value) {
+      const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = normalized + '='.repeat((4 - normalized.length % 4) % 4);
+      const binary = atob(padded);
+      return Uint8Array.from(binary, (character) => character.charCodeAt(0));
+    }
+
+    function utf8ToBase64(value) {
+      const base64Url = bytesToBase64Url(textEncoder.encode(value));
+      return base64Url.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - base64Url.length % 4) % 4);
+    }
+
+    function base64ToUtf8(value) {
+      return textDecoder.decode(base64ToBytes(value.replace(/\s/g, '')));
+    }
+
+    function constantTimeEqual(left, right) {
+      if (left.length !== right.length) return false;
+      let difference = 0;
+      for (let index = 0; index < left.length; index += 1) difference |= left[index] ^ right[index];
+      return difference === 0;
+    }
+
+    // PBKDF2 con salt per-password; il confronto finale è constant-time.
+    async function deriveBits(password, salt, iterations = KDF_ITERATIONS) {
+      const material = await crypto.subtle.importKey('raw', textEncoder.encode(password), 'PBKDF2', false, ['deriveBits']);
+      return new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt, iterations, hash: 'SHA-256' }, material, 256));
+    }
+
+    async function hashPassword(password, salt = crypto.getRandomValues(new Uint8Array(16)), iterations = KDF_ITERATIONS) {
+      const hash = await deriveBits(password, salt, iterations);
+      return { salt: bytesToBase64Url(salt), hash: bytesToBase64Url(hash), iterations };
+    }
+
+    async function verifyReaderPassword(password) {
+      for (const entry of appConfig.readOnlyPasswords || []) {
+        if (!entry.salt || !entry.hash) continue;
+        const candidate = await deriveBits(password, base64ToBytes(entry.salt), entry.iterations || KDF_ITERATIONS);
+        if (constantTimeEqual(candidate, base64ToBytes(entry.hash))) return entry;
+      }
+      return null;
+    }
+
+    async function decryptPat(password, payload) {
+      const bits = await deriveBits(password, base64ToBytes(payload.salt), payload.iterations || KDF_ITERATIONS);
+      const key = await crypto.subtle.importKey('raw', bits, { name: 'AES-GCM' }, false, ['decrypt']);
+      const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: base64ToBytes(payload.iv) }, key, base64ToBytes(payload.ciphertext));
+      return textDecoder.decode(plain);
+    }
+
+    function validateRepoPath(path) {
+      const clean = String(path || '').trim();
+      if (!clean || clean.startsWith('/') || clean.split('/').some((part) => part === '..')) throw new Error('Percorso file non valido.');
+      return clean;
+    }
+
+    function detectRepository() {
+      const configured = appConfig?.repository || {};
+      const url = new URL(window.location.href);
+      const hostMatch = url.hostname.match(/^([^.]+)\.github\.io$/i);
+      const pathParts = url.pathname.split('/').filter(Boolean);
+      const likelyFile = pathParts[0] && pathParts[0].includes('.');
+      const owner = configured.owner || url.searchParams.get('owner') || (hostMatch && hostMatch[1]);
+      const repo = configured.repo || url.searchParams.get('repo') || (hostMatch && (likelyFile || !pathParts[0] ? `${owner}.github.io` : pathParts[0]));
+      if (!owner || !repo) throw new Error('Owner/repository non rilevabili. Compilali in config.json.');
+      return { owner, repo, branch: configured.branch || 'main' };
+    }
+
+    function apiPath(path) {
+      return path.split('/').map(encodeURIComponent).join('/');
+    }
+
+    // L’API Contents richiede il token solo per la modalità Admin.
+    async function githubRequest(method, path, options = {}) {
+      const repository = detectRepository();
+      const query = options.ref ? `?ref=${encodeURIComponent(options.ref)}` : '';
+      const endpoint = `https://api.github.com/repos/${encodeURIComponent(repository.owner)}/${encodeURIComponent(repository.repo)}/contents/${apiPath(path)}${query}`;
+      const headers = {
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        Authorization: `Bearer ${session.token}`
+      };
+      if (options.body) headers['Content-Type'] = 'application/json';
+      const response = await fetch(endpoint, { method, headers, body: options.body ? JSON.stringify(options.body) : undefined });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || `GitHub API: HTTP ${response.status}`);
+      return data;
+    }
+
+    async function githubGetFile(path) {
+      const repository = detectRepository();
+      const data = await githubRequest('GET', validateRepoPath(path), { ref: repository.branch });
+      if (data.type !== 'file' || !data.content) throw new Error('La risposta GitHub non contiene un file leggibile.');
+      return { sha: data.sha, text: base64ToUtf8(data.content) };
+    }
+
+    async function githubPutFile(path, text, sha, message) {
+      const repository = detectRepository();
+      return githubRequest('PUT', validateRepoPath(path), {
+        body: { message, content: utf8ToBase64(text), sha, branch: repository.branch }
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (character) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[character]));
+    }
+
+    async function loadPublicConfig() {
+      const response = await fetch(`${CONFIG_PATH}?v=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) throw new Error('config.json non disponibile.');
+      const config = await response.json();
+      if (config.setupRequired || !config.crypto?.salt || !config.crypto?.iv || !config.crypto?.ciphertext) throw new Error('Configurazione non inizializzata.');
+      if (!Array.isArray(config.readOnlyPasswords)) throw new Error('config.json non valido.');
+      return config;
+    }
+
+    function normalizeSearch(value) {
+      return String(value || '')
+        .toLocaleLowerCase('it-IT')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function sectionSearchText(section) {
+      return [section.title, ...(section.items || []), ...(section.sections || []).map(sectionSearchText)].join(' ');
+    }
+
+    function recipeSearchText(recipe) {
+      return normalizeSearch([
+        recipe.title,
+        recipe.category,
+        recipe.subcategory,
+        ...(recipe.tags || []),
+        ...(recipe.sections || []).map(sectionSearchText)
+      ].join(' '));
+    }
+
+    function renderRecipeSection(section, parent) {
+      const wrapper = document.createElement('section');
+      wrapper.className = `recipe-section recipe-section-${section.type || 'text'}`;
+      const heading = document.createElement('h4');
+      heading.textContent = section.title;
+      wrapper.appendChild(heading);
+
+      if (section.type === 'ordered' || section.type === 'unordered') {
+        const list = document.createElement(section.type === 'ordered' ? 'ol' : 'ul');
+        (section.items || []).forEach((item) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = item;
+          list.appendChild(listItem);
+        });
+        wrapper.appendChild(list);
+      } else {
+        (section.items || []).forEach((item) => {
+          const paragraph = document.createElement('p');
+          paragraph.textContent = item;
+          wrapper.appendChild(paragraph);
+        });
+      }
+
+      (section.sections || []).forEach((child) => renderRecipeSection(child, wrapper));
+      parent.appendChild(wrapper);
+    }
+
+    function renderRecipeCard(recipe, parent) {
+      const card = document.createElement('article');
+      card.className = 'recipe-card';
+
+      const category = document.createElement('div');
+      category.className = 'recipe-category';
+      category.textContent = recipe.category || 'Senza categoria';
+      card.appendChild(category);
+
+      const title = document.createElement('h3');
+      title.textContent = recipe.title;
+      card.appendChild(title);
+
+      if (recipe.subcategory) {
+        const subcategory = document.createElement('p');
+        subcategory.className = 'recipe-subcategory';
+        subcategory.textContent = recipe.subcategory;
+        card.appendChild(subcategory);
+      }
+
+      (recipe.notes || []).forEach((note) => {
+        const paragraph = document.createElement('p');
+        paragraph.className = 'recipe-note';
+        paragraph.textContent = note;
+        card.appendChild(paragraph);
+      });
+
+      (recipe.sections || []).forEach((section) => renderRecipeSection(section, card));
+      parent.appendChild(card);
+    }
+
+    function populateCategoryFilter() {
+      const filter = $('#category-filter');
+      const categories = [...new Set(recipeDataset.map((recipe) => recipe.category).filter(Boolean))]
+        .sort((left, right) => left.localeCompare(right, 'it'));
+      filter.replaceChildren(new Option('Tutte', ''));
+      categories.forEach((category) => filter.add(new Option(category, category)));
+    }
+
+    function renderRecipes() {
+      const term = normalizeSearch($('#search-input').value);
+      const category = $('#category-filter').value;
+      const matches = recipeDataset.filter((recipe) => {
+        const categoryMatches = !category || recipe.category === category;
+        return categoryMatches && (!term || recipeSearchText(recipe).includes(term));
+      });
+      const list = $('#recipe-list');
+      list.replaceChildren();
+      matches.forEach((recipe) => renderRecipeCard(recipe, list));
+      $('#recipe-count').textContent = `${matches.length} di ${recipeDataset.length} ricette`;
+      $('#no-results').hidden = matches.length > 0;
+    }
+
+    function slugify(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase('en-US')
+        .replace(/[\u2019']/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+
+    function defaultRecipe() {
+      return {
+        id: '', title: '', category: '', subcategory: '', tags: [], notes: [],
+        sections: [
+          { title: 'Ingredienti', type: 'text', items: [], sections: [] },
+          { title: 'Procedimento', type: 'ordered', items: [], sections: [] }
+        ]
+      };
+    }
+
+    function uniqueRecipeId(recipe, excludedId = '') {
+      const base = slugify([recipe.category, recipe.subcategory, recipe.title].filter(Boolean).join('-')) || `ricetta-${Date.now()}`;
+      const used = new Set(recipeDataset.map((item) => item.id).filter((id) => id !== excludedId));
+      let candidate = base;
+      let suffix = 2;
+      while (used.has(candidate)) candidate = `${base}-${suffix++}`;
+      return candidate;
+    }
+
+    function populateAdminCategoryFilter() {
+      const filter = $('#admin-recipe-category');
+      if (!filter) return;
+      const selected = filter.value;
+      const categories = [...new Set(recipeDataset.map((recipe) => recipe.category).filter(Boolean))]
+        .sort((left, right) => left.localeCompare(right, 'it'));
+      filter.replaceChildren(new Option('Tutte', ''));
+      categories.forEach((category) => filter.add(new Option(category, category)));
+      filter.value = categories.includes(selected) ? selected : '';
+    }
+
+    function renderAdminRecipeList() {
+      const container = $('#admin-recipe-list');
+      if (!container) return;
+      const term = normalizeSearch($('#admin-recipe-search').value);
+      const category = $('#admin-recipe-category').value;
+      const matches = recipeDataset.filter((recipe) => {
+        const categoryMatches = !category || recipe.category === category;
+        return categoryMatches && (!term || recipeSearchText(recipe).includes(term));
+      });
+      container.replaceChildren();
+      matches.forEach((recipe) => {
+        const row = document.createElement('div');
+        row.className = 'admin-recipe-row';
+        row.dataset.id = recipe.id;
+
+        const info = document.createElement('div');
+        const title = document.createElement('h4');
+        title.textContent = recipe.title;
+        info.appendChild(title);
+        const meta = document.createElement('div');
+        meta.className = 'admin-recipe-meta';
+        meta.textContent = [recipe.category, recipe.subcategory].filter(Boolean).join(' · ');
+        info.appendChild(meta);
+        row.appendChild(info);
+
+        const actions = document.createElement('div');
+        actions.className = 'admin-recipe-actions';
+        [['edit', 'Modifica', 'secondary'], ['duplicate', 'Duplica', 'secondary'], ['delete', 'Elimina', 'danger']].forEach(([action, label, style]) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.dataset.action = action;
+          button.className = style;
+          button.textContent = label;
+          actions.appendChild(button);
+        });
+        row.appendChild(actions);
+        container.appendChild(row);
+      });
+      $('#admin-recipe-count').textContent = `${matches.length} di ${recipeDataset.length} ricette`;
+    }
+
+    function createSectionEditor(section = { title: 'Nuova sezione', type: 'text', items: [], sections: [] }) {
+      const fieldset = document.createElement('fieldset');
+      fieldset.className = 'section-editor';
+
+      const legend = document.createElement('legend');
+      legend.textContent = section.title || 'Sezione';
+      fieldset.appendChild(legend);
+
+      const grid = document.createElement('div');
+      grid.className = 'section-editor-grid';
+
+      const titleLabel = document.createElement('label');
+      titleLabel.textContent = 'Titolo sezione';
+      const titleInput = document.createElement('input');
+      titleInput.className = 'section-title';
+      titleInput.value = section.title || '';
+      titleInput.addEventListener('input', () => { legend.textContent = titleInput.value || 'Sezione'; });
+      titleLabel.appendChild(titleInput);
+      grid.appendChild(titleLabel);
+
+      const typeLabel = document.createElement('label');
+      typeLabel.textContent = 'Tipo contenuto';
+      const typeSelect = document.createElement('select');
+      typeSelect.className = 'section-type';
+      [['text', 'Testo'], ['ordered', 'Lista numerata'], ['unordered', 'Lista puntata'], ['group', 'Gruppo']].forEach(([value, label]) => typeSelect.add(new Option(label, value)));
+      typeSelect.value = section.type || 'text';
+      typeLabel.appendChild(typeSelect);
+      grid.appendChild(typeLabel);
+      fieldset.appendChild(grid);
+
+      const itemsLabel = document.createElement('label');
+      itemsLabel.textContent = 'Contenuto (una voce per riga)';
+      const itemsInput = document.createElement('textarea');
+      itemsInput.className = 'section-items';
+      itemsInput.value = (section.items || []).join('\n');
+      itemsInput.rows = 4;
+      itemsLabel.appendChild(itemsInput);
+      fieldset.appendChild(itemsLabel);
+
+      const children = document.createElement('div');
+      children.className = 'section-children';
+      (section.sections || []).forEach((child) => children.appendChild(createSectionEditor(child)));
+      fieldset.appendChild(children);
+
+      const actions = document.createElement('div');
+      actions.className = 'section-actions';
+      const addChild = document.createElement('button');
+      addChild.type = 'button';
+      addChild.className = 'secondary';
+      addChild.textContent = 'Aggiungi sottosezione';
+      addChild.addEventListener('click', () => children.appendChild(createSectionEditor()));
+      actions.appendChild(addChild);
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'danger';
+      remove.textContent = 'Rimuovi sezione';
+      remove.addEventListener('click', () => fieldset.remove());
+      actions.appendChild(remove);
+      fieldset.appendChild(actions);
+      return fieldset;
+    }
+
+    function readSectionEditor(fieldset) {
+      const title = fieldset.querySelector('.section-title').value.trim();
+      if (!title) throw new Error('Ogni sezione deve avere un titolo.');
+      const items = fieldset.querySelector('.section-items').value
+        .split(/\r?\n/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+      const children = [...fieldset.querySelector('.section-children').children].map(readSectionEditor);
+      return { title, type: fieldset.querySelector('.section-type').value, items, sections: children };
+    }
+
+    function openRecipeEditor(recipe, mode = 'edit') {
+      const draft = recipe ? JSON.parse(JSON.stringify(recipe)) : defaultRecipe();
+      if (mode === 'duplicate') {
+        draft.id = '';
+        draft.title = `${draft.title} (copia)`;
+      }
+      editingRecipeId = mode === 'edit' ? draft.id : null;
+      $('#recipe-form-title').textContent = mode === 'edit' ? 'Modifica ricetta' : 'Nuova ricetta';
+      $('#recipe-title').value = draft.title || '';
+      $('#recipe-category').value = draft.category || '';
+      $('#recipe-subcategory').value = draft.subcategory || '';
+      $('#recipe-tags').value = (draft.tags || []).join(', ');
+      $('#recipe-notes').value = (draft.notes || []).join('\n');
+      const sections = $('#section-editor-list');
+      sections.replaceChildren();
+      (draft.sections || []).forEach((section) => sections.appendChild(createSectionEditor(section)));
+      $('#recipe-form').hidden = false;
+      setStatus($('#recipe-editor-status'), '');
+      $('#recipe-title').focus();
+    }
+
+    function applyRecipeDataset(dataset, path) {
+      if (!Array.isArray(dataset.recipes)) throw new Error('Il dataset non contiene un array recipes valido.');
+      recipeDataset = dataset.recipes;
+      recipeDatasetSource = dataset.source || 'Ricettario_CBT.html';
+      recipeFilePath = path;
+      populateCategoryFilter();
+      populateAdminCategoryFilter();
+      renderRecipes();
+      renderAdminRecipeList();
+    }
+
+    async function loadAdminRecipeDataset() {
+      const path = validateRepoPath(appConfig.repository?.contentPath || 'recipes.json');
+      setStatus($('#recipe-admin-status'), `Caricamento di ${path} da GitHub…`);
+      const file = await githubGetFile(path);
+      recipeFileSha = file.sha;
+      applyRecipeDataset(JSON.parse(file.text), path);
+      setStatus($('#recipe-admin-status'), `Dataset caricato: ${recipeDataset.length} ricette.`, 'ok');
+    }
+
+    // Il lettore carica il dataset soltanto dopo lo sblocco della UI.
+    async function loadReaderContent() {
+      const status = $('#content-status');
+      const path = validateRepoPath(appConfig.repository?.contentPath || 'recipes.json');
+      if (!/\.json$/i.test(path)) throw new Error('contentPath deve puntare a un dataset JSON, normalmente recipes.json.');
+      setStatus(status, `Caricamento di ${path}…`);
+      const response = await fetch(`${path}?v=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Dataset non disponibile: HTTP ${response.status}.`);
+      const dataset = await response.json();
+      applyRecipeDataset(dataset, path);
+      setStatus(status, `Dataset caricato: ${recipeDataset.length} ricette.`, 'ok');
+    }
+
+    function renderAccessRows() {
+      const container = $('#reader-password-list');
+      container.replaceChildren();
+      if (!accessRows.length) {
+        const empty = document.createElement('p');
+        empty.className = 'hint';
+        empty.textContent = 'Nessuna password lettore configurata.';
+        container.appendChild(empty);
+        return;
+      }
+      accessRows.forEach((entry, index) => {
+        const row = document.createElement('div');
+        row.className = 'reader-row';
+        row.dataset.id = entry.id;
+        row.innerHTML = `
+          <label>Etichetta
+            <input data-field="label" value="${escapeHtml(entry.label || `Lettore ${index + 1}`)}" maxlength="80">
+          </label>
+          <label>Password ${entry.hash ? '(nuova opzionale)' : '(obbligatoria)'}
+            <input data-field="password" type="password" autocomplete="new-password" placeholder="${entry.hash ? 'Lascia vuoto per conservare' : 'Inserisci password'}">
+          </label>
+          <button class="danger remove-reader" type="button" data-index="${index}">Rimuovi</button>`;
+        container.appendChild(row);
+      });
+    }
+
+    function unlock(role) {
+      session.role = role;
+      loginView.hidden = true;
+      readerView.hidden = false;
+      adminView.hidden = role !== 'admin';
+      $('#role-badge').textContent = role === 'admin' ? 'Amministratore' : 'Sola lettura';
+      if (role === 'admin') {
+        const repository = detectRepository();
+        $('#repository-badge').textContent = `${repository.owner}/${repository.repo}`;
+        accessRows = (appConfig.readOnlyPasswords || []).map((entry) => ({ ...entry }));
+        renderAccessRows();
+      }
+    }
+
+    function logout() {
+      session = { role: null, token: null };
+      recipeDataset = [];
+      recipeFileSha = null;
+      editingRecipeId = null;
+      $('#recipe-list').replaceChildren();
+      $('#recipe-count').textContent = '';
+      $('#search-input').value = '';
+      $('#category-filter').replaceChildren(new Option('Tutte', ''));
+      $('#admin-recipe-search').value = '';
+      $('#admin-recipe-category').replaceChildren(new Option('Tutte', ''));
+      $('#admin-recipe-list').replaceChildren();
+      $('#recipe-form').hidden = true;
+      $('#reader-password-list').replaceChildren();
+      adminView.hidden = true;
+      readerView.hidden = true;
+      loginView.hidden = false;
+      loginPassword.value = '';
+      setStatus($('#login-status'), 'Sessione terminata.');
+      loginPassword.focus();
+    }
+
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      loginButton.disabled = true;
+      setStatus($('#login-status'), 'Verifica in corso…');
+      let authStage = 'reader';
+      try {
+        const password = loginPassword.value;
+        const reader = await verifyReaderPassword(password);
+        if (reader) {
+          unlock('reader');
+          await loadReaderContent();
+          return;
+        }
+
+        authStage = 'admin-decrypt';
+        let token;
+        try {
+          token = await decryptPat(password, appConfig.crypto);
+        } catch {
+          throw new Error('Password Admin errata oppure config.json cifrato con un’altra password.');
+        }
+        if (!token.trim()) throw new Error('PAT vuoto.');
+        session.token = token.trim();
+
+        authStage = 'github-config';
+        const latestConfig = await githubGetFile(CONFIG_PATH);
+        appConfig = JSON.parse(latestConfig.text);
+        configSha = latestConfig.sha;
+
+        unlock('admin');
+        authStage = 'github-recipes';
+        await loadAdminRecipeDataset();
+      } catch (error) {
+        session = { role: null, token: null };
+        let message = error.message || 'Errore sconosciuto.';
+        if (authStage === 'github-config') {
+          message = `PAT, repository o branch non accessibili: ${message}`;
+        } else if (authStage === 'github-recipes') {
+          message = `Accesso a recipes.json non riuscito: ${message}`;
+        } else if (authStage === 'reader') {
+          message = `Accesso non riuscito: ${message}`;
+        }
+        setStatus($('#login-status'), message, 'error');
+        console.error(error);
+      } finally {
+        loginPassword.value = '';
+        loginButton.disabled = false;
+      }
+    });
+
+    $('#logout-button').addEventListener('click', logout);
+    $('#search-input').addEventListener('input', renderRecipes);
+    $('#category-filter').addEventListener('change', renderRecipes);
+
+    $('#admin-recipe-search').addEventListener('input', renderAdminRecipeList);
+    $('#admin-recipe-category').addEventListener('change', renderAdminRecipeList);
+
+    $('#add-recipe-button').addEventListener('click', () => openRecipeEditor(null, 'new'));
+
+    $('#admin-recipe-list').addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      const row = button.closest('.admin-recipe-row');
+      const recipe = recipeDataset.find((item) => item.id === row.dataset.id);
+      if (!recipe) return;
+      if (button.dataset.action === 'edit') openRecipeEditor(recipe, 'edit');
+      if (button.dataset.action === 'duplicate') openRecipeEditor(recipe, 'duplicate');
+      if (button.dataset.action === 'delete') {
+        if (!window.confirm(`Eliminare la ricetta “${recipe.title}”?`)) return;
+        recipeDataset = recipeDataset.filter((item) => item.id !== recipe.id);
+        if (editingRecipeId === recipe.id) $('#recipe-form').hidden = true;
+        populateCategoryFilter();
+        populateAdminCategoryFilter();
+        renderRecipes();
+        renderAdminRecipeList();
+        setStatus($('#recipe-admin-status'), `“${recipe.title}” eliminata localmente. Pubblica il dataset per confermare.`, 'ok');
+      }
+    });
+
+    $('#recipe-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      try {
+        const title = $('#recipe-title').value.trim();
+        const category = $('#recipe-category').value.trim();
+        if (!title || !category) throw new Error('Titolo e categoria sono obbligatori.');
+        const sectionElements = [...$('#section-editor-list').children];
+        const sections = sectionElements.map(readSectionEditor);
+        if (!sections.length) throw new Error('Aggiungi almeno una sezione.');
+        const existing = recipeDataset.find((recipe) => recipe.id === editingRecipeId);
+        const recipe = {
+          id: existing ? existing.id : uniqueRecipeId({ title, category, subcategory: $('#recipe-subcategory').value.trim() }),
+          title,
+          category,
+          subcategory: $('#recipe-subcategory').value.trim(),
+          tags: $('#recipe-tags').value.split(',').map((tag) => tag.trim()).filter(Boolean),
+          notes: $('#recipe-notes').value.split(/\r?\n/).map((note) => note.trim()).filter(Boolean),
+          sections
+        };
+        if (existing) {
+          recipeDataset[recipeDataset.indexOf(existing)] = recipe;
+        } else {
+          recipeDataset.push(recipe);
+        }
+        editingRecipeId = recipe.id;
+        populateCategoryFilter();
+        populateAdminCategoryFilter();
+        renderRecipes();
+        renderAdminRecipeList();
+        setStatus($('#recipe-editor-status'), 'Ricetta salvata localmente. Pubblica il dataset per creare il commit.', 'ok');
+      } catch (error) {
+        setStatus($('#recipe-editor-status'), error.message, 'error');
+      }
+    });
+
+    $('#cancel-recipe-button').addEventListener('click', () => {
+      editingRecipeId = null;
+      $('#recipe-form').hidden = true;
+      setStatus($('#recipe-editor-status'), '');
+    });
+
+    $('#reload-recipes-button').addEventListener('click', async () => {
+      try {
+        $('#recipe-form').hidden = true;
+        editingRecipeId = null;
+        await loadAdminRecipeDataset();
+      } catch (error) {
+        setStatus($('#recipe-admin-status'), error.message, 'error');
+      }
+    });
+
+    $('#publish-recipes-button').addEventListener('click', async () => {
+      try {
+        if (!recipeFileSha) throw new Error('Dataset non caricato da GitHub.');
+        const message = $('#recipe-commit-message').value.trim();
+        if (!message) throw new Error('Inserisci un messaggio di commit.');
+        if (recipeDataset.some((recipe) => !recipe.id || !recipe.title || !recipe.category)) throw new Error('Ogni ricetta deve avere ID, titolo e categoria.');
+        const ids = recipeDataset.map((recipe) => recipe.id);
+        if (new Set(ids).size !== ids.length) throw new Error('Gli ID delle ricette devono essere univoci.');
+        const payload = JSON.stringify({ version: 1, source: recipeDatasetSource, recipes: recipeDataset }, null, 2) + '\n';
+        setStatus($('#recipe-admin-status'), 'Pubblicazione di recipes.json su GitHub…');
+        const result = await githubPutFile(recipeFilePath, payload, recipeFileSha, message);
+        recipeFileSha = result.content?.sha || recipeFileSha;
+        setStatus($('#recipe-admin-status'), 'Dataset pubblicato e commit creato.', 'ok');
+      } catch (error) {
+        setStatus($('#recipe-admin-status'), error.message, 'error');
+      }
+    });
+
+    $('#add-reader-button').addEventListener('click', () => {
+      accessRows.push({ id: randomId(), label: '', iterations: KDF_ITERATIONS });
+      renderAccessRows();
+      $('#reader-password-list input[data-field="password"]:last-of-type')?.focus();
+    });
+
+    $('#reader-password-list').addEventListener('click', (event) => {
+      const button = event.target.closest('.remove-reader');
+      if (!button) return;
+      accessRows.splice(Number(button.dataset.index), 1);
+      renderAccessRows();
+    });
+
+    // Le password nuove vengono hashate nel browser prima del PUT di config.json.
+    $('#access-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const status = $('#access-status');
+      try {
+        const nextReaders = [];
+        for (const [index, row] of [...$('#reader-password-list').querySelectorAll('.reader-row')].entries()) {
+          const id = row.dataset.id;
+          const original = (appConfig.readOnlyPasswords || []).find((entry) => entry.id === id);
+          const label = row.querySelector('[data-field="label"]').value.trim() || `Lettore ${index + 1}`;
+          const newPassword = row.querySelector('[data-field="password"]').value;
+          if (!original && !newPassword) throw new Error(`Inserisci la password per ${label}.`);
+          const next = original ? { ...original, label } : { id, label };
+          if (newPassword) Object.assign(next, await hashPassword(newPassword));
+          nextReaders.push(next);
+        }
+        const nextConfig = JSON.parse(JSON.stringify(appConfig));
+        nextConfig.readOnlyPasswords = nextReaders;
+        delete nextConfig.setupRequired;
+        setStatus(status, 'Aggiornamento config.json su GitHub…');
+        const result = await githubPutFile(CONFIG_PATH, JSON.stringify(nextConfig, null, 2) + '\n', configSha, 'Aggiorna password lettori');
+        configSha = result.content?.sha || configSha;
+        appConfig = nextConfig;
+        accessRows = nextReaders.map((entry) => ({ ...entry }));
+        renderAccessRows();
+        setStatus(status, 'Password lettori aggiornate.', 'ok');
+      } catch (error) {
+        setStatus(status, error.message, 'error');
+      }
+    });
+
+    window.addEventListener('pagehide', () => { session.token = null; });
+
+    (async function init() {
+      try {
+        appConfig = await loadPublicConfig();
+        setStatus($('#login-status'), 'Pronto.');
+      } catch (error) {
+        loginButton.disabled = true;
+        setStatus($('#login-status'), error.message, 'error');
+        $('#setup-hint').hidden = false;
+      }
+    }());
+  </script>
+</body>
+</html>
