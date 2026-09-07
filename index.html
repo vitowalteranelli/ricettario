@@ -24,6 +24,7 @@
     button.secondary { background:#e9eef2; color:var(--ink); }
     button.danger { background:#fbe8e8; color:var(--danger); }
     button:disabled { cursor:not-allowed; opacity:.55; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid #e0a22b; outline-offset:2px; }
     form { display:grid; gap:1rem; }
     .actions { display:flex; flex-wrap:wrap; gap:.65rem; align-items:center; }
     .topbar { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem; }
@@ -32,10 +33,36 @@
     .status.error { color:var(--danger); }
     .status.ok { color:var(--ok); }
     .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
-    .admin-grid { display:grid; gap:1rem; grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr); align-items:start; }
-    .reader-toolbar { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1rem; margin:1rem 0; }
-    .recipe-list { display:grid; gap:1rem; }
+    .admin-grid { display:block; }
+    .admin-tabs { display:flex; gap:.35rem; margin:0 -0.25rem 1.25rem; padding:.25rem; border-bottom:1px solid var(--line); overflow-x:auto; }
+    .admin-tab { flex:0 0 auto; border-radius:7px 7px 0 0; padding:.65rem .85rem; background:transparent; color:var(--muted); }
+    .admin-tab:hover, .admin-tab.active { background:#fff7f5; color:var(--accent); }
+    .admin-tab.active { box-shadow:inset 0 -3px var(--accent); }
+    .admin-session-notice { display:grid; gap:.75rem; margin:-.25rem 0 1.25rem; padding:.85rem 1rem; border:1px solid #e7c98d; border-radius:10px; background:#fff9e9; }
+    .admin-session-notice p { margin:0; }
+    .admin-reauth-form { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:end; }
+    .admin-panel { min-width:0; }
+    .admin-recipe-workspace { display:grid; grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr); gap:1rem; align-items:start; }
+    .admin-recipe-browser { min-width:0; }
+    .reader-toolbar { position:sticky; top:.5rem; z-index:2; display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:#fffffff2; box-shadow:0 5px 18px #17212b12; }
+    .reader-layout { display:grid; gap:1rem; }
+    .reader-layout.has-selection { grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr); align-items:start; }
+    .reader-results-column { min-width:0; }
+    .reader-section-heading { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .reader-section-heading h2 { margin:0; }
+    .recipe-list { display:grid; gap:.55rem; }
+    .recipe-result { display:grid; gap:.2rem; width:100%; padding:.9rem 1rem; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); text-align:left; }
+    .recipe-result:hover { border-color:var(--accent); box-shadow:0 4px 14px #17212b12; }
+    .recipe-result[aria-current="true"] { border-color:var(--accent); box-shadow:inset 3px 0 var(--accent); }
+    .recipe-result-title { font-size:1rem; font-weight:800; }
+    .recipe-result-meta { color:var(--muted); font-size:.78rem; font-weight:750; letter-spacing:.04em; text-transform:uppercase; }
+    .recipe-result-preview { display:-webkit-box; overflow:hidden; color:var(--muted); font-size:.9rem; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+    .recipe-detail { min-width:0; }
+    .recipe-detail-toolbar { display:flex; justify-content:flex-start; margin-bottom:.75rem; }
+    .recipe-detail-content { border:1px solid var(--line); border-radius:12px; padding:clamp(1rem,2vw,1.5rem); background:#fff; }
+    .recipe-detail-content .recipe-card { border:0; padding:0; }
     .recipe-card { border:1px solid var(--line); border-radius:12px; padding:1.25rem; background:#fff; }
+    .recipe-card h2 { color:var(--accent); margin:.2rem 0 .25rem; }
     .recipe-card h3 { color:var(--accent); margin:.2rem 0 .25rem; }
     .recipe-category { color:var(--muted); font-size:.78rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
     .recipe-subcategory { color:var(--muted); font-size:.9rem; margin:0 0 1rem; }
@@ -57,7 +84,9 @@
     .admin-recipe-meta { color:var(--muted); font-size:.85rem; }
     .admin-recipe-actions { display:flex; flex-wrap:wrap; gap:.4rem; }
     .admin-recipe-actions button { padding:.45rem .65rem; font-size:.85rem; }
-    .recipe-editor { border-top:1px solid var(--line); padding-top:1rem; }
+    .recipe-publish-bar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:1rem; align-items:end; position:sticky; bottom:.5rem; z-index:2; margin-top:.25rem; padding:.85rem; border:1px solid var(--line); border-radius:10px; background:#fffffff2; box-shadow:0 -5px 18px #17212b12; }
+    .recipe-editor { min-width:0; border-left:1px solid var(--line); padding-left:1rem; }
+    .admin-access-panel { max-width:900px; }
     .section-editor { min-width:0; margin:0; padding:.8rem; border:1px solid var(--line); border-radius:9px; }
     .section-editor legend { padding:0 .35rem; font-weight:750; }
     .section-editor-grid { display:grid; grid-template-columns:minmax(0,1fr) 170px; gap:.75rem; align-items:end; }
@@ -74,9 +103,19 @@
     [hidden] { display:none !important; }
     @media (max-width:760px) {
       main { width:min(100% - 1rem,1120px); margin-top:1rem; }
-      .grid,.admin-grid,.reader-toolbar,.admin-recipe-toolbar,.section-editor-grid { grid-template-columns:1fr; }
+      .grid,.reader-toolbar,.admin-recipe-toolbar,.admin-recipe-workspace,.section-editor-grid,.recipe-publish-bar { grid-template-columns:1fr; }
+      .reader-toolbar { position:static; }
+      .reader-layout.has-selection { grid-template-columns:1fr; }
+      .reader-layout.has-selection .recipe-results-column { display:none; }
+      .recipe-detail-content { border:0; padding:0; }
+      .recipe-editor { border-left:0; border-top:1px solid var(--line); padding:1rem 0 0; }
+      .recipe-publish-bar { position:static; padding:0; border:0; background:transparent; box-shadow:none; }
+      .admin-reauth-form { grid-template-columns:1fr; }
       .reader-row { grid-template-columns:1fr; align-items:stretch; }
       .topbar { align-items:flex-start; flex-direction:column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; }
     }
   </style>
 </head>
@@ -97,7 +136,7 @@
 
     <section id="reader-view" hidden>
       <div class="topbar">
-        <div><h1>Contenuto</h1><span id="role-badge" class="badge"></span></div>
+        <div><h1>Ricettario</h1><span id="role-badge" class="badge"></span></div>
         <div class="actions">
           <button id="show-admin-button" class="secondary" type="button" hidden>Torna al pannello Admin</button>
           <button id="logout-button" class="secondary" type="button">Esci</button>
@@ -115,23 +154,50 @@
             </select>
           </label>
         </div>
-        <p id="recipe-count" class="recipe-count"></p>
-        <div id="recipe-list" class="recipe-list"></div>
-        <p id="no-results" class="status" hidden>Nessuna ricetta trovata.</p>
+        <div id="reader-layout" class="reader-layout">
+          <section id="recipe-results-column" class="recipe-results-column" aria-labelledby="recipe-results-title">
+            <div class="reader-section-heading">
+              <h2 id="recipe-results-title">Risultati</h2>
+              <p id="recipe-count" class="recipe-count"></p>
+            </div>
+            <div id="recipe-list" class="recipe-list"></div>
+            <p id="no-results" class="status" hidden>Nessuna ricetta trovata.</p>
+          </section>
+          <article id="recipe-detail" class="recipe-detail" hidden aria-labelledby="recipe-detail-title">
+            <div class="recipe-detail-toolbar">
+              <button id="back-to-results-button" class="secondary" type="button">← Torna ai risultati</button>
+            </div>
+            <div id="recipe-detail-content"></div>
+          </article>
+        </div>
       </article>
     </section>
 
     <section id="admin-view" class="card" hidden>
       <div class="topbar">
-        <div><h2>Pannello amministratore</h2><p class="muted">Il PAT è mantenuto solo nella memoria di questa scheda.</p></div>
+        <div><h2>Pannello amministratore</h2><p class="muted">PAT e chiave AI restano nella memoria di questa scheda.</p></div>
         <div class="actions">
           <span id="repository-badge" class="badge"></span>
           <button id="show-reader-button" class="secondary" type="button">Apri ricettario</button>
           <button id="admin-logout-button" class="secondary" type="button">Esci</button>
         </div>
       </div>
+      <nav class="admin-tabs" role="tablist" aria-label="Sezioni amministratore">
+        <button id="admin-tab-recipes" class="admin-tab active" role="tab" type="button" data-admin-tab="recipes" aria-controls="admin-recipes-panel" aria-selected="true">Ricette e importazione</button>
+        <button id="admin-tab-access" class="admin-tab" role="tab" type="button" data-admin-tab="access" aria-controls="access-form" aria-selected="false">Password lettori</button>
+      </nav>
+      <section id="admin-session-notice" class="admin-session-notice" aria-labelledby="admin-session-title" hidden>
+        <p id="admin-session-title"><strong>Sessione Admin ripristinata.</strong> Per pubblicare modifiche o usare l’importazione AI, riattiva temporaneamente i token inserendo la password Admin.</p>
+        <form id="admin-reauth-form" class="admin-reauth-form">
+          <label for="admin-reauth-password">Password Admin
+            <input id="admin-reauth-password" type="password" autocomplete="current-password" required>
+          </label>
+          <button id="admin-reauth-button" type="submit">Riattiva funzioni Admin</button>
+        </form>
+        <p id="admin-reauth-status" class="status" role="status" aria-live="polite"></p>
+      </section>
       <div class="admin-grid">
-        <section class="recipe-admin-panel" aria-labelledby="recipe-admin-title">
+        <section id="admin-recipes-panel" class="recipe-admin-panel admin-panel" data-admin-panel="recipes" role="tabpanel" aria-labelledby="admin-tab-recipes">
           <div class="topbar">
             <div><h3 id="recipe-admin-title">Gestione ricette</h3><p class="muted">Le modifiche restano locali finché non pubblichi il dataset.</p></div>
             <button id="add-recipe-button" type="button">Nuova ricetta</button>
@@ -150,60 +216,66 @@
             </div>
             <p id="ai-status" class="status" role="status" aria-live="polite"></p>
           </section>
-          <div class="admin-recipe-toolbar">
-            <label for="admin-recipe-search">Cerca nell’archivio
-              <input id="admin-recipe-search" type="search" placeholder="Titolo, ingrediente…" autocomplete="off">
-            </label>
-            <label for="admin-recipe-category">Categoria
-              <select id="admin-recipe-category"><option value="">Tutte</option></select>
-            </label>
-          </div>
-          <p id="admin-recipe-count" class="recipe-count"></p>
-          <div id="admin-recipe-list" class="admin-recipe-list"></div>
+          <div class="admin-recipe-workspace">
+            <div class="admin-recipe-browser">
+              <div class="admin-recipe-toolbar">
+                <label for="admin-recipe-search">Cerca nell’archivio
+                  <input id="admin-recipe-search" type="search" placeholder="Titolo, ingrediente…" autocomplete="off">
+                </label>
+                <label for="admin-recipe-category">Categoria
+                  <select id="admin-recipe-category"><option value="">Tutte</option></select>
+                </label>
+              </div>
+              <p id="admin-recipe-count" class="recipe-count"></p>
+              <div id="admin-recipe-list" class="admin-recipe-list"></div>
+            </div>
 
-          <form id="recipe-form" class="recipe-editor" hidden>
-            <h3 id="recipe-form-title">Nuova ricetta</h3>
-            <div class="grid">
-              <label for="recipe-title">Titolo
-                <input id="recipe-title" required>
+            <form id="recipe-form" class="recipe-editor" hidden>
+              <h3 id="recipe-form-title">Nuova ricetta</h3>
+              <div class="grid">
+                <label for="recipe-title">Titolo
+                  <input id="recipe-title" required>
+                </label>
+                <label for="recipe-category">Categoria
+                  <input id="recipe-category" required>
+                </label>
+                <label for="recipe-subcategory">Sottocategoria
+                  <input id="recipe-subcategory">
+                </label>
+                <label for="recipe-tags">Tag separati da virgole
+                  <input id="recipe-tags" placeholder="es. manzo, sous-vide">
+                </label>
+              </div>
+              <label for="recipe-notes">Note (una per riga)
+                <textarea id="recipe-notes" rows="3" placeholder="Note introduttive o avvertenze…"></textarea>
               </label>
-              <label for="recipe-category">Categoria
-                <input id="recipe-category" required>
-              </label>
-              <label for="recipe-subcategory">Sottocategoria
-                <input id="recipe-subcategory">
-              </label>
-              <label for="recipe-tags">Tag separati da virgole
-                <input id="recipe-tags" placeholder="es. manzo, sous-vide">
-              </label>
-            </div>
-            <label for="recipe-notes">Note (una per riga)
-              <textarea id="recipe-notes" rows="3" placeholder="Note introduttive o avvertenze…"></textarea>
+              <div>
+                <h4>Sezioni</h4>
+                <div id="section-editor-list"></div>
+                <div class="section-actions"><button id="add-section-button" class="secondary" type="button">Aggiungi sezione</button></div>
+              </div>
+              <div class="actions">
+                <button type="submit">Salva ricetta</button>
+                <button id="cancel-recipe-button" class="secondary" type="button">Annulla</button>
+              </div>
+              <p id="recipe-editor-status" class="status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <div class="recipe-publish-bar">
+            <label for="recipe-commit-message">Messaggio commit dataset
+              <input id="recipe-commit-message" value="Aggiorna ricette" required>
             </label>
-            <div>
-              <h4>Sezioni</h4>
-              <div id="section-editor-list"></div>
-              <div class="section-actions"><button id="add-section-button" class="secondary" type="button">Aggiungi sezione</button></div>
-            </div>
             <div class="actions">
-              <button type="submit">Salva ricetta</button>
-              <button id="cancel-recipe-button" class="secondary" type="button">Annulla</button>
+              <button id="reload-recipes-button" class="secondary" type="button">Ricarica da GitHub</button>
+              <button id="publish-recipes-button" type="button">Salva e pusha recipes.json</button>
             </div>
-            <p id="recipe-editor-status" class="status" role="status" aria-live="polite"></p>
-          </form>
-
-          <div class="actions">
-            <button id="reload-recipes-button" class="secondary" type="button">Ricarica da GitHub</button>
-            <button id="publish-recipes-button" type="button">Salva e pusha recipes.json</button>
           </div>
-          <label for="recipe-commit-message">Messaggio commit dataset
-            <input id="recipe-commit-message" value="Aggiorna ricette" required>
-          </label>
           <p id="recipe-admin-status" class="status" role="status" aria-live="polite"></p>
         </section>
 
-        <form id="access-form">
-          <h3>Gestione Password Lettori</h3>
+        <form id="access-form" class="admin-panel admin-access-panel" data-admin-panel="access" role="tabpanel" aria-labelledby="admin-tab-access" hidden>
+          <h3 id="access-title">Gestione Password Lettori</h3>
           <p class="hint">Lascia vuoto il campo password per conservare l’hash esistente.</p>
           <div id="reader-password-list"></div>
           <div class="actions">
@@ -219,12 +291,14 @@
   <script>
     'use strict';
 
-    // I segreti non vengono mai scritti in localStorage, cookie o DOM: vivono solo in session.
+    // I segreti non vengono mai scritti in storage, cookie o DOM: vivono solo in RAM.
+    // sessionStorage contiene esclusivamente il ruolo della sessione, mai PAT o API key.
     const CONFIG_PATH = 'config.json';
     const AI_PROMPT_PATH = 'prompts/recipe-extraction.md';
     const AI_SCHEMA_PATH = 'prompts/recipe-schema.json';
     const AI_DEFAULT_MODEL = 'gemini-flash-latest';
     const AI_MAX_FILE_BYTES = 20 * 1024 * 1024;
+    const SESSION_ROLE_KEY = 'ricettario-session-role-v2';
     const READER_SESSION_KEY = 'ricettario-reader-session-v1';
     const KDF_ITERATIONS = 120000;
     const textEncoder = new TextEncoder();
@@ -236,6 +310,7 @@
     let recipeDatasetSource = 'Ricettario_CBT.html';
     let recipeFilePath = 'recipes.json';
     let recipeFileSha = null;
+    let selectedRecipeId = null;
     let editingRecipeId = null;
     let session = { role: null, token: null, llmKey: null };
 
@@ -252,16 +327,27 @@
       element.className = `status${kind ? ` ${kind}` : ''}`;
     }
 
-    function readerSessionIsActive() {
-      try { return sessionStorage.getItem(READER_SESSION_KEY) === 'active'; } catch { return false; }
+    function storedSessionRole() {
+      try {
+        const role = sessionStorage.getItem(SESSION_ROLE_KEY);
+        if (role === 'reader' || role === 'admin') return role;
+        return sessionStorage.getItem(READER_SESSION_KEY) === 'active' ? 'reader' : null;
+      } catch { return null; }
     }
 
-    function rememberReaderSession() {
-      try { sessionStorage.setItem(READER_SESSION_KEY, 'active'); } catch { /* Storage non disponibile: si resta con login per refresh. */ }
+    function rememberSessionRole(role) {
+      try {
+        sessionStorage.setItem(SESSION_ROLE_KEY, role);
+        if (role === 'reader') sessionStorage.setItem(READER_SESSION_KEY, 'active');
+        else sessionStorage.removeItem(READER_SESSION_KEY);
+      } catch { /* Storage non disponibile: si resta con login per refresh. */ }
     }
 
-    function clearReaderSession() {
-      try { sessionStorage.removeItem(READER_SESSION_KEY); } catch { /* Storage non disponibile. */ }
+    function clearSessionRole() {
+      try {
+        sessionStorage.removeItem(SESSION_ROLE_KEY);
+        sessionStorage.removeItem(READER_SESSION_KEY);
+      } catch { /* Storage non disponibile. */ }
     }
 
     function randomId() {
@@ -361,6 +447,7 @@
 
     // L’API Contents richiede il token solo per la modalità Admin.
     async function githubRequest(method, path, options = {}) {
+      if (!session.token) throw new Error('Sessione Admin senza PAT. Riattiva le funzioni Admin.');
       const repository = detectRepository();
       const query = options.ref ? `?ref=${encodeURIComponent(options.ref)}` : '';
       const endpoint = `https://api.github.com/repos/${encodeURIComponent(repository.owner)}/${encodeURIComponent(repository.repo)}/contents/${apiPath(path)}${query}`;
@@ -564,7 +651,15 @@
       parent.appendChild(wrapper);
     }
 
-    function renderRecipeCard(recipe, parent) {
+    function recipePreviewText(recipe) {
+      const sectionText = (section) => [
+        ...(section.items || []),
+        ...(section.sections || []).map(sectionText)
+      ].join(' ');
+      return [...(recipe.notes || []), ...(recipe.sections || []).map(sectionText)].join(' ').trim().slice(0, 180);
+    }
+
+    function renderRecipeDetail(recipe, parent) {
       const card = document.createElement('article');
       card.className = 'recipe-card';
 
@@ -573,7 +668,8 @@
       category.textContent = recipe.category || 'Senza categoria';
       card.appendChild(category);
 
-      const title = document.createElement('h3');
+      const title = document.createElement('h2');
+      title.id = 'recipe-detail-title';
       title.textContent = recipe.title;
       card.appendChild(title);
 
@@ -595,6 +691,33 @@
       parent.appendChild(card);
     }
 
+    function renderRecipeResult(recipe, parent) {
+      const result = document.createElement('button');
+      result.type = 'button';
+      result.className = 'recipe-result';
+      result.dataset.recipeId = recipe.id;
+      result.setAttribute('aria-current', recipe.id === selectedRecipeId ? 'true' : 'false');
+
+      const meta = document.createElement('span');
+      meta.className = 'recipe-result-meta';
+      meta.textContent = [recipe.category || 'Senza categoria', recipe.subcategory].filter(Boolean).join(' · ');
+      result.appendChild(meta);
+
+      const title = document.createElement('span');
+      title.className = 'recipe-result-title';
+      title.textContent = recipe.title || 'Ricetta senza titolo';
+      result.appendChild(title);
+
+      const preview = recipePreviewText(recipe);
+      if (preview) {
+        const previewElement = document.createElement('span');
+        previewElement.className = 'recipe-result-preview';
+        previewElement.textContent = preview;
+        result.appendChild(previewElement);
+      }
+      parent.appendChild(result);
+    }
+
     function populateCategoryFilter() {
       const filter = $('#category-filter');
       const categories = [...new Set(recipeDataset.map((recipe) => recipe.category).filter(Boolean))]
@@ -612,9 +735,38 @@
       });
       const list = $('#recipe-list');
       list.replaceChildren();
-      matches.forEach((recipe) => renderRecipeCard(recipe, list));
+      matches.forEach((recipe) => renderRecipeResult(recipe, list));
       $('#recipe-count').textContent = `${matches.length} di ${recipeDataset.length} ricette`;
       $('#no-results').hidden = matches.length > 0;
+      const selected = matches.find((recipe) => recipe.id === selectedRecipeId);
+      if (selected) {
+        const detail = $('#recipe-detail-content');
+        detail.replaceChildren();
+        renderRecipeDetail(selected, detail);
+      } else if (selectedRecipeId) {
+        closeRecipeDetail({ focus: false });
+      }
+    }
+
+    function showRecipeDetail(recipe) {
+      selectedRecipeId = recipe.id;
+      const content = $('#recipe-detail-content');
+      content.replaceChildren();
+      renderRecipeDetail(recipe, content);
+      $('#recipe-detail').hidden = false;
+      $('#reader-layout').classList.add('has-selection');
+      document.querySelectorAll('#recipe-list .recipe-result').forEach((button) => {
+        button.setAttribute('aria-current', button.dataset.recipeId === selectedRecipeId ? 'true' : 'false');
+      });
+      if (window.matchMedia('(max-width: 760px)').matches) $('#recipe-detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function closeRecipeDetail({ focus = true } = {}) {
+      selectedRecipeId = null;
+      $('#reader-layout').classList.remove('has-selection');
+      $('#recipe-detail').hidden = true;
+      $('#recipe-detail-content').replaceChildren();
+      if (focus) $('#search-input').focus();
     }
 
     function slugify(value) {
@@ -851,12 +1003,13 @@
       });
     }
 
-    function unlock(role) {
+    function unlock(role, { restored = false } = {}) {
       session.role = role;
       loginView.hidden = true;
       const isAdmin = role === 'admin';
       readerView.hidden = isAdmin;
       adminView.hidden = !isAdmin;
+      $('#admin-session-notice').hidden = !(isAdmin && restored);
       $('#role-badge').textContent = role === 'admin' ? 'Amministratore' : 'Sola lettura';
       $('#show-admin-button').hidden = !isAdmin;
       if (role === 'admin') {
@@ -864,8 +1017,52 @@
         $('#repository-badge').textContent = `${repository.owner}/${repository.repo}`;
         accessRows = (appConfig.readOnlyPasswords || []).map((entry) => ({ ...entry }));
         renderAccessRows();
+        switchAdminPanel('recipes');
       }
       updateAiImportControls();
+    }
+
+    async function reactivateAdminSecrets(password) {
+      let token;
+      try {
+        token = await decryptPat(password, appConfig.crypto);
+      } catch {
+        throw new Error('Password Admin errata oppure config.json cifrato con un’altra password.');
+      }
+      if (!token.trim()) throw new Error('PAT vuoto.');
+      session.token = token.trim();
+
+      const latestConfig = await githubGetFile(CONFIG_PATH);
+      appConfig = JSON.parse(latestConfig.text);
+      configSha = latestConfig.sha;
+      session.llmKey = null;
+      if (appConfig.ai?.crypto) {
+        try {
+          session.llmKey = (await decryptSecret(password, appConfig.ai.crypto)).trim();
+        } catch {
+          throw new Error('API key AI non decifrabile: rigenera config.json con la stessa password Admin.');
+        }
+        if (!session.llmKey) throw new Error('API key AI vuota.');
+      }
+
+      accessRows = (appConfig.readOnlyPasswords || []).map((entry) => ({ ...entry }));
+      renderAccessRows();
+      await loadAdminRecipeDataset();
+      rememberSessionRole('admin');
+      $('#admin-session-notice').hidden = true;
+      setStatus($('#admin-reauth-status'), 'Funzioni Admin riattivate fino al prossimo refresh.', 'ok');
+    }
+
+    function switchAdminPanel(panelName) {
+      document.querySelectorAll('[data-admin-panel]').forEach((panel) => {
+        panel.hidden = panel.dataset.adminPanel !== panelName;
+      });
+      document.querySelectorAll('[data-admin-tab]').forEach((tab) => {
+        const active = tab.dataset.adminTab === panelName;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+      });
+      if (panelName === 'access') $('#reader-password-list input[data-field="password"]')?.focus();
     }
 
     function showAdminView() {
@@ -885,7 +1082,7 @@
 
     function logout() {
       session = { role: null, token: null, llmKey: null };
-      clearReaderSession();
+      clearSessionRole();
       recipeDataset = [];
       recipeFileSha = null;
       editingRecipeId = null;
@@ -896,11 +1093,15 @@
       $('#admin-recipe-search').value = '';
       $('#admin-recipe-category').replaceChildren(new Option('Tutte', ''));
       $('#admin-recipe-list').replaceChildren();
+      closeRecipeDetail({ focus: false });
       $('#recipe-form').hidden = true;
       $('#recipe-source-file').value = '';
       $('#recipe-source-name').textContent = '';
       setStatus($('#ai-status'), '');
       $('#reader-password-list').replaceChildren();
+      $('#admin-session-notice').hidden = true;
+      $('#admin-reauth-password').value = '';
+      setStatus($('#admin-reauth-status'), '');
       adminView.hidden = true;
       readerView.hidden = true;
       loginView.hidden = false;
@@ -918,9 +1119,9 @@
         const password = loginPassword.value;
         const reader = await verifyReaderPassword(password);
         if (reader) {
-          rememberReaderSession();
           unlock('reader');
           await loadReaderContent();
+          rememberSessionRole('reader');
           return;
         }
 
@@ -952,6 +1153,7 @@
         unlock('admin');
         authStage = 'github-recipes';
         await loadAdminRecipeDataset();
+        rememberSessionRole('admin');
       } catch (error) {
         session = { role: null, token: null, llmKey: null };
         let message = error.message || 'Errore sconosciuto.';
@@ -978,9 +1180,37 @@
     $('#show-admin-button').addEventListener('click', showAdminView);
     $('#search-input').addEventListener('input', renderRecipes);
     $('#category-filter').addEventListener('change', renderRecipes);
+    $('#recipe-list').addEventListener('click', (event) => {
+      const result = event.target.closest('.recipe-result');
+      if (!result) return;
+      const recipe = recipeDataset.find((item) => item.id === result.dataset.recipeId);
+      if (recipe) showRecipeDetail(recipe);
+    });
+    $('#back-to-results-button').addEventListener('click', () => closeRecipeDetail());
+
+    $('#admin-reauth-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const button = $('#admin-reauth-button');
+      button.disabled = true;
+      setStatus($('#admin-reauth-status'), 'Riattivazione delle funzioni Admin…');
+      try {
+        await reactivateAdminSecrets($('#admin-reauth-password').value);
+      } catch (error) {
+        session.token = null;
+        session.llmKey = null;
+        updateAiImportControls();
+        setStatus($('#admin-reauth-status'), error.message, 'error');
+      } finally {
+        $('#admin-reauth-password').value = '';
+        button.disabled = false;
+      }
+    });
 
     $('#admin-recipe-search').addEventListener('input', renderAdminRecipeList);
     $('#admin-recipe-category').addEventListener('change', renderAdminRecipeList);
+    document.querySelectorAll('[data-admin-tab]').forEach((tab) => {
+      tab.addEventListener('click', () => switchAdminPanel(tab.dataset.adminTab));
+    });
 
     $('#add-recipe-button').addEventListener('click', () => openRecipeEditor(null, 'new'));
 
@@ -1078,6 +1308,7 @@
 
     $('#publish-recipes-button').addEventListener('click', async () => {
       try {
+        if (!session.token) throw new Error('Sessione Admin senza PAT. Riattiva le funzioni Admin.');
         if (!recipeFileSha) throw new Error('Dataset non caricato da GitHub.');
         const message = $('#recipe-commit-message').value.trim();
         if (!message) throw new Error('Inserisci un messaggio di commit.');
@@ -1138,17 +1369,37 @@
       }
     });
 
-    window.addEventListener('pagehide', () => { session.token = null; session.llmKey = null; });
+    window.addEventListener('pagehide', () => {
+      session.token = null;
+      session.llmKey = null;
+      if (session.role === 'admin') {
+        $('#admin-session-notice').hidden = false;
+        setStatus($('#admin-reauth-status'), 'Token rimossi dalla memoria dopo il refresh o la chiusura della pagina.');
+        updateAiImportControls();
+      }
+    });
 
     (async function init() {
       try {
         appConfig = await loadPublicConfig();
-        if (readerSessionIsActive()) {
+        const savedRole = storedSessionRole();
+        if (savedRole === 'reader') {
           unlock('reader');
           try {
             await loadReaderContent();
           } catch (error) {
-            clearReaderSession();
+            clearSessionRole();
+            logout();
+            setStatus($('#login-status'), error.message, 'error');
+          }
+        } else if (savedRole === 'admin') {
+          unlock('admin', { restored: true });
+          try {
+            await loadReaderContent();
+            setStatus($('#recipe-admin-status'), 'Sessione Admin ripristinata. Riattiva le funzioni Admin per pubblicare o importare.', 'ok');
+            $('#admin-reauth-password').focus();
+          } catch (error) {
+            clearSessionRole();
             logout();
             setStatus($('#login-status'), error.message, 'error');
           }

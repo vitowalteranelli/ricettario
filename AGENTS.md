@@ -41,9 +41,11 @@ changes, manually verify the locked initial state, reader login, Admin login,
 recipe search/filter, recipe add/edit/duplicate/remove, dataset publishing,
 password add/edit/remove, and responsive layout.
 Confirm the browser console has no errors and that the PAT is absent from
-network logs, localStorage, and committed files. With AI configured, also verify
-that image/PDF import produces a draft, surfaces warnings, and never publishes
-without the existing manual save action.
+network logs, browser storage, and committed files. Verify that a reader refresh
+restores access until the tab closes; an Admin refresh restores the panel but
+requires reactivation before PAT/API-key operations. With AI configured, also
+verify that image/PDF import produces a draft, surfaces warnings, and never
+publishes without the existing manual save action.
 
 ## Commit & Pull Request Guidelines
 

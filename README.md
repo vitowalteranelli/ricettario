@@ -96,8 +96,11 @@ Poi apri `http://localhost:8000/index.html` e verifica:
 
 Per i lettori, dopo il primo accesso la sessione viene ricordata solo nella scheda
 corrente tramite `sessionStorage`: un refresh non richiede nuovamente la password,
-mentre la chiusura della scheda la cancella. La sessione Admin e il PAT non vengono
-salvati nel browser.
+mentre la chiusura della scheda la cancella. Anche l’area Admin viene ripristinata
+dopo un refresh, ma il PAT e la API key vengono rimossi dalla RAM: il pannello
+mostra il dataset pubblico e richiede nuovamente la password Admin solo quando
+serve pubblicare, aggiornare le password lettore o usare l’importazione AI. Né il
+PAT né la API key vengono mai salvati nel browser.
 
 Se il token è valido ma il push fallisce, controlla owner, repository, branch e
 permesso `Contents: Read and write`. Un conflitto GitHub richiede di usare
