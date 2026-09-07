@@ -183,7 +183,7 @@
               <option value="">Tutte</option>
             </select>
           </label>
-          <p id="search-help" class="search-help">Cerca tutte le parole; usa le virgolette per una frase esatta, ad esempio <span aria-hidden="true">“</span>pasta sfoglia<span aria-hidden="true">”</span>.</p>
+          <p id="search-help" class="search-help">Cerca tutte le parole, anche parziali da 3 caratteri; usa le virgolette per una frase esatta, ad esempio <span aria-hidden="true">“</span>pasta sfoglia<span aria-hidden="true">”</span>.</p>
         </div>
         <div id="reader-layout" class="reader-layout">
           <section id="recipe-results-column" class="recipe-results-column" aria-labelledby="recipe-results-title">
@@ -338,6 +338,7 @@
     let configSha = null;
     let accessRows = [];
     let recipeDataset = [];
+    let recipeSearchTimer = null;
     let recipeDatasetSource = 'Ricettario_CBT.html';
     let recipeFilePath = 'recipes.json';
     let recipeFileSha = null;
@@ -682,37 +683,54 @@
         { text: normalizeSearchText(recipe.subcategory), weight: 60 },
         { text: normalizeSearchText(recipe.notes?.join(' ')), weight: 35 },
         { text: normalizeSearchText((recipe.sections || []).map(sectionSearchText).join(' ')), weight: 20 }
-      ];
+      ].map((field) => ({ ...field, tokens: field.text ? field.text.split(' ') : [] }));
     }
 
-    function searchTextContainsTerm(text, term) {
-      return ` ${text} `.includes(` ${term} `);
+    function termMatchKind(field, term) {
+      if (field.tokens.includes(term)) return 'exact';
+      if (term.length < 3) return '';
+      if (field.tokens.some((token) => token.startsWith(term))) return 'prefix';
+      if (field.tokens.some((token) => token.includes(term))) return 'partial';
+      return '';
     }
 
-    function recipeSearchScore(recipe, query) {
+    function recipeSearchScore(indexedRecipe, query) {
       if (!query.phrases.length && !query.terms.length) return 0;
-      const fields = recipeSearchFields(recipe);
+      const { fields } = indexedRecipe;
       if (!query.phrases.every((phrase) => fields.some((field) => field.text.includes(phrase)))) return -1;
-      if (!query.terms.every((term) => fields.some((field) => searchTextContainsTerm(field.text, term)))) return -1;
 
       let score = 0;
       query.phrases.forEach((phrase) => {
         const bestField = fields.find((field) => field.text.includes(phrase));
-        score += (bestField?.weight || 0) + 40;
+        score += 3000 + (bestField?.weight || 0);
       });
-      query.terms.forEach((term) => {
-        const matchingFields = fields.filter((field) => searchTextContainsTerm(field.text, term));
-        score += (matchingFields[0]?.weight || 0) + Math.min(matchingFields.length, 3) * 3;
-      });
+      for (const term of query.terms) {
+        const matchingFields = fields
+          .map((field) => ({ field, kind: termMatchKind(field, term) }))
+          .filter((match) => match.kind)
+          .sort((left, right) => {
+            const kindWeight = { exact: 300, prefix: 200, partial: 100 };
+            return kindWeight[right.kind] - kindWeight[left.kind] || right.field.weight - left.field.weight;
+          });
+        if (!matchingFields.length) return -1;
+        const best = matchingFields[0];
+        const kindWeight = { exact: 300, prefix: 200, partial: 100 };
+        score += kindWeight[best.kind] + best.field.weight + Math.min(matchingFields.length, 3) * 3;
+      }
       return score;
     }
 
     function searchRecipes(dataset, queryText, category = '') {
       const query = parseSearchQuery(queryText);
-      const matches = dataset.map((recipe, index) => ({
+      const entries = dataset.map((recipe, index) => ({
         recipe,
         index,
-        score: !category || recipe.category === category ? recipeSearchScore(recipe, query) : -1
+        fields: recipeSearchFields(recipe)
+      }));
+      const matches = entries.map((entry) => ({
+        recipe: entry.recipe,
+        index: entry.index,
+        score: !category || entry.recipe.category === category ? recipeSearchScore(entry, query) : -1
       }))
         .filter((entry) => entry.score >= 0)
         .sort((left, right) => right.score - left.score || left.index - right.index)
@@ -864,6 +882,14 @@
       $('#recipe-detail').hidden = true;
       $('#recipe-detail-content').replaceChildren();
       if (focus) $('#search-input').focus();
+    }
+
+    function scheduleRecipeSearch() {
+      clearTimeout(recipeSearchTimer);
+      recipeSearchTimer = setTimeout(() => {
+        recipeSearchTimer = null;
+        renderRecipes();
+      }, 100);
     }
 
     function slugify(value) {
@@ -1178,6 +1204,7 @@
       session = { role: null, token: null, llmKey: null };
       clearSessionRole();
       recipeDataset = [];
+      clearTimeout(recipeSearchTimer);
       recipeFileSha = null;
       editingRecipeId = null;
       $('#recipe-list').replaceChildren();
@@ -1272,9 +1299,11 @@
     $('#admin-logout-button').addEventListener('click', logout);
     $('#show-reader-button').addEventListener('click', showReaderView);
     $('#show-admin-button').addEventListener('click', showAdminView);
-    $('#search-input').addEventListener('input', renderRecipes);
+    $('#search-input').addEventListener('input', scheduleRecipeSearch);
     $('#category-filter').addEventListener('change', renderRecipes);
     $('#clear-search-button').addEventListener('click', () => {
+      clearTimeout(recipeSearchTimer);
+      recipeSearchTimer = null;
       $('#search-input').value = '';
       renderRecipes();
       $('#search-input').focus();
