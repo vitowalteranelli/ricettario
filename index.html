@@ -59,6 +59,11 @@
     .admin-recipe-workspace { display:grid; grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr); gap:1rem; align-items:start; }
     .admin-recipe-browser { min-width:0; }
     .reader-toolbar { position:sticky; top:.5rem; z-index:2; display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:#fffffff2; box-shadow:0 5px 18px #17212b12; }
+    .search-input-wrap { position:relative; display:block; }
+    .search-input-wrap input { padding-right:2.75rem; }
+    .search-clear { position:absolute; top:50%; right:.35rem; width:2rem; height:2rem; padding:0; transform:translateY(-50%); border-radius:50%; background:transparent !important; color:var(--muted) !important; font-size:1.25rem; line-height:1; }
+    .search-clear:hover { background:#e9eef2 !important; color:var(--ink) !important; }
+    .search-help { grid-column:1 / -1; margin:0; color:var(--muted); font-size:.82rem; }
     .reader-layout { display:grid; gap:1rem; }
     .reader-layout.has-selection { grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr); align-items:start; }
     .reader-results-column { min-width:0; }
@@ -167,14 +172,18 @@
       <article class="card">
         <p id="content-status" class="status" role="status" aria-live="polite">Caricamento…</p>
         <div class="reader-toolbar">
-          <label for="search-input">Cerca ricetta
-            <input id="search-input" type="search" placeholder="Titolo, ingrediente o procedimento…" autocomplete="off">
+          <label for="search-input">Cerca ricette, ingredienti o parole chiave
+            <span class="search-input-wrap">
+              <input id="search-input" type="search" placeholder="es. pomodoro basilico…" autocomplete="off" aria-describedby="search-help">
+              <button id="clear-search-button" class="search-clear" type="button" aria-label="Cancella ricerca" title="Cancella ricerca" hidden>×</button>
+            </span>
           </label>
           <label for="category-filter">Categoria
             <select id="category-filter">
               <option value="">Tutte</option>
             </select>
           </label>
+          <p id="search-help" class="search-help">Cerca tutte le parole; usa le virgolette per una frase esatta, ad esempio <span aria-hidden="true">“</span>pasta sfoglia<span aria-hidden="true">”</span>.</p>
         </div>
         <div id="reader-layout" class="reader-layout">
           <section id="recipe-results-column" class="recipe-results-column" aria-labelledby="recipe-results-title">
@@ -183,7 +192,7 @@
               <p id="recipe-count" class="recipe-count"></p>
             </div>
             <div id="recipe-list" class="recipe-list"></div>
-            <p id="no-results" class="status" hidden>Nessuna ricetta trovata.</p>
+            <p id="no-results" class="status" hidden>Nessuna ricetta trovata. Prova a rimuovere una parola o a usare un termine più generico.</p>
           </section>
           <article id="recipe-detail" class="recipe-detail" hidden aria-labelledby="recipe-detail-title">
             <div class="recipe-detail-toolbar">
@@ -242,7 +251,7 @@
             <div class="admin-recipe-browser">
               <div class="admin-recipe-toolbar">
                 <label for="admin-recipe-search">Cerca nell’archivio
-                  <input id="admin-recipe-search" type="search" placeholder="Titolo, ingrediente…" autocomplete="off">
+                  <input id="admin-recipe-search" type="search" placeholder="Titolo, ingrediente o keyword…" autocomplete="off">
                 </label>
                 <label for="admin-recipe-category">Categoria
                   <select id="admin-recipe-category"><option value="">Tutte</option></select>
@@ -632,18 +641,83 @@
         .replace(/[\u0300-\u036f]/g, '');
     }
 
+    function normalizeSearchText(value) {
+      return normalizeSearch(value)
+        .replace(/[^a-z0-9]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function parseSearchQuery(value) {
+      const phrases = [];
+      const terms = [];
+      const source = String(value || '').trim();
+      const pattern = /"([^"]+)"|([^\s]+)/g;
+      let match;
+      while ((match = pattern.exec(source))) {
+        const normalized = normalizeSearchText(match[1] || match[2]);
+        if (!normalized) continue;
+        if (match[1]) phrases.push(normalized);
+        else normalized.split(' ').forEach((term) => terms.push(term));
+      }
+      return {
+        phrases: [...new Set(phrases)],
+        terms: [...new Set(terms)]
+      };
+    }
+
+    function searchQueryLabel(query) {
+      return [...query.phrases.map((phrase) => `“${phrase}”`), ...query.terms].join(' · ');
+    }
+
     function sectionSearchText(section) {
       return [section.title, ...(section.items || []), ...(section.sections || []).map(sectionSearchText)].join(' ');
     }
 
-    function recipeSearchText(recipe) {
-      return normalizeSearch([
-        recipe.title,
-        recipe.category,
-        recipe.subcategory,
-        ...(recipe.tags || []),
-        ...(recipe.sections || []).map(sectionSearchText)
-      ].join(' '));
+    function recipeSearchFields(recipe) {
+      return [
+        { text: normalizeSearchText(recipe.title), weight: 100 },
+        { text: normalizeSearchText(recipe.tags?.join(' ')), weight: 80 },
+        { text: normalizeSearchText(recipe.category), weight: 65 },
+        { text: normalizeSearchText(recipe.subcategory), weight: 60 },
+        { text: normalizeSearchText(recipe.notes?.join(' ')), weight: 35 },
+        { text: normalizeSearchText((recipe.sections || []).map(sectionSearchText).join(' ')), weight: 20 }
+      ];
+    }
+
+    function searchTextContainsTerm(text, term) {
+      return ` ${text} `.includes(` ${term} `);
+    }
+
+    function recipeSearchScore(recipe, query) {
+      if (!query.phrases.length && !query.terms.length) return 0;
+      const fields = recipeSearchFields(recipe);
+      if (!query.phrases.every((phrase) => fields.some((field) => field.text.includes(phrase)))) return -1;
+      if (!query.terms.every((term) => fields.some((field) => searchTextContainsTerm(field.text, term)))) return -1;
+
+      let score = 0;
+      query.phrases.forEach((phrase) => {
+        const bestField = fields.find((field) => field.text.includes(phrase));
+        score += (bestField?.weight || 0) + 40;
+      });
+      query.terms.forEach((term) => {
+        const matchingFields = fields.filter((field) => searchTextContainsTerm(field.text, term));
+        score += (matchingFields[0]?.weight || 0) + Math.min(matchingFields.length, 3) * 3;
+      });
+      return score;
+    }
+
+    function searchRecipes(dataset, queryText, category = '') {
+      const query = parseSearchQuery(queryText);
+      const matches = dataset.map((recipe, index) => ({
+        recipe,
+        index,
+        score: !category || recipe.category === category ? recipeSearchScore(recipe, query) : -1
+      }))
+        .filter((entry) => entry.score >= 0)
+        .sort((left, right) => right.score - left.score || left.index - right.index)
+        .map((entry) => entry.recipe);
+      return { query, matches };
     }
 
     function renderRecipeSection(section, parent) {
@@ -749,17 +823,18 @@
     }
 
     function renderRecipes() {
-      const term = normalizeSearch($('#search-input').value);
+      const queryText = $('#search-input').value;
       const category = $('#category-filter').value;
-      const matches = recipeDataset.filter((recipe) => {
-        const categoryMatches = !category || recipe.category === category;
-        return categoryMatches && (!term || recipeSearchText(recipe).includes(term));
-      });
+      const { query, matches } = searchRecipes(recipeDataset, queryText, category);
       const list = $('#recipe-list');
       list.replaceChildren();
       matches.forEach((recipe) => renderRecipeResult(recipe, list));
-      $('#recipe-count').textContent = `${matches.length} di ${recipeDataset.length} ricette`;
+      const queryLabel = searchQueryLabel(query);
+      $('#recipe-count').textContent = queryLabel
+        ? `${matches.length} risultati per ${queryLabel}`
+        : `${matches.length} di ${recipeDataset.length} ricette`;
       $('#no-results').hidden = matches.length > 0;
+      $('#clear-search-button').hidden = !queryText.trim();
       const selected = matches.find((recipe) => recipe.id === selectedRecipeId);
       if (selected) {
         const detail = $('#recipe-detail-content');
@@ -834,12 +909,9 @@
     function renderAdminRecipeList() {
       const container = $('#admin-recipe-list');
       if (!container) return;
-      const term = normalizeSearch($('#admin-recipe-search').value);
+      const queryText = $('#admin-recipe-search').value;
       const category = $('#admin-recipe-category').value;
-      const matches = recipeDataset.filter((recipe) => {
-        const categoryMatches = !category || recipe.category === category;
-        return categoryMatches && (!term || recipeSearchText(recipe).includes(term));
-      });
+      const { matches } = searchRecipes(recipeDataset, queryText, category);
       container.replaceChildren();
       matches.forEach((recipe) => {
         const row = document.createElement('div');
@@ -1202,6 +1274,11 @@
     $('#show-admin-button').addEventListener('click', showAdminView);
     $('#search-input').addEventListener('input', renderRecipes);
     $('#category-filter').addEventListener('change', renderRecipes);
+    $('#clear-search-button').addEventListener('click', () => {
+      $('#search-input').value = '';
+      renderRecipes();
+      $('#search-input').focus();
+    });
     $('#recipe-list').addEventListener('click', (event) => {
       const result = event.target.closest('.recipe-result');
       if (!result) return;
