@@ -21722,30 +21722,6 @@
         }
       ],
       "notes": []
-    },
-    {
-      "id": "test-test-testtest",
-      "title": "testtest",
-      "category": "test",
-      "subcategory": "test",
-      "tags": [],
-      "notes": [],
-      "sections": [
-        {
-          "title": "Ingredienti",
-          "type": "text",
-          "items": [],
-          "sections": []
-        },
-        {
-          "title": "Procedimento",
-          "type": "ordered",
-          "items": [
-            "test"
-          ],
-          "sections": []
-        }
-      ]
     }
   ]
 }
