@@ -4,14 +4,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Area privata</title>
+  <title>Ricettario</title>
   <style>
     :root { color-scheme: light; --bg:#f4f6f8; --card:#fff; --ink:#17212b; --muted:#647383; --accent:#b7352c; --line:#d9e0e7; --ok:#176b43; --danger:#a12222; }
     * { box-sizing:border-box; }
     body { margin:0; min-height:100vh; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
     main { width:min(1120px,calc(100% - 2rem)); margin:2rem auto 4rem; }
     .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:clamp(1rem,3vw,2rem); box-shadow:0 8px 28px #17212b0d; }
-    .login-card { max-width:450px; margin:12vh auto 0; }
+    .login-card { position:relative; max-width:470px; margin:clamp(3rem,14vh,9rem) auto 0; overflow:hidden; }
+    .login-card::before { position:absolute; inset:0 0 auto; height:5px; background:linear-gradient(90deg,var(--accent),#e0a22b); content:""; }
+    .login-brand { display:flex; align-items:center; gap:.75rem; margin-bottom:2rem; }
+    .login-mark { display:grid; width:2.8rem; height:2.8rem; place-items:center; border-radius:12px; background:var(--accent); color:#fff; font-size:1.35rem; font-weight:850; box-shadow:0 6px 14px #b7352c33; }
+    .login-brand-name { color:var(--ink); font-size:.9rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .login-eyebrow { margin:0 0 .45rem; color:var(--accent); font-size:.75rem; font-weight:850; letter-spacing:.12em; text-transform:uppercase; }
+    .login-card h1 { margin-bottom:.65rem; font-size:clamp(1.8rem,5vw,2.5rem); }
+    .login-description { max-width:34rem; margin:0 0 1.5rem; color:var(--muted); }
+    .login-form { gap:.85rem; }
+    .login-form label { color:var(--ink); font-size:.95rem; }
+    .login-form input { min-height:3rem; }
+    .login-submit { width:100%; min-height:3rem; margin-top:.2rem; }
+    .login-session-note { display:flex; gap:.5rem; align-items:flex-start; margin:1.25rem 0 0; padding:.75rem .85rem; border-radius:9px; background:#f7f8fa; color:var(--muted); font-size:.82rem; }
+    .login-session-note::before { flex:0 0 auto; color:var(--accent); content:"●"; font-size:.7rem; line-height:1.55; }
+    .login-card .status { margin:.1rem 0 0; }
     h1,h2,h3 { line-height:1.2; margin:0 0 .75rem; }
     h1 { font-size:clamp(1.5rem,4vw,2.1rem); }
     h2 { font-size:1.25rem; }
@@ -113,6 +127,8 @@
       .admin-reauth-form { grid-template-columns:1fr; }
       .reader-row { grid-template-columns:1fr; align-items:stretch; }
       .topbar { align-items:flex-start; flex-direction:column; }
+      .login-card { margin:2rem 0 0; }
+      .login-brand { margin-bottom:1.5rem; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior:auto !important; }
@@ -122,16 +138,22 @@
 <body>
   <main>
     <section id="login-view" class="card login-card" aria-labelledby="login-title">
-      <h1 id="login-title">Area privata</h1>
-      <p class="muted">Inserisci la password per continuare. L’accesso lettore resta attivo fino alla chiusura della scheda.</p>
-      <form id="login-form">
-        <label for="login-password">Password
+      <div class="login-brand" aria-label="Ricettario">
+        <span class="login-mark" aria-hidden="true">R</span>
+        <span class="login-brand-name">Ricettario</span>
+      </div>
+      <p class="login-eyebrow">Archivio personale</p>
+      <h1 id="login-title">Le tue ricette, sempre a portata di mano.</h1>
+      <p id="login-description" class="login-description">Accedi al ricettario per cercare, consultare e gestire il tuo archivio.</p>
+      <form id="login-form" class="login-form" aria-describedby="login-description">
+        <label for="login-password">Password di accesso
           <input id="login-password" type="password" autocomplete="current-password" required autofocus>
         </label>
-        <button id="login-button" type="submit">Accedi</button>
+        <button id="login-button" class="login-submit" type="submit">Apri il ricettario</button>
         <p id="login-status" class="status" role="status" aria-live="polite"></p>
         <p id="setup-hint" class="hint" hidden>Configurazione non inizializzata. Usa <a href="setup.html">setup.html</a> localmente e pubblica il nuovo <code>config.json</code>.</p>
       </form>
+      <p class="login-session-note">L’accesso resta attivo solo in questa scheda e termina quando la scheda viene chiusa.</p>
     </section>
 
     <section id="reader-view" hidden>
