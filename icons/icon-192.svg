@@ -1,6 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
   <title id="title">Ricettario</title>
-  <rect width="64" height="64" rx="16" fill="#b7352c"/>
-  <path fill="#fff" d="M16 34.5c0-3.6 2.4-6.7 5.7-7.8A10.8 10.8 0 0 1 32 17.2c2.8 0 5.3 1.1 7.2 2.9a10 10 0 0 1 5.2-1.5c5.5 0 10 4.5 10 10 0 1.1-.2 2.1-.5 3.1 2.4 1.2 4.1 3.7 4.1 6.6v2.2H16v-6Z"/>
-  <path fill="#fff" d="M16 42h42v7H16z"/>
+  <rect x="1" y="1" width="62" height="62" rx="15" fill="#fffaf0" stroke="#d9e0e7" stroke-width="2"/>
+  <g fill="#171717">
+    <ellipse cx="13" cy="16" rx="7" ry="10"/>
+    <path d="M11.5 24h3v30h-3z"/>
+    <path d="M24 8h2v16h2V8h2v16h2V8h2v16h2V8h2v16c0 4-2.4 7.5-6 8.5V54h-3V32.5c-3.6-1-6-4.5-6-8.5V8z"/>
+    <path d="M50 7c-3.6 0-6 6-6 15v9c0 6 2 10 6 12v11h3V7c-1-.1-2-.1-3 0z"/>
+  </g>
 </svg>
