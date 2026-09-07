@@ -1,0 +1,25 @@
+{
+  "name": "Ricettario",
+  "short_name": "Ricettario",
+  "description": "Archivio personale di ricette",
+  "lang": "it",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#b7352c",
+  "icons": [
+    {
+      "src": "./icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

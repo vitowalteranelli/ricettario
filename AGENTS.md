@@ -8,6 +8,8 @@ reader view, and Admin UI; `setup.html` is a local-only configuration helper;
 `recipes.json` is the structured recipe dataset rendered by `index.html`;
 `prompts/recipe-extraction.md` and `prompts/recipe-schema.json` define the AI
 recipe-import contract;
+`favicon.svg`, `manifest.webmanifest`, `sw.js`, and `icons/` provide the favicon
+and installable web-app shell;
 `Ricettario_CBT.html` remains the original migration source/backup.
 `tools/migrate-recipes.js` is the
 dependency-free one-time importer. `README.md` holds the three-step deployment
@@ -45,7 +47,9 @@ network logs, browser storage, and committed files. Verify that a reader refresh
 restores access until the tab closes; an Admin refresh restores the panel but
 requires reactivation before PAT/API-key operations. With AI configured, also
 verify that image/PDF import produces a draft, surfaces warnings, and never
-publishes without the existing manual save action.
+publishes without the existing manual save action. On GitHub Pages, verify that
+the favicon and PWA manifest load and that `recipes.json` is fetched from the
+network after a refresh rather than served from the service-worker cache.
 
 ## Commit & Pull Request Guidelines
 

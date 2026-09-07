@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>Ricettario</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#b7352c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ricettario">
   <style>
     :root { color-scheme: light; --bg:#f4f6f8; --card:#fff; --ink:#17212b; --muted:#647383; --accent:#b7352c; --line:#d9e0e7; --ok:#176b43; --danger:#a12222; }
     * { box-sizing:border-box; }
@@ -14,7 +19,8 @@
     .login-card { position:relative; max-width:470px; margin:clamp(3rem,14vh,9rem) auto 0; overflow:hidden; }
     .login-card::before { position:absolute; inset:0 0 auto; height:5px; background:linear-gradient(90deg,var(--accent),#e0a22b); content:""; }
     .login-brand { display:flex; align-items:center; gap:.75rem; margin-bottom:2rem; }
-    .login-mark { display:grid; width:2.8rem; height:2.8rem; place-items:center; border-radius:12px; background:var(--accent); color:#fff; font-size:1.35rem; font-weight:850; box-shadow:0 6px 14px #b7352c33; }
+    .login-mark { display:block; width:2.8rem; height:2.8rem; overflow:hidden; border-radius:12px; box-shadow:0 6px 14px #b7352c33; }
+    .login-mark img { display:block; width:100%; height:100%; }
     .login-brand-name { color:var(--ink); font-size:.9rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
     .login-eyebrow { margin:0 0 .45rem; color:var(--accent); font-size:.75rem; font-weight:850; letter-spacing:.12em; text-transform:uppercase; }
     .login-card h1 { margin-bottom:.65rem; font-size:clamp(1.8rem,5vw,2.5rem); }
@@ -144,7 +150,7 @@
   <main>
     <section id="login-view" class="card login-card" aria-labelledby="login-title">
       <div class="login-brand" aria-label="Ricettario">
-        <span class="login-mark" aria-hidden="true">R</span>
+        <span class="login-mark" aria-hidden="true"><img src="favicon.svg" alt=""></span>
         <span class="login-brand-name">Ricettario</span>
       </div>
       <p class="login-eyebrow">Archivio personale</p>
@@ -1123,8 +1129,13 @@
       });
     }
 
+    function updatePageTitle(role = null) {
+      document.title = role === 'admin' ? 'Ricettario · Amministrazione' : role === 'reader' ? 'Ricettario' : 'Ricettario · Accesso';
+    }
+
     function unlock(role, { restored = false } = {}) {
       session.role = role;
+      updatePageTitle(role);
       loginView.hidden = true;
       const isAdmin = role === 'admin';
       readerView.hidden = isAdmin;
@@ -1189,6 +1200,7 @@
       if (session.role !== 'admin') return;
       adminView.hidden = false;
       readerView.hidden = true;
+      updatePageTitle('admin');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1196,12 +1208,14 @@
       if (!session.role) return;
       adminView.hidden = true;
       readerView.hidden = false;
+      updatePageTitle('reader');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       $('#search-input').focus();
     }
 
     function logout() {
       session = { role: null, token: null, llmKey: null };
+      updatePageTitle();
       clearSessionRole();
       recipeDataset = [];
       clearTimeout(recipeSearchTimer);
@@ -1540,6 +1554,12 @@
         $('#setup-hint').hidden = false;
       }
     }());
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch((error) => console.warn('Service worker non disponibile:', error));
+      });
+    }
   </script>
 </body>
 </html>

@@ -23,10 +23,11 @@ Usalo solo per contenuti che possono essere distribuiti pubblicamente.
    cifrati in memoria.
 
 3. **Pubblica i file.** Copia il `config.json` generato nella root e pubblica
-   `index.html`, `config.json`, `recipes.json` e la directory `prompts/` tramite
-   GitHub Pages. Configura Pages dalla branch scelta e verifica prima il login
-   lettore, poi quello Admin. `setup.html` è un tool locale: non è necessario
-   pubblicarlo.
+   `index.html`, `config.json`, `recipes.json`, `favicon.svg`,
+   `manifest.webmanifest`, `sw.js`, la directory `icons/` e la directory
+   `prompts/` tramite GitHub Pages. Configura Pages dalla branch scelta e
+   verifica prima il login lettore, poi quello Admin. `setup.html` è un tool
+   locale: non è necessario pubblicarlo.
 
 ## Importazione AI da foto o PDF
 
@@ -101,6 +102,16 @@ dopo un refresh, ma il PAT e la API key vengono rimossi dalla RAM: il pannello
 mostra il dataset pubblico e richiede nuovamente la password Admin solo quando
 serve pubblicare, aggiornare le password lettore o usare l’importazione AI. Né il
 PAT né la API key vengono mai salvati nel browser.
+
+## Installazione come web app
+
+Su GitHub Pages, aprendo il sito da un browser compatibile, il ricettario può
+essere installato nella schermata Home o tra le applicazioni grazie a
+`manifest.webmanifest` e `sw.js`. Il service worker memorizza solo la shell
+statica dell’app; `config.json`, `recipes.json`, i prompt e le API esterne restano
+sempre esclusi dalla cache. Dopo una pubblicazione Admin, le nuove ricette sono
+disponibili al successivo refresh o alla riapertura dell’app: non è previsto un
+aggiornamento istantaneo mentre la schermata resta aperta.
 
 Se il token è valido ma il push fallisce, controlla owner, repository, branch e
 permesso `Contents: Read and write`. Un conflitto GitHub richiede di usare
