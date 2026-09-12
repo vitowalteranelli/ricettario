@@ -11,7 +11,7 @@ const SHELL_FILES = [
 function isLiveData(url) {
   return url.origin === self.location.origin && (
     url.pathname.endsWith('/config.json') ||
-    url.pathname.endsWith('/recipes.json') ||
+    url.pathname.includes('/datasets/') ||
     url.pathname.includes('/prompts/')
   );
 }

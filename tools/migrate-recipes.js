@@ -2,7 +2,7 @@
 
 /*
  * One-time, dependency-free migration from the Markdown-like corpus embedded
- * in Ricettario_CBT.html to a structured recipes.json file.
+ * in Ricettario_CBT.html to the CBT Pirotta source dataset.
  */
 
 const fs = require('node:fs');
@@ -10,7 +10,10 @@ const path = require('node:path');
 
 const repositoryRoot = path.resolve(__dirname, '..');
 const sourcePath = path.join(repositoryRoot, 'Ricettario_CBT.html');
-const destinationPath = path.join(repositoryRoot, 'recipes.json');
+const sourceId = 'cbt-pirotta';
+const sourceName = 'CBT Pirotta';
+const destinationPath = path.join(repositoryRoot, 'datasets', `${sourceId}.json`);
+const catalogPath = path.join(repositoryRoot, 'datasets', 'catalog.json');
 
 function slugify(value) {
   return value
@@ -64,7 +67,9 @@ function parseRecipes(markdown) {
     const baseId = slugify([category, subcategory, current.title].filter(Boolean).join('-')) || `ricetta-${recipes.length + 1}`;
     const occurrence = (seenIds.get(baseId) || 0) + 1;
     seenIds.set(baseId, occurrence);
-    current.id = occurrence === 1 ? baseId : `${baseId}-${occurrence}`;
+    const localId = occurrence === 1 ? baseId : `${baseId}-${occurrence}`;
+    current.id = `${sourceId}--${localId}`;
+    current.sourceId = sourceId;
     recipes.push(current);
     current = null;
     sectionStack = [];
@@ -162,9 +167,22 @@ if (recipes.length === 0) throw new Error('Nessuna ricetta estratta.');
 
 const output = {
   version: 1,
-  source: 'Ricettario_CBT.html',
+  sourceId,
+  sourceName,
   recipes
 };
+fs.mkdirSync(path.dirname(destinationPath), { recursive: true });
 fs.writeFileSync(destinationPath, `${JSON.stringify(output, null, 2)}\n`, 'utf8');
+
+const catalog = fs.existsSync(catalogPath)
+  ? JSON.parse(fs.readFileSync(catalogPath, 'utf8'))
+  : { version: 1, sources: [] };
+if (!Array.isArray(catalog.sources)) catalog.sources = [];
+const sourceEntry = { id: sourceId, label: sourceName, path: `datasets/${sourceId}.json` };
+const existingIndex = catalog.sources.findIndex((source) => source.id === sourceId);
+if (existingIndex >= 0) catalog.sources[existingIndex] = { ...catalog.sources[existingIndex], ...sourceEntry };
+else catalog.sources.push(sourceEntry);
+catalog.version = 1;
+fs.writeFileSync(catalogPath, `${JSON.stringify(catalog, null, 2)}\n`, 'utf8');
 
 console.log(`Migrated ${recipes.length} recipes to ${path.relative(repositoryRoot, destinationPath)}.`);

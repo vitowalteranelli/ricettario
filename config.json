@@ -4,7 +4,7 @@
     "owner": "vitowalteranelli",
     "repo": "ricettario",
     "branch": "main",
-    "contentPath": "recipes.json"
+    "catalogPath": "datasets/catalog.json"
   },
   "crypto": {
     "algorithm": "AES-256-GCM",

@@ -64,7 +64,7 @@
     .admin-panel { min-width:0; }
     .admin-recipe-workspace { display:grid; grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr); gap:1rem; align-items:start; }
     .admin-recipe-browser { min-width:0; }
-    .reader-toolbar { position:sticky; top:.5rem; z-index:2; display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:#fffffff2; box-shadow:0 5px 18px #17212b12; }
+    .reader-toolbar { position:sticky; top:.5rem; z-index:2; display:grid; grid-template-columns:minmax(0,1fr) 220px 260px; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:#fffffff2; box-shadow:0 5px 18px #17212b12; }
     .search-input-wrap { position:relative; display:block; }
     .search-input-wrap input { padding-right:2.75rem; }
     .search-clear { position:absolute; top:50%; right:.35rem; width:2rem; height:2rem; padding:0; transform:translateY(-50%); border-radius:50%; background:transparent !important; color:var(--muted) !important; font-size:1.25rem; line-height:1; }
@@ -103,6 +103,7 @@
     .recipe-import-panel input[type="file"] { padding:.55rem; }
     .recipe-admin-panel { display:grid; gap:1rem; }
     .admin-recipe-toolbar { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1rem; }
+    .admin-source-toolbar { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:1rem; align-items:end; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:#fbfcfd; }
     .admin-recipe-list { display:grid; gap:.55rem; max-height:55vh; overflow:auto; padding-right:.25rem; }
     .admin-recipe-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:center; padding:.75rem; border:1px solid var(--line); border-radius:9px; }
     .admin-recipe-row h4 { margin:0; font-size:1rem; }
@@ -118,6 +119,16 @@
     .section-children { display:grid; gap:.65rem; margin-top:.75rem; padding-left:1rem; border-left:2px solid var(--line); }
     .section-editor textarea { min-height:100px; font: .9rem/1.45 system-ui,-apple-system,"Segoe UI",sans-serif; }
     .recipe-editor > label textarea { min-height:100px; font: .9rem/1.45 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    .recipe-source-note { margin:0; color:var(--muted); font-size:.82rem; }
+    .source-list { display:grid; gap:.55rem; }
+    .source-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:center; padding:.85rem; border:1px solid var(--line); border-radius:9px; }
+    .source-row h4 { margin:0; font-size:1rem; }
+    .source-row-meta { color:var(--muted); font-size:.85rem; }
+    .source-row-actions { display:flex; flex-wrap:wrap; gap:.4rem; }
+    .source-row-actions button { padding:.45rem .65rem; font-size:.85rem; }
+    .source-editor { max-width:720px; padding:1rem; border:1px solid var(--line); border-radius:10px; background:#fbfcfd; }
+    .source-editor-path { margin:0; color:var(--muted); font-size:.85rem; }
+    .source-publish-bar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:1rem; align-items:end; position:sticky; bottom:.5rem; z-index:2; margin-top:.25rem; padding:.85rem; border:1px solid var(--line); border-radius:10px; background:#fffffff2; box-shadow:0 -5px 18px #17212b12; }
     .section-actions { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.65rem; }
     .section-actions button { padding:.45rem .65rem; font-size:.85rem; }
     .reader-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; gap:.65rem; padding:.75rem 0; border-bottom:1px solid var(--line); align-items:end; }
@@ -128,7 +139,7 @@
     [hidden] { display:none !important; }
     @media (max-width:760px) {
       main { width:min(100% - 1rem,1120px); margin-top:1rem; }
-      .grid,.reader-toolbar,.admin-recipe-toolbar,.admin-recipe-workspace,.section-editor-grid,.recipe-publish-bar { grid-template-columns:1fr; }
+      .grid,.reader-toolbar,.admin-recipe-toolbar,.admin-recipe-workspace,.section-editor-grid,.recipe-publish-bar,.admin-source-toolbar,.source-publish-bar { grid-template-columns:1fr; }
       .reader-toolbar { position:static; }
       .reader-layout.has-selection { grid-template-columns:1fr; }
       .reader-layout.has-selection .recipe-results-column { display:none; }
@@ -138,6 +149,7 @@
       .admin-reauth-form { grid-template-columns:1fr; }
       .reader-row { grid-template-columns:1fr; align-items:stretch; }
       .topbar { align-items:flex-start; flex-direction:column; }
+      .source-row { grid-template-columns:1fr; }
       .login-card { margin:2rem 0 0; }
       .login-brand { margin-bottom:1.5rem; }
     }
@@ -189,6 +201,11 @@
               <option value="">Tutte</option>
             </select>
           </label>
+          <label for="source-filter">Fonte
+            <select id="source-filter">
+              <option value="">Tutte le fonti</option>
+            </select>
+          </label>
           <p id="search-help" class="search-help">Cerca tutte le parole, anche parziali da 3 caratteri; usa le virgolette per una frase esatta, ad esempio <span aria-hidden="true">“</span>pasta sfoglia<span aria-hidden="true">”</span>.</p>
         </div>
         <div id="reader-layout" class="reader-layout">
@@ -221,6 +238,7 @@
       </div>
       <nav class="admin-tabs" role="tablist" aria-label="Sezioni amministratore">
         <button id="admin-tab-recipes" class="admin-tab active" role="tab" type="button" data-admin-tab="recipes" aria-controls="admin-recipes-panel" aria-selected="true">Ricette e importazione</button>
+        <button id="admin-tab-sources" class="admin-tab" role="tab" type="button" data-admin-tab="sources" aria-controls="admin-sources-panel" aria-selected="false">Fonti</button>
         <button id="admin-tab-access" class="admin-tab" role="tab" type="button" data-admin-tab="access" aria-controls="access-form" aria-selected="false">Password lettori</button>
       </nav>
       <section id="admin-session-notice" class="admin-session-notice" aria-labelledby="admin-session-title" hidden>
@@ -234,16 +252,25 @@
         <p id="admin-reauth-status" class="status" role="status" aria-live="polite"></p>
       </section>
       <div class="admin-grid">
-        <section id="admin-recipes-panel" class="recipe-admin-panel admin-panel" data-admin-panel="recipes" role="tabpanel" aria-labelledby="admin-tab-recipes">
-          <div class="topbar">
-            <div><h3 id="recipe-admin-title">Gestione ricette</h3><p class="muted">Le modifiche restano locali finché non pubblichi il dataset.</p></div>
+          <section id="admin-recipes-panel" class="recipe-admin-panel admin-panel" data-admin-panel="recipes" role="tabpanel" aria-labelledby="admin-tab-recipes">
+            <div class="topbar">
+            <div><h3 id="recipe-admin-title">Gestione ricette</h3><p class="muted">Le modifiche restano locali finché non pubblichi il dataset della fonte selezionata.</p></div>
             <button id="add-recipe-button" type="button">Nuova ricetta</button>
+          </div>
+          <div class="admin-source-toolbar">
+            <label for="admin-source-select">Fonte attiva
+              <select id="admin-source-select"></select>
+            </label>
+            <p id="admin-source-path" class="recipe-source-note"></p>
           </div>
           <section class="recipe-import-panel" aria-labelledby="recipe-import-title">
             <div>
               <h4 id="recipe-import-title">Importa da foto o PDF</h4>
               <p class="hint">L’AI crea una bozza: controlla sempre il form prima di salvarlo.</p>
             </div>
+            <label for="recipe-import-source">Fonte di destinazione
+              <select id="recipe-import-source" required></select>
+            </label>
             <label for="recipe-source-file">Immagine o documento
               <input id="recipe-source-file" type="file" accept="image/*,application/pdf" capture="environment" disabled>
             </label>
@@ -276,6 +303,10 @@
                 <label for="recipe-category">Categoria
                   <input id="recipe-category" required>
                 </label>
+                <label for="recipe-source">Fonte
+                  <select id="recipe-source" required></select>
+                  <span class="recipe-source-note">La fonte è obbligatoria. In modifica resta quella originale.</span>
+                </label>
                 <label for="recipe-subcategory">Sottocategoria
                   <input id="recipe-subcategory">
                 </label>
@@ -305,10 +336,48 @@
             </label>
             <div class="actions">
               <button id="reload-recipes-button" class="secondary" type="button">Ricarica da GitHub</button>
-              <button id="publish-recipes-button" type="button">Salva e pusha recipes.json</button>
+              <button id="publish-recipes-button" type="button">Salva e pusha dataset</button>
             </div>
           </div>
           <p id="recipe-admin-status" class="status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section id="admin-sources-panel" class="admin-panel" data-admin-panel="sources" role="tabpanel" aria-labelledby="admin-tab-sources" hidden>
+          <div class="topbar">
+            <div><h3>Gestione fonti</h3><p class="muted">Crea una fonte una sola volta, poi assegnala alle nuove ricette.</p></div>
+            <button id="add-source-button" type="button">Nuova fonte</button>
+          </div>
+          <div id="source-list" class="source-list"></div>
+          <form id="source-form" class="source-editor" hidden>
+            <h3 id="source-form-title">Nuova fonte</h3>
+            <div class="grid">
+              <label for="source-label">Nome della fonte
+                <input id="source-label" required maxlength="120" placeholder="es. Ricette regionali">
+              </label>
+              <label for="source-author">Autore o pubblicazione
+                <input id="source-author" maxlength="160" placeholder="es. Alessandro Molinari Pradelli">
+              </label>
+            </div>
+            <label for="source-description">Descrizione o note
+              <textarea id="source-description" rows="3" placeholder="Informazioni utili sulla fonte…"></textarea>
+            </label>
+            <p id="source-path" class="source-editor-path"></p>
+            <div class="actions">
+              <button type="submit">Salva fonte localmente</button>
+              <button id="cancel-source-button" class="secondary" type="button">Annulla</button>
+            </div>
+            <p id="source-editor-status" class="status" role="status" aria-live="polite"></p>
+          </form>
+          <div class="source-publish-bar">
+            <label for="source-commit-message">Messaggio commit fonti
+              <input id="source-commit-message" value="Aggiorna catalogo fonti" required>
+            </label>
+            <div class="actions">
+              <button id="reload-sources-button" class="secondary" type="button">Ricarica da GitHub</button>
+              <button id="publish-sources-button" type="button">Salva e pusha fonti</button>
+            </div>
+          </div>
+          <p id="source-admin-status" class="status" role="status" aria-live="polite"></p>
         </section>
 
         <form id="access-form" class="admin-panel admin-access-panel" data-admin-panel="access" role="tabpanel" aria-labelledby="admin-tab-access" hidden>
@@ -331,6 +400,7 @@
     // I segreti non vengono mai scritti in storage, cookie o DOM: vivono solo in RAM.
     // sessionStorage contiene esclusivamente il ruolo della sessione, mai PAT o API key.
     const CONFIG_PATH = 'config.json';
+    const DEFAULT_CATALOG_PATH = 'datasets/catalog.json';
     const AI_PROMPT_PATH = 'prompts/recipe-extraction.md';
     const AI_SCHEMA_PATH = 'prompts/recipe-schema.json';
     const AI_DEFAULT_MODEL = 'gemini-flash-latest';
@@ -345,9 +415,17 @@
     let accessRows = [];
     let recipeDataset = [];
     let recipeSearchTimer = null;
-    let recipeDatasetSource = 'Ricettario_CBT.html';
-    let recipeFilePath = 'recipes.json';
+    let recipeDatasetSource = 'CBT Pirotta';
+    let recipeDatasetSourceId = '';
+    let recipeFilePath = '';
     let recipeFileSha = null;
+    let catalogPath = DEFAULT_CATALOG_PATH;
+    let catalogSha = null;
+    let sourceCatalog = [];
+    let sourceDatasets = new Map();
+    let adminSourceId = '';
+    let sourceEditingId = null;
+    let catalogDirty = false;
     let selectedRecipeId = null;
     let editingRecipeId = null;
     let session = { role: null, token: null, llmKey: null };
@@ -467,6 +545,86 @@
       return clean;
     }
 
+    function configuredCatalogPath() {
+      return validateRepoPath(appConfig?.repository?.catalogPath || DEFAULT_CATALOG_PATH);
+    }
+
+    function normalizeSourceEntry(source, index) {
+      if (!source || typeof source !== 'object') throw new Error(`Fonte ${index + 1} non valida.`);
+      const label = String(source.label || source.name || '').trim();
+      const id = slugify(source.id || label);
+      if (!id || !label) throw new Error(`Fonte ${index + 1}: nome o ID mancante.`);
+      const path = validateRepoPath(source.path || `datasets/${id}.json`);
+      return {
+        ...source,
+        id,
+        label,
+        path,
+        author: String(source.author || '').trim(),
+        description: String(source.description || '').trim()
+      };
+    }
+
+    function parseSourceCatalog(data) {
+      if (!data || typeof data !== 'object' || !Array.isArray(data.sources) || !data.sources.length) {
+        throw new Error('Il catalogo non contiene fonti valide.');
+      }
+      const sources = data.sources.map(normalizeSourceEntry);
+      const ids = sources.map((source) => source.id);
+      if (new Set(ids).size !== ids.length) throw new Error('Il catalogo contiene ID fonte duplicati.');
+      const paths = sources.map((source) => source.path);
+      if (new Set(paths).size !== paths.length) throw new Error('Il catalogo contiene percorsi fonte duplicati.');
+      return { version: Number(data.version) || 1, sources };
+    }
+
+    function normalizeDataset(data, source) {
+      if (!data || typeof data !== 'object' || !Array.isArray(data.recipes)) {
+        throw new Error(`Il dataset della fonte “${source.label}” non contiene un array recipes valido.`);
+      }
+      if (data.sourceId && data.sourceId !== source.id) {
+        throw new Error(`Il dataset ${source.path} appartiene a una fonte diversa.`);
+      }
+      const recipes = data.recipes.map((recipe, index) => {
+        if (!recipe || typeof recipe !== 'object') throw new Error(`${source.path}: ricetta ${index + 1} non valida.`);
+        const rawId = String(recipe.id || '').trim();
+        if (!rawId) throw new Error(`${source.path}: ricetta ${index + 1} senza ID.`);
+        const prefix = `${source.id}--`;
+        const id = rawId.startsWith(prefix) ? rawId : `${prefix}${rawId}`;
+        if (recipe.sourceId && recipe.sourceId !== source.id) {
+          throw new Error(`${source.path}: la ricetta ${rawId} appartiene a una fonte diversa.`);
+        }
+        return { ...recipe, id, sourceId: source.id };
+      });
+      return { version: Number(data.version) || 1, sourceId: source.id, sourceName: source.label, recipes };
+    }
+
+    function datasetPayload(entry) {
+      return { version: 1, sourceId: entry.source.id, sourceName: entry.source.label, recipes: entry.recipes };
+    }
+
+    function sourceById(sourceId) {
+      return sourceCatalog.find((source) => source.id === sourceId) || null;
+    }
+
+    function sourceLabel(sourceId) {
+      return sourceById(sourceId)?.label || sourceId || 'Fonte sconosciuta';
+    }
+
+    function flattenSourceDatasets() {
+      return sourceCatalog.flatMap((source) => sourceDatasets.get(source.id)?.recipes || []);
+    }
+
+    function ensureUniqueRecipeIds() {
+      const ids = flattenSourceDatasets().map((recipe) => recipe.id);
+      if (new Set(ids).size !== ids.length) throw new Error('I dataset contengono ID ricetta duplicati.');
+    }
+
+    async function fetchJson(path, label) {
+      const response = await fetch(`${validateRepoPath(path)}?v=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`${label || path} non disponibile: HTTP ${response.status}.`);
+      return response.json();
+    }
+
     function detectRepository() {
       const configured = appConfig?.repository || {};
       const url = new URL(window.location.href);
@@ -485,10 +643,11 @@
 
     // L’API Contents richiede il token solo per la modalità Admin.
     async function githubRequest(method, path, options = {}) {
-      if (!session.token) throw new Error('Sessione Admin senza PAT. Riattiva le funzioni Admin.');
-      const repository = detectRepository();
-      const query = options.ref ? `?ref=${encodeURIComponent(options.ref)}` : '';
-      const endpoint = `https://api.github.com/repos/${encodeURIComponent(repository.owner)}/${encodeURIComponent(repository.repo)}/contents/${apiPath(path)}${query}`;
+        if (!session.token) throw new Error('Sessione Admin senza PAT. Riattiva le funzioni Admin.');
+        const repository = detectRepository();
+        const apiPrefix = options.apiPrefix || 'contents';
+        const query = options.ref && apiPrefix === 'contents' ? `?ref=${encodeURIComponent(options.ref)}` : '';
+        const endpoint = `https://api.github.com/repos/${encodeURIComponent(repository.owner)}/${encodeURIComponent(repository.repo)}/${apiPrefix}/${apiPath(path)}${query}`;
       const headers = {
         Accept: 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28',
@@ -502,17 +661,27 @@
     }
 
     async function githubGetFile(path) {
-      const repository = detectRepository();
-      const data = await githubRequest('GET', validateRepoPath(path), { ref: repository.branch });
-      if (data.type !== 'file' || !data.content) throw new Error('La risposta GitHub non contiene un file leggibile.');
-      return { sha: data.sha, text: base64ToUtf8(data.content) };
+        const repository = detectRepository();
+        const data = await githubRequest('GET', validateRepoPath(path), { ref: repository.branch });
+        if (data.type !== 'file') throw new Error('La risposta GitHub non contiene un file leggibile.');
+        if (data.content) return { sha: data.sha, text: base64ToUtf8(data.content) };
+
+        // Contents API omette il campo content per i file grandi. Il blob
+        // mantiene lo stesso SHA e restituisce comunque il contenuto Base64.
+        if (data.sha) {
+            const blob = await githubRequest('GET', data.sha, { apiPrefix: 'git/blobs' });
+            if (blob.encoding === 'base64' && blob.content) {
+                return { sha: data.sha, text: base64ToUtf8(blob.content) };
+            }
+        }
+        throw new Error('La risposta GitHub non contiene un file leggibile.');
     }
 
     async function githubPutFile(path, text, sha, message) {
       const repository = detectRepository();
-      return githubRequest('PUT', validateRepoPath(path), {
-        body: { message, content: utf8ToBase64(text), sha, branch: repository.branch }
-      });
+      const body = { message, content: utf8ToBase64(text), branch: repository.branch };
+      if (sha) body.sha = sha;
+      return githubRequest('PUT', validateRepoPath(path), { body });
     }
 
     function escapeHtml(value) {
@@ -533,7 +702,7 @@
       const extractButton = $('#extract-recipe-button');
       const configured = session.role === 'admin' && Boolean(session.llmKey) && appConfig?.ai?.provider === 'gemini';
       fileInput.disabled = !configured;
-      extractButton.disabled = !configured || !fileInput.files.length;
+      extractButton.disabled = !configured || !fileInput.files.length || !$('#recipe-import-source').value;
       if (!configured) setStatus($('#ai-status'), 'Importazione AI non configurata. Rigenera config.json con una API key Gemini.');
     }
 
@@ -613,6 +782,8 @@
       if (!isPdf && !file.type.startsWith('image/')) throw new Error('Sono accettati solo immagini e PDF.');
       if (file.size > AI_MAX_FILE_BYTES) throw new Error('Il file supera il limite di 20 MB.');
       if (!session.llmKey || appConfig?.ai?.provider !== 'gemini') throw new Error('Importazione AI non configurata.');
+      const sourceId = $('#recipe-import-source').value;
+      if (!sourceById(sourceId)) throw new Error('Seleziona una fonte di destinazione.');
 
       const { prompt, schema } = await loadAiExtractionAssets();
       const mimeType = isPdf ? 'application/pdf' : file.type;
@@ -635,7 +806,7 @@
       if (!response.ok) throw new Error(result.error?.message || `Gemini API: HTTP ${response.status}`);
       const modelText = (result.candidates?.[0]?.content?.parts || []).map((part) => part.text || '').join('');
       const draft = normalizeRecipeDraft(parseModelJson(modelText));
-      openRecipeEditor(draft.recipe, 'new');
+      openRecipeEditor({ ...draft.recipe, sourceId }, 'new');
       const warnings = [...draft.warnings, ...draft.uncertainFields.map((field) => `Verifica: ${field}`)];
       setStatus($('#recipe-editor-status'), warnings.length ? `Bozza importata. Controlla: ${warnings.join(' · ')}` : 'Bozza importata. Controlla il form prima di salvare.', warnings.length ? '' : 'ok');
       setStatus($('#ai-status'), `Analisi completata: ${file.name}.`, 'ok');
@@ -726,7 +897,7 @@
       return score;
     }
 
-    function searchRecipes(dataset, queryText, category = '') {
+    function searchRecipes(dataset, queryText, category = '', sourceId = '') {
       const query = parseSearchQuery(queryText);
       const entries = dataset.map((recipe, index) => ({
         recipe,
@@ -736,7 +907,7 @@
       const matches = entries.map((entry) => ({
         recipe: entry.recipe,
         index: entry.index,
-        score: !category || entry.recipe.category === category ? recipeSearchScore(entry, query) : -1
+        score: (!category || entry.recipe.category === category) && (!sourceId || entry.recipe.sourceId === sourceId) ? recipeSearchScore(entry, query) : -1
       }))
         .filter((entry) => entry.score >= 0)
         .sort((left, right) => right.score - left.score || left.index - right.index)
@@ -793,6 +964,11 @@
       title.textContent = recipe.title;
       card.appendChild(title);
 
+      const source = document.createElement('p');
+      source.className = 'recipe-source-note';
+      source.textContent = `Fonte: ${sourceLabel(recipe.sourceId)}`;
+      card.appendChild(source);
+
       if (recipe.subcategory) {
         const subcategory = document.createElement('p');
         subcategory.className = 'recipe-subcategory';
@@ -820,7 +996,7 @@
 
       const meta = document.createElement('span');
       meta.className = 'recipe-result-meta';
-      meta.textContent = [recipe.category || 'Senza categoria', recipe.subcategory].filter(Boolean).join(' · ');
+      meta.textContent = [recipe.category || 'Senza categoria', recipe.subcategory, sourceCatalog.length > 1 ? sourceLabel(recipe.sourceId) : ''].filter(Boolean).join(' · ');
       result.appendChild(meta);
 
       const title = document.createElement('span');
@@ -846,10 +1022,20 @@
       categories.forEach((category) => filter.add(new Option(category, category)));
     }
 
+    function populateSourceFilter() {
+      const filter = $('#source-filter');
+      if (!filter) return;
+      const selected = filter.value;
+      filter.replaceChildren(new Option('Tutte le fonti', ''));
+      sourceCatalog.forEach((source) => filter.add(new Option(source.label, source.id)));
+      filter.value = sourceCatalog.some((source) => source.id === selected) ? selected : '';
+    }
+
     function renderRecipes() {
       const queryText = $('#search-input').value;
       const category = $('#category-filter').value;
-      const { query, matches } = searchRecipes(recipeDataset, queryText, category);
+      const sourceId = $('#source-filter').value;
+      const { query, matches } = searchRecipes(recipeDataset, queryText, category, sourceId);
       const list = $('#recipe-list');
       list.replaceChildren();
       matches.forEach((recipe) => renderRecipeResult(recipe, list));
@@ -910,7 +1096,7 @@
 
     function defaultRecipe() {
       return {
-        id: '', title: '', category: '', subcategory: '', tags: [], notes: [],
+        id: '', sourceId: '', title: '', category: '', subcategory: '', tags: [], notes: [],
         sections: [
           { title: 'Ingredienti', type: 'text', items: [], sections: [] },
           { title: 'Procedimento', type: 'ordered', items: [], sections: [] }
@@ -918,13 +1104,157 @@
       };
     }
 
-    function uniqueRecipeId(recipe, excludedId = '') {
-      const base = slugify([recipe.category, recipe.subcategory, recipe.title].filter(Boolean).join('-')) || `ricetta-${Date.now()}`;
-      const used = new Set(recipeDataset.map((item) => item.id).filter((id) => id !== excludedId));
+    function uniqueRecipeId(recipe, sourceId, excludedId = '') {
+      const baseSlug = slugify([recipe.category, recipe.subcategory, recipe.title].filter(Boolean).join('-')) || `ricetta-${Date.now()}`;
+      const base = `${sourceId}--${baseSlug}`;
+      const used = new Set(flattenSourceDatasets().map((item) => item.id).filter((id) => id !== excludedId));
       let candidate = base;
       let suffix = 2;
       while (used.has(candidate)) candidate = `${base}-${suffix++}`;
       return candidate;
+    }
+
+    function populateAdminSourceSelect() {
+      const select = $('#admin-source-select');
+      if (!select) return;
+      select.replaceChildren();
+      sourceCatalog.forEach((source) => select.add(new Option(source.label, source.id)));
+      select.value = sourceCatalog.some((source) => source.id === adminSourceId) ? adminSourceId : (sourceCatalog[0]?.id || '');
+      const source = sourceById(select.value);
+      const entry = source ? sourceDatasets.get(source.id) : null;
+      $('#admin-source-path').textContent = source
+        ? `${source.path} · ${entry?.recipes.length || 0} ricette`
+        : 'Nessuna fonte disponibile.';
+    }
+
+    function populateRecipeSourceSelect(selectedId = '') {
+      const select = $('#recipe-source');
+      if (!select) return;
+      const selected = selectedId || select.value || adminSourceId;
+      select.replaceChildren(new Option('Seleziona una fonte', ''));
+      sourceCatalog.forEach((source) => select.add(new Option(source.label, source.id)));
+      select.value = sourceCatalog.some((source) => source.id === selected) ? selected : '';
+    }
+
+    function populateImportSourceSelect(selectedId = '') {
+      const select = $('#recipe-import-source');
+      if (!select) return;
+      const selected = selectedId || select.value || adminSourceId;
+      select.replaceChildren(new Option('Seleziona una fonte', ''));
+      sourceCatalog.forEach((source) => select.add(new Option(source.label, source.id)));
+      select.value = sourceCatalog.some((source) => source.id === selected) ? selected : '';
+    }
+
+    function populateAllSourceSelectors() {
+      populateSourceFilter();
+      populateAdminSourceSelect();
+      populateRecipeSourceSelect();
+      populateImportSourceSelect();
+      updateAiImportControls();
+    }
+
+    function renderSourceList() {
+      const container = $('#source-list');
+      if (!container) return;
+      container.replaceChildren();
+      if (!sourceCatalog.length) {
+        const empty = document.createElement('p');
+        empty.className = 'hint';
+        empty.textContent = 'Nessuna fonte configurata.';
+        container.appendChild(empty);
+        return;
+      }
+      sourceCatalog.forEach((source) => {
+        const row = document.createElement('div');
+        row.className = 'source-row';
+        row.dataset.id = source.id;
+
+        const info = document.createElement('div');
+        const title = document.createElement('h4');
+        title.textContent = source.label;
+        info.appendChild(title);
+        const meta = document.createElement('div');
+        meta.className = 'source-row-meta';
+        const count = sourceDatasets.get(source.id)?.recipes.length || 0;
+        meta.textContent = [source.author, `${count} ricette`, source.path].filter(Boolean).join(' · ');
+        info.appendChild(meta);
+        if (source.description) {
+          const description = document.createElement('div');
+          description.className = 'source-row-meta';
+          description.textContent = source.description;
+          info.appendChild(description);
+        }
+        row.appendChild(info);
+
+        const actions = document.createElement('div');
+        actions.className = 'source-row-actions';
+        const edit = document.createElement('button');
+        edit.type = 'button';
+        edit.className = 'secondary';
+        edit.dataset.action = 'edit-source';
+        edit.textContent = 'Modifica';
+        actions.appendChild(edit);
+        row.appendChild(actions);
+        container.appendChild(row);
+      });
+    }
+
+    function updateSourceFormPath() {
+      const sourceId = sourceEditingId || slugify($('#source-label').value);
+      $('#source-path').textContent = sourceId
+        ? `ID: ${sourceId} · file: datasets/${sourceId}.json`
+        : 'L’ID e il percorso file verranno creati dal nome.';
+    }
+
+    function openSourceEditor(source = null) {
+      sourceEditingId = source?.id || null;
+      $('#source-form-title').textContent = source ? 'Modifica fonte' : 'Nuova fonte';
+      $('#source-label').value = source?.label || '';
+      $('#source-author').value = source?.author || '';
+      $('#source-description').value = source?.description || '';
+      $('#source-label').disabled = false;
+      $('#source-path').textContent = source
+        ? `ID: ${source.id} · file: ${source.path}`
+        : 'L’ID e il percorso file verranno creati dal nome.';
+      $('#source-form').hidden = false;
+      setStatus($('#source-editor-status'), '');
+      $('#source-label').focus();
+    }
+
+    function closeSourceEditor() {
+      sourceEditingId = null;
+      $('#source-form').hidden = true;
+      setStatus($('#source-editor-status'), '');
+    }
+
+    function setAdminSource(sourceId, { closeEditor = true } = {}) {
+      const source = sourceById(sourceId) || sourceCatalog[0];
+      if (!source) {
+        adminSourceId = '';
+        recipeDataset = [];
+        recipeDatasetSource = '';
+        recipeDatasetSourceId = '';
+        recipeFilePath = '';
+        recipeFileSha = null;
+        populateAllSourceSelectors();
+        renderAdminRecipeList();
+        return;
+      }
+      const entry = sourceDatasets.get(source.id);
+      if (!entry) throw new Error(`Dataset della fonte “${source.label}” non caricato.`);
+      adminSourceId = source.id;
+      recipeDataset = entry.recipes;
+      recipeDatasetSource = source.label;
+      recipeDatasetSourceId = source.id;
+      recipeFilePath = entry.path;
+      recipeFileSha = entry.sha;
+      populateAllSourceSelectors();
+      populateAdminCategoryFilter();
+      renderAdminRecipeList();
+      if (closeEditor) {
+        editingRecipeId = null;
+        $('#recipe-form').hidden = true;
+      }
     }
 
     function populateAdminCategoryFilter() {
@@ -1057,6 +1387,9 @@
       }
       editingRecipeId = mode === 'edit' ? draft.id : null;
       $('#recipe-form-title').textContent = mode === 'edit' ? 'Modifica ricetta' : 'Nuova ricetta';
+      populateRecipeSourceSelect(draft.sourceId || adminSourceId);
+      $('#recipe-source').value = draft.sourceId || adminSourceId || '';
+      $('#recipe-source').disabled = mode === 'edit';
       $('#recipe-title').value = draft.title || '';
       $('#recipe-category').value = draft.category || '';
       $('#recipe-subcategory').value = draft.subcategory || '';
@@ -1070,37 +1403,55 @@
       $('#recipe-title').focus();
     }
 
-    function applyRecipeDataset(dataset, path) {
-      if (!Array.isArray(dataset.recipes)) throw new Error('Il dataset non contiene un array recipes valido.');
-      recipeDataset = dataset.recipes;
-      recipeDatasetSource = dataset.source || 'Ricettario_CBT.html';
-      recipeFilePath = path;
+    function applyReaderDatasets() {
+      recipeDataset = flattenSourceDatasets();
+      recipeDatasetSource = '';
+      recipeDatasetSourceId = '';
+      populateAllSourceSelectors();
       populateCategoryFilter();
-      populateAdminCategoryFilter();
       renderRecipes();
       renderAdminRecipeList();
+      renderSourceList();
     }
 
-    async function loadAdminRecipeDataset() {
-      const path = validateRepoPath(appConfig.repository?.contentPath || 'recipes.json');
-      setStatus($('#recipe-admin-status'), `Caricamento di ${path} da GitHub…`);
-      const file = await githubGetFile(path);
-      recipeFileSha = file.sha;
-      applyRecipeDataset(JSON.parse(file.text), path);
-      setStatus($('#recipe-admin-status'), `Dataset caricato: ${recipeDataset.length} ricette.`, 'ok');
+    async function loadAdminSourceCatalog() {
+      catalogPath = configuredCatalogPath();
+      setStatus($('#recipe-admin-status'), `Caricamento del catalogo fonti da GitHub…`);
+      const catalogFile = await githubGetFile(catalogPath);
+      const catalog = parseSourceCatalog(JSON.parse(catalogFile.text));
+      catalogSha = catalogFile.sha;
+      sourceCatalog = catalog.sources;
+      const entries = await Promise.all(sourceCatalog.map(async (source) => {
+        const file = await githubGetFile(source.path);
+        const dataset = normalizeDataset(JSON.parse(file.text), source);
+        return [source.id, { source, path: source.path, sha: file.sha, recipes: dataset.recipes, recipeDirty: false, metadataDirty: false }];
+      }));
+      sourceDatasets = new Map(entries);
+      ensureUniqueRecipeIds();
+      catalogDirty = false;
+      adminSourceId = sourceById(adminSourceId)?.id || sourceCatalog[0]?.id || '';
+      populateAllSourceSelectors();
+      renderSourceList();
+      setAdminSource(adminSourceId);
+      setStatus($('#recipe-admin-status'), `Fonti caricate: ${sourceCatalog.length} · ${flattenSourceDatasets().length} ricette.`, 'ok');
     }
 
-    // Il lettore carica il dataset soltanto dopo lo sblocco della UI.
+    // Il lettore carica il catalogo e tutti i dataset soltanto dopo lo sblocco della UI.
     async function loadReaderContent() {
       const status = $('#content-status');
-      const path = validateRepoPath(appConfig.repository?.contentPath || 'recipes.json');
-      if (!/\.json$/i.test(path)) throw new Error('contentPath deve puntare a un dataset JSON, normalmente recipes.json.');
-      setStatus(status, `Caricamento di ${path}…`);
-      const response = await fetch(`${path}?v=${Date.now()}`, { cache: 'no-store' });
-      if (!response.ok) throw new Error(`Dataset non disponibile: HTTP ${response.status}.`);
-      const dataset = await response.json();
-      applyRecipeDataset(dataset, path);
-      setStatus(status, `Dataset caricato: ${recipeDataset.length} ricette.`, 'ok');
+      catalogPath = configuredCatalogPath();
+      setStatus(status, `Caricamento delle fonti…`);
+      const catalog = parseSourceCatalog(await fetchJson(catalogPath, 'Catalogo fonti'));
+      sourceCatalog = catalog.sources;
+      const entries = await Promise.all(sourceCatalog.map(async (source) => {
+        const dataset = normalizeDataset(await fetchJson(source.path, `Dataset ${source.label}`), source);
+        return [source.id, { source, path: source.path, sha: null, recipes: dataset.recipes, recipeDirty: false, metadataDirty: false }];
+      }));
+      sourceDatasets = new Map(entries);
+      ensureUniqueRecipeIds();
+      applyReaderDatasets();
+      if (session.role === 'admin' && sourceCatalog.length) setAdminSource(adminSourceId || sourceCatalog[0].id);
+      setStatus(status, `Dataset caricati: ${flattenSourceDatasets().length} ricette da ${sourceCatalog.length} fonti.`, 'ok');
     }
 
     function renderAccessRows() {
@@ -1148,6 +1499,8 @@
         $('#repository-badge').textContent = `${repository.owner}/${repository.repo}`;
         accessRows = (appConfig.readOnlyPasswords || []).map((entry) => ({ ...entry }));
         renderAccessRows();
+        populateAllSourceSelectors();
+        renderSourceList();
         switchAdminPanel('recipes');
       }
       updateAiImportControls();
@@ -1178,7 +1531,7 @@
 
       accessRows = (appConfig.readOnlyPasswords || []).map((entry) => ({ ...entry }));
       renderAccessRows();
-      await loadAdminRecipeDataset();
+      await loadAdminSourceCatalog();
       rememberSessionRole('admin');
       $('#admin-session-notice').hidden = true;
       setStatus($('#admin-reauth-status'), 'Funzioni Admin riattivate fino al prossimo refresh.', 'ok');
@@ -1198,6 +1551,7 @@
 
     function showAdminView() {
       if (session.role !== 'admin') return;
+      if (adminSourceId) setAdminSource(adminSourceId, { closeEditor: false });
       adminView.hidden = false;
       readerView.hidden = true;
       updatePageTitle('admin');
@@ -1206,6 +1560,7 @@
 
     function showReaderView() {
       if (!session.role) return;
+      applyReaderDatasets();
       adminView.hidden = true;
       readerView.hidden = false;
       updatePageTitle('reader');
@@ -1218,18 +1573,31 @@
       updatePageTitle();
       clearSessionRole();
       recipeDataset = [];
+      sourceCatalog = [];
+      sourceDatasets = new Map();
+      adminSourceId = '';
+      catalogSha = null;
+      catalogDirty = false;
       clearTimeout(recipeSearchTimer);
       recipeFileSha = null;
+      recipeFilePath = '';
+      recipeDatasetSource = '';
+      recipeDatasetSourceId = '';
       editingRecipeId = null;
       $('#recipe-list').replaceChildren();
       $('#recipe-count').textContent = '';
       $('#search-input').value = '';
       $('#category-filter').replaceChildren(new Option('Tutte', ''));
+      $('#source-filter').replaceChildren(new Option('Tutte le fonti', ''));
+      $('#admin-source-select').replaceChildren();
+      $('#recipe-source').replaceChildren(new Option('Seleziona una fonte', ''));
+      $('#recipe-import-source').replaceChildren(new Option('Seleziona una fonte', ''));
       $('#admin-recipe-search').value = '';
       $('#admin-recipe-category').replaceChildren(new Option('Tutte', ''));
       $('#admin-recipe-list').replaceChildren();
       closeRecipeDetail({ focus: false });
       $('#recipe-form').hidden = true;
+      closeSourceEditor();
       $('#recipe-source-file').value = '';
       $('#recipe-source-name').textContent = '';
       setStatus($('#ai-status'), '');
@@ -1287,7 +1655,7 @@
 
         unlock('admin');
         authStage = 'github-recipes';
-        await loadAdminRecipeDataset();
+        await loadAdminSourceCatalog();
         rememberSessionRole('admin');
       } catch (error) {
         session = { role: null, token: null, llmKey: null };
@@ -1295,7 +1663,7 @@
         if (authStage === 'github-config') {
           message = `PAT, repository o branch non accessibili: ${message}`;
         } else if (authStage === 'github-recipes') {
-          message = `Accesso a recipes.json non riuscito: ${message}`;
+          message = `Catalogo fonti o dataset non accessibile: ${message}`;
         } else if (authStage === 'ai-decrypt') {
           message = `Configurazione AI non accessibile: ${message}`;
         } else if (authStage === 'reader') {
@@ -1350,18 +1718,80 @@
 
     $('#admin-recipe-search').addEventListener('input', renderAdminRecipeList);
     $('#admin-recipe-category').addEventListener('change', renderAdminRecipeList);
+    $('#source-filter').addEventListener('change', renderRecipes);
+    $('#admin-source-select').addEventListener('change', () => {
+      try {
+        setAdminSource($('#admin-source-select').value);
+      } catch (error) {
+        setStatus($('#recipe-admin-status'), error.message, 'error');
+      }
+    });
     document.querySelectorAll('[data-admin-tab]').forEach((tab) => {
       tab.addEventListener('click', () => switchAdminPanel(tab.dataset.adminTab));
     });
 
-    $('#add-recipe-button').addEventListener('click', () => openRecipeEditor(null, 'new'));
+    $('#add-recipe-button').addEventListener('click', () => {
+      if (!adminSourceId) {
+        setStatus($('#recipe-admin-status'), 'Crea prima una fonte.', 'error');
+        switchAdminPanel('sources');
+        return;
+      }
+      openRecipeEditor(null, 'new');
+    });
+
+    $('#add-source-button').addEventListener('click', () => openSourceEditor());
+    $('#source-label').addEventListener('input', updateSourceFormPath);
+    $('#cancel-source-button').addEventListener('click', closeSourceEditor);
+    $('#source-list').addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-action="edit-source"]');
+      if (!button) return;
+      openSourceEditor(sourceById(button.closest('.source-row').dataset.id));
+    });
+
+    $('#source-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      try {
+        const label = $('#source-label').value.trim();
+        const author = $('#source-author').value.trim();
+        const description = $('#source-description').value.trim();
+        const id = sourceEditingId || slugify(label);
+        if (!label || !id) throw new Error('Inserisci un nome fonte valido.');
+        const existing = sourceEditingId ? sourceById(sourceEditingId) : sourceById(id);
+        if (!existing && sourceById(id)) throw new Error('Esiste già una fonte con questo ID.');
+        const duplicateLabel = sourceCatalog.find((source) => source.id !== (sourceEditingId || id) && normalizeSearch(source.label) === normalizeSearch(label));
+        if (duplicateLabel) throw new Error('Esiste già una fonte con questo nome.');
+        if (existing) {
+          existing.label = label;
+          existing.author = author;
+          existing.description = description;
+          const entry = sourceDatasets.get(existing.id);
+          if (!entry) throw new Error('Dataset fonte non caricato.');
+          entry.source = existing;
+          entry.metadataDirty = true;
+          adminSourceId = existing.id;
+        } else {
+          const source = { id, label, author, description, path: `datasets/${id}.json` };
+          sourceCatalog.push(source);
+          sourceDatasets.set(id, { source, path: source.path, sha: null, recipes: [], recipeDirty: false, metadataDirty: true });
+          adminSourceId = id;
+        }
+        catalogDirty = true;
+        populateAllSourceSelectors();
+        renderSourceList();
+        setAdminSource(adminSourceId, { closeEditor: false });
+        setStatus($('#source-editor-status'), 'Fonte salvata localmente. Pubblica il catalogo per confermare.', 'ok');
+      } catch (error) {
+        setStatus($('#source-editor-status'), error.message, 'error');
+      }
+    });
 
     $('#recipe-source-file').addEventListener('change', () => {
       const file = $('#recipe-source-file').files[0];
       $('#recipe-source-name').textContent = file ? `${file.name} (${Math.ceil(file.size / 1024)} KB)` : '';
-      $('#extract-recipe-button').disabled = !file || !session.llmKey;
+      updateAiImportControls();
       if (file) setStatus($('#ai-status'), 'File pronto per l’analisi.');
     });
+    $('#recipe-import-source').addEventListener('change', updateAiImportControls);
 
     $('#extract-recipe-button').addEventListener('click', async () => {
       const file = $('#recipe-source-file').files[0];
@@ -1387,7 +1817,14 @@
       if (button.dataset.action === 'duplicate') openRecipeEditor(recipe, 'duplicate');
       if (button.dataset.action === 'delete') {
         if (!window.confirm(`Eliminare la ricetta “${recipe.title}”?`)) return;
-        recipeDataset = recipeDataset.filter((item) => item.id !== recipe.id);
+        const entry = sourceDatasets.get(recipe.sourceId || adminSourceId);
+        const recipeIndex = entry?.recipes.indexOf(recipe) ?? -1;
+        if (!entry || recipeIndex < 0) {
+          setStatus($('#recipe-admin-status'), 'Dataset della fonte non disponibile.', 'error');
+          return;
+        }
+        entry.recipes.splice(recipeIndex, 1);
+        entry.recipeDirty = true;
         if (editingRecipeId === recipe.id) $('#recipe-form').hidden = true;
         populateCategoryFilter();
         populateAdminCategoryFilter();
@@ -1402,13 +1839,19 @@
       try {
         const title = $('#recipe-title').value.trim();
         const category = $('#recipe-category').value.trim();
+        const sourceId = $('#recipe-source').value;
         if (!title || !category) throw new Error('Titolo e categoria sono obbligatori.');
+        const source = sourceById(sourceId);
+        const target = source ? sourceDatasets.get(source.id) : null;
+        if (!source || !target) throw new Error('Seleziona una fonte valida.');
         const sectionElements = [...$('#section-editor-list').children];
         const sections = sectionElements.map(readSectionEditor);
         if (!sections.length) throw new Error('Aggiungi almeno una sezione.');
         const existing = recipeDataset.find((recipe) => recipe.id === editingRecipeId);
+        if (existing && existing.sourceId !== sourceId) throw new Error('Per cambiare fonte usa una nuova ricetta o duplica la ricetta.');
         const recipe = {
-          id: existing ? existing.id : uniqueRecipeId({ title, category, subcategory: $('#recipe-subcategory').value.trim() }),
+          id: existing ? existing.id : uniqueRecipeId({ title, category, subcategory: $('#recipe-subcategory').value.trim() }, sourceId),
+          sourceId,
           title,
           category,
           subcategory: $('#recipe-subcategory').value.trim(),
@@ -1419,8 +1862,10 @@
         if (existing) {
           recipeDataset[recipeDataset.indexOf(existing)] = recipe;
         } else {
-          recipeDataset.push(recipe);
+          target.recipes.push(recipe);
+          if (sourceId !== adminSourceId) setAdminSource(sourceId, { closeEditor: false });
         }
+        target.recipeDirty = true;
         editingRecipeId = recipe.id;
         populateCategoryFilter();
         populateAdminCategoryFilter();
@@ -1442,7 +1887,7 @@
       try {
         $('#recipe-form').hidden = true;
         editingRecipeId = null;
-        await loadAdminRecipeDataset();
+        await loadAdminSourceCatalog();
       } catch (error) {
         setStatus($('#recipe-admin-status'), error.message, 'error');
       }
@@ -1451,19 +1896,65 @@
     $('#publish-recipes-button').addEventListener('click', async () => {
       try {
         if (!session.token) throw new Error('Sessione Admin senza PAT. Riattiva le funzioni Admin.');
-        if (!recipeFileSha) throw new Error('Dataset non caricato da GitHub.');
+        const entry = sourceDatasets.get(adminSourceId);
+        if (!entry) throw new Error('Seleziona una fonte con dataset caricato.');
         const message = $('#recipe-commit-message').value.trim();
         if (!message) throw new Error('Inserisci un messaggio di commit.');
-        if (recipeDataset.some((recipe) => !recipe.id || !recipe.title || !recipe.category)) throw new Error('Ogni ricetta deve avere ID, titolo e categoria.');
-        const ids = recipeDataset.map((recipe) => recipe.id);
+        if (entry.recipes.some((recipe) => !recipe.id || !recipe.title || !recipe.category || recipe.sourceId !== adminSourceId)) throw new Error('Ogni ricetta deve avere ID, titolo, categoria e fonte validi.');
+        const ids = flattenSourceDatasets().map((recipe) => recipe.id);
         if (new Set(ids).size !== ids.length) throw new Error('Gli ID delle ricette devono essere univoci.');
-        const payload = JSON.stringify({ version: 1, source: recipeDatasetSource, recipes: recipeDataset }, null, 2) + '\n';
-        setStatus($('#recipe-admin-status'), 'Pubblicazione di recipes.json su GitHub…');
-        const result = await githubPutFile(recipeFilePath, payload, recipeFileSha, message);
-        recipeFileSha = result.content?.sha || recipeFileSha;
-        setStatus($('#recipe-admin-status'), 'Dataset pubblicato e commit creato.', 'ok');
+        const payload = JSON.stringify(datasetPayload(entry), null, 2) + '\n';
+        setStatus($('#recipe-admin-status'), `Pubblicazione di ${entry.path} su GitHub…`);
+        const result = await githubPutFile(entry.path, payload, entry.sha, message);
+        entry.sha = result.content?.sha || entry.sha;
+        entry.recipeDirty = false;
+        entry.metadataDirty = false;
+        recipeFileSha = entry.sha;
+        setStatus($('#recipe-admin-status'), `Dataset ${entry.source.label} pubblicato e commit creato.`, 'ok');
       } catch (error) {
         setStatus($('#recipe-admin-status'), error.message, 'error');
+      }
+    });
+
+    $('#reload-sources-button').addEventListener('click', async () => {
+      try {
+        closeSourceEditor();
+        await loadAdminSourceCatalog();
+      } catch (error) {
+        setStatus($('#source-admin-status'), error.message, 'error');
+      }
+    });
+
+    $('#publish-sources-button').addEventListener('click', async () => {
+      try {
+        if (!session.token) throw new Error('Sessione Admin senza PAT. Riattiva le funzioni Admin.');
+        if (!catalogSha) throw new Error('Catalogo fonti non caricato da GitHub.');
+        const message = $('#source-commit-message').value.trim();
+        if (!message) throw new Error('Inserisci un messaggio di commit.');
+        const pending = sourceCatalog
+          .map((source) => sourceDatasets.get(source.id))
+          .filter((entry) => entry && (!entry.sha || entry.metadataDirty));
+        if (pending.some((entry) => entry.recipeDirty)) throw new Error('Pubblica prima le modifiche alle ricette della fonte interessata.');
+        if (!catalogDirty && !pending.length) {
+          setStatus($('#source-admin-status'), 'Nessuna modifica alle fonti da pubblicare.', 'ok');
+          return;
+        }
+        for (const entry of pending) {
+          const payload = JSON.stringify(datasetPayload(entry), null, 2) + '\n';
+          const result = await githubPutFile(entry.path, payload, entry.sha, message);
+          entry.sha = result.content?.sha || entry.sha;
+          entry.metadataDirty = false;
+        }
+        const catalogPayload = JSON.stringify({ version: 1, sources: sourceCatalog }, null, 2) + '\n';
+        const result = await githubPutFile(catalogPath, catalogPayload, catalogSha, message);
+        catalogSha = result.content?.sha || catalogSha;
+        catalogDirty = false;
+        renderSourceList();
+        populateAllSourceSelectors();
+        setAdminSource(adminSourceId, { closeEditor: false });
+        setStatus($('#source-admin-status'), 'Catalogo fonti pubblicato e commit creati.', 'ok');
+      } catch (error) {
+        setStatus($('#source-admin-status'), error.message, 'error');
       }
     });
 

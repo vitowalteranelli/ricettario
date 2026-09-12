@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "cbt-pirotta",
+      "label": "CBT Pirotta",
+      "path": "datasets/cbt-pirotta.json"
+    },
+    {
+      "id": "ricette-regionali",
+      "label": "Ricette regionali",
+      "path": "datasets/ricette-regionali.json",
+      "author": "Alessandro Molinari Pradelli",
+      "description": "La cucina regionale italiana in oltre 5000 ricette"
+    }
+  ]
+}

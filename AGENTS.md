@@ -4,8 +4,9 @@
 
 This is a dependency-free static web app. `index.html` is the password wall,
 reader view, and Admin UI; `setup.html` is a local-only configuration helper;
-`config.json` stores the encrypted PAT payload and reader-password hashes; and
-`recipes.json` is the structured recipe dataset rendered by `index.html`;
+`config.json` stores the encrypted PAT payload and reader-password hashes;
+`datasets/catalog.json` lists the recipe sources; and each JSON in `datasets/`
+is the structured recipe dataset rendered by `index.html`;
 `prompts/recipe-extraction.md` and `prompts/recipe-schema.json` define the AI
 recipe-import contract;
 `favicon.svg`, `manifest.webmanifest`, `sw.js`, and `icons/` provide the favicon
@@ -47,9 +48,11 @@ network logs, browser storage, and committed files. Verify that a reader refresh
 restores access until the tab closes; an Admin refresh restores the panel but
 requires reactivation before PAT/API-key operations. With AI configured, also
 verify that image/PDF import produces a draft, surfaces warnings, and never
-publishes without the existing manual save action. On GitHub Pages, verify that
-the favicon and PWA manifest load and that `recipes.json` is fetched from the
-network after a refresh rather than served from the service-worker cache.
+publishes without the existing manual save action. Verify source management,
+source selection when adding/importing a recipe, and source-specific publishing.
+On GitHub Pages, verify that the favicon and PWA manifest load and that the
+catalog and source datasets are fetched from the network after a refresh rather
+than served from the service-worker cache.
 
 ## Commit & Pull Request Guidelines
 

@@ -23,7 +23,7 @@ Usalo solo per contenuti che possono essere distribuiti pubblicamente.
    cifrati in memoria.
 
 3. **Pubblica i file.** Copia il `config.json` generato nella root e pubblica
-   `index.html`, `config.json`, `recipes.json`, `favicon.svg`,
+   `index.html`, `config.json`, `datasets/`, `favicon.svg`,
    `manifest.webmanifest`, `sw.js`, la directory `icons/` e la directory
    `prompts/` tramite GitHub Pages. Configura Pages dalla branch scelta e
    verifica prima il login lettore, poi quello Admin. `setup.html` è un tool
@@ -67,7 +67,7 @@ La sostituzione del PAT rigenera il payload cifrato e non richiede modifiche a
    `crypto.ciphertext` siano valorizzati. Non incollare il PAT in terminale,
    README, issue o commit.
 6. Verifica in locale `index.html`; solo dopo il test fai commit e push di
-   `index.html`, `config.json`, `recipes.json` e `prompts/`. Mantieni
+   `index.html`, `config.json`, `datasets/` e `prompts/`. Mantieni
    `setup.html` fuori dalla pubblicazione Pages.
 
 La procedura rigenera anche gli hash lettore: inserisci nuovamente tutte le
@@ -89,7 +89,8 @@ Poi apri `http://localhost:8000/index.html` e verifica:
 - una password lettore mostra ricerca, filtro categoria e ricette;
 - la password Admin mostra il pannello CRUD;
 - aggiunta, modifica, duplicazione ed eliminazione aggiornano il contatore;
-- `Salva e pusha recipes.json` crea il commit atteso;
+- `Salva e pusha dataset` aggiorna solo il JSON della fonte attiva;
+- il pannello **Fonti** permette di creare e modificare il catalogo delle fonti;
 - gestione password lettori continua a funzionare;
 - con una configurazione AI valida, foto e PDF compilano una bozza ricetta;
 - una bozza AI mostra gli eventuali warning e richiede revisione manuale;
@@ -108,7 +109,7 @@ PAT né la API key vengono mai salvati nel browser.
 Su GitHub Pages, aprendo il sito da un browser compatibile, il ricettario può
 essere installato nella schermata Home o tra le applicazioni grazie a
 `manifest.webmanifest` e `sw.js`. Il service worker memorizza solo la shell
-statica dell’app; `config.json`, `recipes.json`, i prompt e le API esterne restano
+statica dell’app; `config.json`, `datasets/`, i prompt e le API esterne restano
 sempre esclusi dalla cache. Dopo una pubblicazione Admin, le nuove ricette sono
 disponibili al successivo refresh o alla riapertura dell’app: non è previsto un
 aggiornamento istantaneo mentre la schermata resta aperta.
@@ -119,8 +120,9 @@ permesso `Contents: Read and write`. Un conflitto GitHub richiede di usare
 
 ## Funzionamento
 
-`index.html` non contiene il testo delle ricette: dopo il login carica il dataset
-JSON indicato in `config.json` (di default `recipes.json`). La password lettore verifica solo gli hash locali e
+`index.html` non contiene il testo delle ricette: dopo il login carica il catalogo
+JSON indicato in `config.json` (di default `datasets/catalog.json`) e tutti i
+dataset delle fonti elencate. La password lettore verifica solo gli hash locali e
 non tenta mai di decifrare il PAT. La password Admin decifra il PAT in RAM e
 abilita le API GitHub Contents per caricare/salvare file e aggiornare gli hash
 lettore.
@@ -131,17 +133,41 @@ pathname. Su un dominio custom compilali nei campi Owner/Repository di
 
 ## Dataset ricette
 
-Il corpus strutturato è in `recipes.json` e contiene 660 ricette con ID stabili,
-categorie, sottocategorie e sezioni ordinate. La migrazione originale può
-essere rigenerata con:
+Il catalogo delle fonti è in `datasets/catalog.json`; ogni fonte ha un dataset
+separato, ad esempio `datasets/cbt-pirotta.json` e
+`datasets/ricette-regionali.json`. Gli ID delle ricette sono globalmente univoci
+e prefissati dall’ID fonte. Il dataset CBT contiene 660 ricette con categorie,
+sottocategorie e sezioni ordinate. La fonte “Ricette regionali” contiene 4.521
+ricette ricavate dalla trascrizione OCR di
+`output/cucina-regionale-italiana-5000-ricette.md`: non è stato corretto
+editorialmente, ma sono stati corretti gli errori OCR esclusivamente univoci; i
+casi ambigui sono rimasti invariati. Ogni voce conserva pagina, righe sorgente,
+intestazione OCR e regione quando riconoscibile. Le 96 tavole fotografiche fuori
+testo non vengono importate come ricette.
+
+L’importazione della fonte regionale può essere rigenerata con:
+
+```sh
+node tools/import-regional-recipes.js
+```
+
+Per correggere nuovamente la trascrizione prima dell’importazione:
+
+```sh
+node tools/correct-regional-transcription.js
+node tools/import-regional-recipes.js
+```
+
+La migrazione originale CBT può essere rigenerata con:
 
 ```sh
 node tools/migrate-recipes.js
 ```
 
 È un comando da usare solo per una nuova importazione da
-`Ricettario_CBT.html`: sovrascrive `recipes.json`. Dopo l’attivazione del CRUD,
-le modifiche quotidiane dovranno essere fatte sul dataset strutturato.
+`Ricettario_CBT.html`: aggiorna `datasets/cbt-pirotta.json` e la relativa voce
+del catalogo. Dopo l’attivazione del CRUD, le modifiche quotidiane dovranno
+essere fatte dai pannelli Admin sui dataset strutturati.
 
 GitHub richiede il permesso Contents in scrittura per l'endpoint usato per
 creare o aggiornare file; vedi la [documentazione REST ufficiale](https://docs.github.com/en/rest/repos/contents).

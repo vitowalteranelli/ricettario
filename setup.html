@@ -27,7 +27,7 @@
           <label>Owner GitHub <span class="field-hint">username o organizzazione</span><input id="owner" placeholder="es. walter" autocomplete="username"></label>
           <label>Repository GitHub <span class="field-hint">nome soltanto, senza URL</span><input id="repo" placeholder="es. ricettario" autocomplete="off"></label>
           <label>Branch <span class="field-hint">normalmente main</span><input id="branch" value="main" autocomplete="off"></label>
-          <label>Percorso dataset <span class="field-hint">normalmente recipes.json</span><input id="content-path" value="recipes.json" autocomplete="off"></label>
+          <label>Percorso catalogo fonti <span class="field-hint">normalmente datasets/catalog.json</span><input id="catalog-path" value="datasets/catalog.json" autocomplete="off"></label>
         </div>
         <label>GitHub PAT fine-grained <span class="field-hint">Contents: Read and write sulla repository</span><input id="pat" type="password" autocomplete="off" required></label>
         <div>
@@ -127,7 +127,7 @@
         }
         const config = {
           version: 1,
-          repository: { owner, repo, branch: $('#branch').value.trim() || 'main', contentPath: $('#content-path').value.trim() || 'recipes.json' },
+          repository: { owner, repo, branch: $('#branch').value.trim() || 'main', catalogPath: $('#catalog-path').value.trim() || 'datasets/catalog.json' },
           crypto: await encryptSecret(pat, adminPassword),
           readOnlyPasswords: readers
         };
