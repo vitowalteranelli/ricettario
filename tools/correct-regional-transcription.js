@@ -122,6 +122,9 @@ const markdown = fs.readFileSync(sourcePath, 'utf8').replace(/\r\n/g, '\n');
 const lines = markdown.split('\n');
 
 const globalTokens = [
+    ['g 00', 'g 60'],
+    ['g So', 'g 50'],
+    ['g SO', 'g 50'],
     ['$ spicchi di aglio tritato', '5 spicchi di aglio tritato'],
     ['$ filetti di acciughe', '5 filetti di acciughe'],
     ['appena $ minuti', 'appena 8 minuti'],
@@ -720,6 +723,29 @@ const artifactLines = new Map([
 
 const pageLineCorrections = new Map([
     [90, new Map([['sul Gafgano. ì', 'sul Gafgano.']])],
+    [38, new Map([['g 3500 di pomodori maturi (privati della pelle, dei', 'g 300 di pomodori maturi (privati della pelle, dei']])],
+    [180, new Map([['seguito, versate a filo 1,5 di di olio e seguitate', 'seguito, versate a filo l 1,5 di olio e seguitate']])],
+    [232, new Map([['È 1 di latte intero', 'l 1 di latte intero']])],
+    [213, new Map([['1 3 abbondanti di acqua', 'l 3 abbondanti di acqua']])],
+    [290, new Map([['i 2 di brodo di pollo', 'l 2 di brodo di pollo']])],
+    [262, new Map([['g 000 di lampredotto, tagliato a listarelle', 'g 600 di lampredotto, tagliato a listarelle']])],
+    [351, new Map([['g 000 di farina', 'g 600 di farina']])],
+    [364, new Map([['g 3500 di farina', 'g 500 di farina']])],
+    [434, new Map([['g 000 di farina', 'g 600 di farina']])],
+    [471, new Map([['g p', '']])],
+    [508, new Map([['g 1290 di pancetta (rigatino) tagliata a fette', 'g 120 di pancetta (rigatino) tagliata a fette']])],
+    [521, new Map([['a 500 di ceci', 'g 500 di ceci']])],
+    [522, new Map([['g 3500 di farina', 'g 500 di farina']])],
+    [546, new Map([['g 3500 di riso Vialone nano', 'g 500 di riso Vialone nano']])],
+    [700, new Map([['um di di panna liquida', 'un dl di panna liquida']])],
+    [963, new Map([['È 1 di brodo buono, caldo', 'l 1 di brodo buono, caldo']])],
+    [982, new Map([['E 600 di fegato di vitello, affettato', 'g 600 di fegato di vitello, affettato']])],
+    [1022, new Map([['2 di di olio di oliva', '2 dl di olio di oliva']])],
+    [1162, new Map([['2 di di olie', '2 dl di olio']])],
+    [1278, new Map([['g 000 di carne avanzata (bollito o quant\'altro), a', 'g 600 di carne avanzata (bollito o quant\'altro), a']])],
+    [1182, new Map([['g 3500 di cuori di lattuga, lavati e tagliati a listarelle', 'g 500 di cuori di lattuga, lavati e tagliati a listarelle']])],
+    [1299, new Map([['a 60 di burro', 'g 60 di burro']])],
+    [1349, new Map([['E 1 di latte', 'l 1 di latte']])],
     [54, new Map([['13 di acqua a 10-12° (5 o 6 nei mesi estivi)', 'l 3 di acqua a 10-12° (5 o 6 nei mesi estivi']])],
     [114, new Map([['21 di olio di semi di arachidi o di mais', 'l 1 di olio di semi di arachidi o di mais']])],
     [127, new Map([['60 di punte di asparagi, già lessate', 'g 60 di punte di asparagi, già lessate']])],
@@ -753,7 +779,7 @@ const pageLineCorrections = new Map([
     [1337, new Map([['11 di latte fresco, intero', 'l 1 di latte fresco, intero']])],
     [1351, new Map([['21 di mosto di vino bianco o rosso', '2 l di mosto di vino bianco o rosso']])],
     [1374, new Map([['11 di latte', 'l 1 di latte']])],
-    [1375, new Map([['11 di latte', 'l 1 di latte']])],
+    [1375, new Map([['11 di latte', 'l 1 di latte'], ['g o di burro', 'g 80 di burro']])],
     [1376, new Map([['12 di latte', 'l 2 di latte']])],
     [1381, new Map([['11 di vino cotto', 'l 1 di vino cotto']])],
     [1388, new Map([['300 di purea di zucca; infine sgusciate le uo-', 'g 300 di purea di zucca; infine sgusciate le uo-']])],
@@ -763,11 +789,13 @@ const pageLineCorrections = new Map([
     [1400, new Map([['11 di latte fresco, intero', 'l 1 di latte fresco, intero'], ['14 di acqua tiepida', 'l 4 di acqua tiepida']])],
     [1405, new Map([['11 di acqua bollente', 'l 1 di acqua bollente']])],
     [1441, new Map([['11 di latte fresco, intero', 'l 1 di latte fresco, intero']])],
+    [1448, new Map([['g 3500 di farina', 'g 500 di farina']])],
     [1446, new Map([['150 di zucchero', 'g 150 di zucchero']])],
     [1460, new Map([['830 di zucchero', 'g 30 di zucchero']])],
     [1461, new Map([['84 di lievito di birra', 'g 4 di lievito di birra']])],
     [1475, new Map([['8180 di cioccolato fondente', 'g 180 di cioccolato fondente']])],
     [1477, new Map([['11 di latte', 'l 1 di latte'], ['11 di latte intero', 'l 1 di latte intero']])],
+    [1474, new Map([['i 1,2 di latte', 'l 1,2 di latte']])],
     [1483, new Map([['870 di lardo', 'g 70 di lardo']])],
     [667, new Map([['8800 di salsiccia', 'g 800 di salsiccia']])],
     [1208, new Map([['11,8 di acqua calda', 'l 1,8 di acqua calda']])],
@@ -796,6 +824,36 @@ const pageLineCorrections = new Map([
     [1339, new Map([['n.', 'ti.']])],
 ]);
 
+// In queste righe l'OCR ha perso la posizione dell'unità “dl”: il PDF mostra
+// “2 dl”/“3 dl”, non “dl 2”/“dl 3”. Sono correzioni puntuali perché in altre
+// ricette la fonte usa legittimamente l'ordine “dl 2”.
+const quantityOrderCorrections = new Map([
+    [610, new Map([
+        ['dl 2 di olio extra vergine di oliva, per friggere', '2 dl di olio extra vergine di oliva, per friggere'],
+        ['dl 2 di olio di semi di arachide, per friggere', '2 dl di olio di semi di arachide, per friggere']
+    ])],
+    [616, new Map([['dl 2 di olio extra vergine di oliva', '2 dl di olio extra vergine di oliva']])],
+    [639, new Map([['dl 3 di latte intero', '3 dl di latte intero']])],
+    [718, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [908, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [929, new Map([['dl 2 di aceto di vino', '2 dl di aceto di vino']])],
+    [1022, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1038, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1050, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1069, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1072, new Map([['dl 2 di aceto di vino', '2 dl di aceto di vino']])],
+    [1088, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1106, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1124, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1134, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1162, new Map([['dl 2 di olio', '2 dl di olio']])],
+    [1174, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1178, new Map([['dl 3 di latte', '3 dl di latte']])],
+    [1225, new Map([['dl 2 di olio di oliva', '2 dl di olio di oliva']])],
+    [1270, new Map([['dl 3 di panna liquida', '3 dl di panna liquida']])],
+    [1390, new Map([['dl 2 di Rhum', '2 dl di Rhum']])]
+]);
+
 for (let index = 0; index < lines.length; index += 1) {
     let line = lines[index];
     const pageMatch = line.match(/^<!-- PDF page (\d{4}) \|/);
@@ -814,9 +872,58 @@ for (let index = 0; index < lines.length; index += 1) {
         line = right;
     }
 
+    const quantityOrder = quantityOrderCorrections.get(currentPage);
+    if (quantityOrder && quantityOrder.has(line)) {
+        const right = quantityOrder.get(line);
+        record('ordine unità OCR verificato pagina ' + currentPage, line);
+        line = right;
+    }
+
     line = replaceTokens(line, globalTokens, false);
     line = replaceRegex(line, 'token: 7rentino/fobbrica prima di trattino', /(?<![\p{L}\p{N}])(?:7rentino|fobbrica)(?=-)/gu, match => match === '7rentino' ? 'Trentino' : 'fabbrica');
     if (currentPage >= bodyFirstPage && currentPage <= bodyLastPage) {
+        line = replaceRegex(
+            line,
+            'unità grammi OCR: 82 → g',
+            /^(\s*)82 (?=\d{1,4}(?:[.,]\d+)?\)?\s+di\b)/u,
+            (match, indent) => indent + 'g '
+        );
+        line = replaceRegex(
+            line,
+            'unità litri OCR: 1 prima della quantità → l',
+            /^(\s*)1 (?=\d+(?:[.,]\d+)?(?:-\d+(?:[.,]\d+)?)?\s+di\b)/u,
+            (match, indent) => indent + 'l '
+        );
+        line = replaceRegex(
+            line,
+            'unità chilogrammi OCR: simbolo → 1',
+            /^(\s*)kg (?:!|1!|\/)(?=\s+di\b)/u,
+            (match, indent) => indent + 'kg 1'
+        );
+        line = replaceRegex(
+            line,
+            'unità decilitri OCR: ! → 1',
+            /^(\s*)dl !(?=\s+di\b)/u,
+            (match, indent) => indent + 'dl 1'
+        );
+        line = replaceRegex(
+            line,
+            'unità decilitri OCR: dI → dl',
+            /^(\s*)2 dI di\b/u,
+            (match, indent) => indent + '2 dl di'
+        );
+        line = replaceRegex(
+            line,
+            'unità decilitri OCR: unità omessa prima di di di',
+            /^(\s*)([234]) di di\b/u,
+            (match, indent, quantity) => indent + quantity + ' dl di'
+        );
+        line = replaceRegex(
+            line,
+            'unità decilitri OCR: di duplicato',
+            /^(\s*)dl (\d+(?:[.,]\d+)?) di di\b/u,
+            (match, indent, quantity) => indent + 'dl ' + quantity + ' di'
+        );
         line = replaceRegex(
             line,
             'unità litri OCR: cifra concatenata prima di quantità',
@@ -930,10 +1037,10 @@ for (let index = 0; index < lines.length; index += 1) {
         line = replaceRegex(line, 'simbolo OCR © → o', /©/gu, 'o');
     }
 
-    // Nei quantitativi in grammi il carattere corsivo “g” è stato riconosciuto
-    // come £, &, 8, e oppure 2. Si corregge solo il prefisso di righe che
-    // contengono chiaramente un numero seguito da “di”; quantità dubbie come
-    // “$0”, “8100” o “82 300” non vengono reinterpretate.
+    // Nei quantitativi il carattere corsivo delle unità può essere stato
+    // riconosciuto come £, &, 8, e oppure 2. Si corregge solo il prefisso di
+    // righe che contengono chiaramente una quantità seguita da “di”; i valori
+    // che non sono verificabili in modo univoco restano invariati.
     if (currentPage >= bodyFirstPage && currentPage <= bodyLastPage) {
         line = replaceRegex(
             line,

@@ -1229,7 +1229,7 @@ Ingredienti:
 6 spicchi di aglio
 
 g 20 di mollica di pane
-dl 2 di di aceto buono
+dl 2 di aceto buono
 
 Pestate in un mortaio gli spicchi d’aglio —
 calcolando uno spicchio d’aglio a persona —
@@ -3932,11 +3932,11 @@ Salsa di vino
 
 Ingredienti:
 
-g So di burro
+g 50 di burro
 
 5 cucchiai di zucchero
 
-dl 2 di di vino rosso (ideale il Merlot)
+dl 2 di vino rosso (ideale il Merlot)
 
 2 biscotti secchi, pestati o grattugiati finemente
 (ideali i baci — amaretti — di Trento)
@@ -4848,7 +4848,7 @@ Ingredienti:
 
 un limone, a spicchi
 
-g 3500 di pomodori maturi (privati della pelle, dei
+g 300 di pomodori maturi (privati della pelle, dei
 semi e dell'acqua di vegetazione)
 
 mezzo dl di olio extra vergine di oliva
@@ -5737,7 +5737,7 @@ g 80 di lievito di birra
 
 g 90 di sale
 
-1 3,2 di acqua tiepida (a 18-20°)
+l 3,2 di acqua tiepida (a 18-20°)
 g 200 di strutto (a piacere)
 
 Dopo aver deposto sulla spianatoia la fari-
@@ -6976,7 +6976,7 @@ l 3 di acqua
 g 75 di sale
 
 g 50 di strutto
-g So di lievito
+g 50 di lievito
 g 100 di malto
 
 Sulla spianatoia, mettete la farina aperta a
@@ -8462,7 +8462,7 @@ g 100 di crusca
 
 mezzo bicchiere di olio di oliva
 
-dl 5 di di latte o latte e acqua frizzante
+dl 5 di latte o latte e acqua frizzante
 
 g 25 di lievito di birra (o una bustina di lievito in
 polvere o g 5 di bicarbonato di sodio)
@@ -9721,7 +9721,7 @@ Acciughe marinate Puglia
 
 Ingredienti:
 
-kg 1! di acciughe piccolissime, avannotti
+kg 1 di acciughe piccolissime, avannotti
 2 limoni, il succo
 
 olio extra vergine di oliva
@@ -9947,7 +9947,7 @@ in profondità, insieme agli scampi.
 
 Ingredienti:
 
-kg ! di alici freschissime
+kg 1 di alici freschissime
 3 uova
 
 farina
@@ -10197,8 +10197,8 @@ g 60 di farina
 
 dl 2 di latte
 
-dl 2 di di olio extra vergine di oliva
-dl 3 di di olio di semi di arachide
+dl 2 di olio extra vergine di oliva
+dl 3 di olio di semi di arachide
 2 cucchiai di prezzemolo tritato
 sale
 
@@ -10309,7 +10309,7 @@ mezza costa di sedano tritato
 
 g 120 di formaggio canestrato, tagliato a dadini
 
-g 00 di pisellini sgusciati
+g 60 di pisellini sgusciati
 
 un mestolo di salsa di pomodoro
 
@@ -10521,7 +10521,7 @@ g 200 di acciughe salate (ideali le rosse di Spagna)
 
 6 spicchi grossi di aglio
 
-dl 6 di di olio extra vergine di oliva
+dl 6 di olio extra vergine di oliva
 
 g 90 di burro
 
@@ -15390,7 +15390,7 @@ Cullurielli (ciambelline) Calabria
 
 Ingredienti:
 
-kg ! di patate
+kg 1 di patate
 
 kg 1 di farina tipo 00
 
@@ -16169,7 +16169,7 @@ g 200 di polenta
 
 2 patate
 
-dl 2 di di olio extra vergine di oliva
+dl 2 di olio extra vergine di oliva
 sale
 
 Per la lievitazione:
@@ -17762,7 +17762,7 @@ un mestolino di brodo
 
 dl 2 di olio extra vergine di oliva
 
-dl 2 di di olio di semi di arachide
+dl 2 di olio di semi di arachide
 
 sale
 
@@ -18246,7 +18246,7 @@ pomodori rosa, cetrioli)
 
 g 60 di giardiniera sott'aceto
 
-g 00 di sott'olio
+g 60 di sott'olio
 
 2 uova sode
 
@@ -18532,7 +18532,7 @@ sale e pepe di mulinello
 
 dl 2 di olio extra vergine di oliva
 
-dl 2 di di olio di semi di girasole
+dl 2 di olio di semi di girasole
 
 In una ciotola ampia mettete il risotto avan-
 zato, per mescolarlo con il parmigiano reg-
@@ -18596,7 +18596,7 @@ noce moscata
 
 sale e pepe di mulinello
 
-dl 2 di di olio extra vergine di oliva
+dl 2 di olio extra vergine di oliva
 
 dl 2 di olio di semi di arachide
 
@@ -19029,7 +19029,7 @@ Insalata di granchi Abruzzo-Molise
 
 Ingredienti:
 
-kg / di granchi di mare
+kg 1 di granchi di mare
 
 un limone, il succo
 
@@ -20232,7 +20232,7 @@ una foglia di alloro
 
 un rametto di rosmarino
 
-1 2-3 di brodo
+l 2-3 di brodo
 
 sale
 
@@ -20633,7 +20633,7 @@ g 300 di groviera
 
 g 150 di burro
 
-1 1,2 di brodo
+l 1,2 di brodo
 
 g 25 di pangrattato
 
@@ -22118,7 +22118,7 @@ kg 1 di farina di frumento
 g 400 di farina di granturco
 lievito naturale
 
-82 150 di uva passa
+g 150 di uva passa
 
 g 80 di pinoli
 
@@ -22413,7 +22413,7 @@ Pane cotto (Pani cottu) Sardegna
 
 Ingredienti per 6 persone:
 
-kg ! di pane di semola di grano duro, raffermo
+kg 1 di pane di semola di grano duro, raffermo
 3 mestoli di salsa di pomodoro
 
 formaggio pecorino fresco
@@ -24948,7 +24948,7 @@ da stemperare nel succo di limone (o un cuc-
 chiaio di aceto); unite un tuorlo d’uovo e me-
 scolate continuamente con una frusta, sempre
 nello stesso verso, fino a incorporarli. Di
-seguito, versate a filo 1,5 di di olio e seguitate
+seguito, versate a filo l 1,5 di olio e seguitate
 a mescolare.
 
 Preparate una salsa pestando insieme nel
@@ -26213,7 +26213,7 @@ un nonnulla di noce moscata
 
 2 tuorli d'uovo
 
-82 50 di midollo di bue
+g 50 di midollo di bue
 
 una patata bollita e passata al setaccio (o 3 fette di
 pane in cassetta bagnate nel latte e strizzate o g 80
@@ -26232,7 +26232,7 @@ e privati della pellicina
 
 sale e pepe di mulinello
 
-1 2 di ottimo brodo di carne
+l 2 di ottimo brodo di carne
 
 l 1 di gelatina eventualmente preparata con il brodo
 di cottura
@@ -28915,14 +28915,14 @@ sale e pepe bianco di mulinello
 
 burro
 
-1 2 di olio di semi di arachidi per friggere
+l 2 di olio di semi di arachidi per friggere
 
 Per la salsa Mornay (besciamella arricchita);
 g 150 di burro
 
 g 200 di farina o
 
-1 1,5 di latte fresco
+l 1,5 di latte fresco
 
 4 tuorli d'uovo
 
@@ -29572,7 +29572,7 @@ una crosta di parmigiano reggiano
 uno spicchio d'aglio e una foglia di alloro
 racchiusi in una garza
 
-1 3 abbondanti di acqua
+l 3 abbondanti di acqua
 
 sale
 
@@ -29953,7 +29953,7 @@ Ingredienti:
 
 g 300 di farina di ceci
 
-1 1,5 di acqua fredda
+l 1,5 di acqua fredda
 dl 1 di olio d'oliva
 
 sale e pepe di mulinello
@@ -32211,7 +32211,7 @@ mezzo dl di olio di oliva
 2 cucchiai di concentrato, diluito in acqua tiepida
 un nonnulla di aceto
 
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 sale e pepe nero di mulinello
 
@@ -32353,7 +32353,7 @@ Brodo “bruciato” Friuli-Venezia Giulia
 
 Ingredienti:
 
-È 1 di latte intero
+l 1 di latte intero
 mezzo l di acqua
 g 80 di burro
 
@@ -32829,7 +32829,7 @@ Brodo ripieno Calabria
 
 Ingredienti per 6 persone:
 
-1 2 di brodo buono, di carne
+l 2 di brodo buono, di carne
 
 5 uova
 
@@ -33250,7 +33250,7 @@ un uovo
 
 un nonnulla di noce moscata
 
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 sale e pepe
 
@@ -34581,7 +34581,7 @@ uno spicchio di aglio tritato
 
 g 100 di lardo pestato
 
-dl ! di olio di oliva
+dl 1 di olio di oliva
 
 sale e pepe di mulinello
 
@@ -34792,7 +34792,7 @@ stesse, nelle quali si serviva — raffinata ed
 elegante — la ginestrata.
 
 Ingredienti per 6 persone:
-1 1,5 di buon brodo di pollo
+l 1,5 di buon brodo di pollo
 2 uova, i soli tuorli
 
 il succo di mezzo limone
@@ -34822,7 +34822,7 @@ Gnocchi in brodo Marche
 
 Ingredienti per 6 persone:
 
-kg ! di patate
+kg 1 di patate
 
 g 250 di farina
 
@@ -34833,7 +34833,7 @@ g 40 di parmigiano reggiano grattugiato
 
 un nonnulla di noce moscata
 
-1 2 di brodo buono, di carne
+l 2 di brodo buono, di carne
 
 formaggio per spolvero finale, a piacere
 sale
@@ -34991,7 +34991,7 @@ g 300 di fagioli secchi
 
 l 1,5 di latte intero
 
-1 1,5 di acqua
+l 1,5 di acqua
 
 g 300 di brovade (rape affettate e fermentate
 nelle vinacce)
@@ -35264,7 +35264,7 @@ g 80 di formaggio pecorino grattugiato
 
 olio di oliva, per friggere
 
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 sule
 
@@ -35520,7 +35520,7 @@ mezzo cavolo verza (ineglio se nero) tritato
 5 pomodori maturi, nettati della pelle e dei semi
 (oppure un cucchiaino di concentrato di pomodoro)
 
-1 1,5 di brodo
+l 1,5 di brodo
 
 uno spicchio di aglio tritato
 
@@ -35815,7 +35815,7 @@ g 20) di burro
 
 una cipolla tritata
 
-1 2 di brodo buono, di carne
+l 2 di brodo buono, di carne
 sale
 
 Nettate i bruscandoli e tagliateli a pezzetti.
@@ -35841,7 +35841,7 @@ g 600 di cardi selvatici
 g 500 di patate, pelate e tagliate a dadini
 g 200 di lardo pestato (o pancetta)
 
-1 2 di acqua
+l 2 di acqua
 
 g 25 di strutto
 
@@ -35970,7 +35970,7 @@ g 400 di tubetti (pasta secca, corta)
 
 mezzo dl di olio di oliva
 
-1 1,5 di acqua
+l 1,5 di acqua
 
 2 spicchi di aglio schiacciati (da togliere)
 
@@ -36666,7 +36666,7 @@ g 30 di burro
 
 fette di pane raffermo
 
-1 1,5 di brodo buono
+l 1,5 di brodo buono
 
 erba cipollina tritata finemente
 
@@ -36781,7 +36781,7 @@ un pezzetto di cotenna di prosciutto
 
 sale e pepe di mulinello
 
-1 1,5 di brodo di carne o vegetale
+l 1,5 di brodo di carne o vegetale
 
 Sbattete le uova con la farina e il parmigia-
 no reggiano, facendo attenzione a non forma-
@@ -36866,7 +36866,7 @@ ghiamo per preparare una minestra.
 
 Ingredienti per 6 persone:
 
-g 000 di lampredotto, tagliato a listarelle
+g 600 di lampredotto, tagliato a listarelle
 
 g 250 di riso semifino (Maratelli, Rosa Marchetti,
 Romeo, Vialone nano)
@@ -37187,7 +37187,7 @@ uno spicchio di aglio tritato
 
 un cucchiaio di prezzemolo tritato
 
-1 2 di brodo buono, di carne
+l 2 di brodo buono, di carne
 
 sale e pepe di mulinello
 
@@ -37627,7 +37627,7 @@ un cucchiaio di olio di oliva
 
 g 20 di burro
 
-1 2 di brodo buono
+l 2 di brodo buono
 
 g 20 di formaggio grana, grattugiato
 
@@ -37708,7 +37708,7 @@ tritati assieme
 
 mezzo peperoncino rosso piccante, macinato
 
-1 1,5 di acqua calda
+l 1,5 di acqua calda
 
 sale
 
@@ -37776,7 +37776,7 @@ Ingredienti per 6 persone:
 
 g 200 di riso Maratelli
 
-1 2 di brodo di carne
+l 2 di brodo di carne
 
 g 500 di cime di luppolo
 
@@ -37805,7 +37805,7 @@ Minestra di riso e rape
 
 Friuli-Venezia Giulia
 Ingredienti per 6 persone:
-1 2 di brodo buono, di carne
+l 2 di brodo buono, di carne
 3 rape
 g 300 di riso Maratelli
 un cucchiaio di prezzemolo tritato
@@ -37878,7 +37878,7 @@ Ingredienti per 6 persone:
 
 g 250 di riso Maratelli
 
-1 2 di brodo di carne
+l 2 di brodo di carne
 
 una verza piccola
 
@@ -38004,7 +38004,7 @@ un peperoncino piccante, macinato
 3 pomodori maturi (privati della pelle, dei semi e
 dell’acqua di vegetazione)
 
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 sale
 
@@ -38034,7 +38034,7 @@ Ingredienti per 6 persone:
 
 g 300 di tagliolini all'uovo
 
-g 00 di lardo pestato (o pancetta)
+g 60 di lardo pestato (o pancetta)
 
 uno spicchio di aglio tritato
 
@@ -38188,7 +38188,7 @@ una cipolla tritata
 
 3 cucchiai di olio di oliva
 
-1 1,5 di acqua
+l 1,5 di acqua
 
 3 uova
 
@@ -38733,7 +38733,7 @@ mezzo dl di olio di oliva
 
 5 pomodori pelati
 
-1 1,5 di brodo leggero, ma di carne
+l 1,5 di brodo leggero, ma di carne
 
 formaggio pecorino, da grattugiare
 
@@ -39474,7 +39474,7 @@ Trentino-Alto Adige
 
 Ingredienti per 6 persone:
 
-kg ! di fagioli freschi, sgranati
+kg 1 di fagioli freschi, sgranati
 
 g 150 di pasta secca, piccola
 
@@ -39487,7 +39487,7 @@ uno spicchio di aglio tritato
 
 mezzo dl di olio di oliva
 
-1 2,2 di brodo buono, di carne
+l 2,2 di brodo buono, di carne
 
 2 cucchiai di farina
 
@@ -39665,7 +39665,7 @@ g 350 di fagiolini
 
 g 300 di fiori di zucca
 
-1 1,5 di acqua
+l 1,5 di acqua
 
 una cipolla affettata
 
@@ -39771,7 +39771,7 @@ poi strizzati
 
 mezzo dl di olio di oliva
 
-1 1,5 di brodo buono
+l 1,5 di brodo buono
 
 formaggio pecorino grattugiato
 
@@ -39818,7 +39818,7 @@ un porro tritato
 
 2 cucchiai di prezzemolo tritato
 
-1 3 di acqua
+l 3 di acqua
 
 g 25 di burro (o panna liquida)
 
@@ -39867,7 +39867,7 @@ Panata Trentino-Alto Adige
 Ingredienti per 6 persone:
 
 g 500 di pane raffermo, affettato
-1 2,5 di acqua
+l 2,5 di acqua
 
 g 30 di burro
 
@@ -39968,7 +39968,7 @@ g 60 di burro
 
 3 uova
 
-1 2 di brodo di carne
+l 2 di brodo di carne
 
 pepe di mulinello
 
@@ -40008,7 +40008,7 @@ g 200 di cicoria (meglio se selvatica)
 g 100 di pancetta, a dadini
 
 g 100 di salsiccia fresca, sminuzzata
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 un peperoncino piccante, sbriciolato
 2 uova
@@ -40579,7 +40579,7 @@ un nonnulla di noce moscata
 
 g 30 di midollo di bue
 
-1 2 di brodo di carne
+l 2 di brodo di carne
 
 In una ciotola impastate accuratamente le
 uova con il parmigiano reggiano, il pane
@@ -40880,7 +40880,7 @@ Ingredienti per 6 persone:
 kg 1 di polpa di zucca gialla, priva della pelle e dei
 semi, poi tagliata a dadini
 
-82 350 di pasta secca, corta
+g 350 di pasta secca, corta
 
 2 spicchi di aglio schiacciati (da togliere)
 
@@ -40926,7 +40926,7 @@ g 250 di farina
 un limone, la scorza grattugiata
 un nonnulla di noce moscata
 
-1 2 di brodo buono, di carne
+l 2 di brodo buono, di carne
 formaggio grattugiato, a piacere
 
 Pasta grattata
@@ -41007,7 +41007,7 @@ mezzo limone, la scorza grattugiata
 
 un nonnulla di noce moscata
 
-i 2 di brodo di pollo
+l 2 di brodo di pollo
 
 sale
 
@@ -41198,7 +41198,7 @@ g 30 di burro
 5 uova
 
 g 60 di parmigiano reggiano grattugiato
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 sale e pepe di mulinello
 
@@ -41679,7 +41679,7 @@ zione romagnola,
 
 Ingredienti per 6 persone:
 
-1 2 di brodo buono
+l 2 di brodo buono
 
 g 250 di riso Vialone nano
 
@@ -42015,7 +42015,7 @@ g 200 di fontina, affettata sottilmente
 
 un bicchiere di vino bianco secco
 
-1 1,5 di brodo di carne
+l 1,5 di brodo di carne
 
 un nonnulla di cannella grattugiata
 
@@ -42101,7 +42101,7 @@ un nonnulla di noce moscata
 
 un limone, la scorza grattugiata
 
-1 2 di brodo buono, di carne
+l 2 di brodo buono, di carne
 
 sale
 
@@ -42630,7 +42630,7 @@ Ingredienti per 6 persone:
 3 cucchiai di formaggio grana, grattugiato
 un nonnulla di noce moscata
 
-1 2 di brodo buono, di carne
+l 2 di brodo buono, di carne
 
 Mentre in una casseruola portate a bollore il
 brodo, a parte, in una ciotola sbattete le uova,
@@ -42716,7 +42716,7 @@ un cucchiaio di prezzemolo fresco tritato
 4 uova
 g 50 di parmigiano reggiano grattugiato
 g 20 di burro
-1 1,5 di brodo di carne
+l 1,5 di brodo di carne
 sale e pepe di mulinello
 
 Lessate in abbondante acqua salata bollente
@@ -43017,7 +43017,7 @@ una carota tritata
 
 g 40 di midollo di bue, pestato
 
-1 2 di brodo buono
+l 2 di brodo buono
 
 un cucchiaio di concentrato di pomodoro
 
@@ -43106,7 +43106,7 @@ mezza carota tritata
 2 chiodi di garofano
 2 pomodori pelati e nettati dei semi, ridotti a cubetti
 mezzo bicchiere di olio extra vergine di oliva
-1 2 di brodo di carne
+l 2 di brodo di carne
 12 fette di pane raffermo, arrostite
 peperoncino macinato, a piacere
 sale e pepe di mulinello
@@ -43263,7 +43263,7 @@ mezzo dl di olio di oliva
 
 2 spicchi di aglio tritati
 
-1 1,5 di brodo buono
+l 1,5 di brodo buono
 
 3 uova
 
@@ -43300,7 +43300,7 @@ Ingredienti per 6 persone:
 kg 1 di punte di asparagi selvatici
 mezzo dl di olio extra vergine di oliva
 uno spicchio di aglio tritato finemente
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 3 uova
 
@@ -43498,7 +43498,7 @@ gustoso.
 
 Ingredienti per 6 persone:
 
-1 2 di brodo di carne (capra o castrato)
+l 2 di brodo di carne (capra o castrato)
 fette di pane
 
 formaggio pecorino, grattugiato
@@ -43861,7 +43861,7 @@ mezzo dl di olio di oliva
 
 5 pomodori pelati
 
-1 2 di acqua calda
+l 2 di acqua calda
 
 sale e pepe di mulinello
 
@@ -43900,7 +43900,7 @@ kg 1 di cicoria
 2 uova
 
 g 60 di formaggio pecorino, grattugiato
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 pane raffermo abbrustolito
 
@@ -43982,7 +43982,7 @@ dl 1 di olio di oliva
 
 un peperoncino piccante, sbriciolato
 
-1 1,5 di buon brodo, di carne
+l 1,5 di buon brodo, di carne
 
 sale
 
@@ -44275,7 +44275,7 @@ una carota tritata
 
 un mestolino di sugo di pomodoro
 
-1 1,5 di acqua
+l 1,5 di acqua
 
 formaggio pecorino, grattugiato
 
@@ -44333,7 +44333,7 @@ olio extra vergine di oliva
 
 2 mestoli di passato di pomodoro
 
-1 2 di brodo (molto meglio se di pesce)
+l 2 di brodo (molto meglio se di pesce)
 
 2 foglie di basilico tritate
 
@@ -44385,7 +44385,7 @@ Ingredienti per 6 persone:
 
 g 60 di finocchietto selvatico
 
-1 2 di acqua
+l 2 di acqua
 
 mezzo dl di olio di oliva
 
@@ -44454,7 +44454,7 @@ Ingredienti per 6 persone:
 
 g 160 di farina
 
-dl 2 di di latte
+dl 2 di latte
 
 un uovo
 
@@ -44546,7 +44546,7 @@ Ingredienti per 6 persone:
 
 g 800 di funghi cardoncelli freschi
 
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 3 uova, sbattute
 
@@ -44991,7 +44991,7 @@ mezzo cucchiaino di paprica
 
 un cucchiaio di estratto di pomodoro
 
-1 2 di acqua
+l 2 di acqua
 
 una foglia di alloro (da togliere)
 
@@ -45330,7 +45330,7 @@ Zuppa di Palermo Sicilia
 
 Ingredienti per 6 persone:
 
-1 2 di brodo buono, di gallina
+l 2 di brodo buono, di gallina
 
 g 300 di vermicelli (meglio se freschi, fatti a mano)
 formaggio pecorino grattugiato, per spolvero finale
@@ -46895,7 +46895,7 @@ g 200 di cotechino, già lessato
 un bicchiere di vino bianco, ideale se
 della regione
 
-1 1,5 di brodo di carne
+l 1,5 di brodo di carne
 
 g 80 di burro
 
@@ -47036,7 +47036,7 @@ g 60 di pancetta pestata (o lardo)
 
 2 cucchiai di olio di oliva
 
-1 1,5 di brodo di pollo (o di verdure)
+l 1,5 di brodo di pollo (o di verdure)
 
 formaggio grana grattugiato, a piacere
 
@@ -47359,7 +47359,7 @@ g 60 di lardo pestato
 
 uno spicchio di aglio tritato
 
-1 1,5 di brodo di pollo (o di tacchino)
+l 1,5 di brodo di pollo (o di tacchino)
 
 In una teglia disponete uno strato di fette di
 pane giallo, spolverizzate formaggio grattu-
@@ -47544,7 +47544,7 @@ Zuppa pasquale Marche
 
 Ingredienti per 6 persone:
 
-1 2 di brodo buono (di carni miste di gallina e di
+l 2 di brodo buono (di carni miste di gallina e di
 manzo)
 
 2 cucchiai di prezzemolo tritato
@@ -48913,7 +48913,7 @@ Per la besciamella:
 
 g 60 di burro
 
-g 00 di farina
+g 60 di farina
 
 mezzo l di latte
 
@@ -49395,7 +49395,7 @@ sale
 
 Per la cottura ed il condimento:
 
-1 2 di brodo buono, di carne
+l 2 di brodo buono, di carne
 
 2 mestoli di ragù di pollo
 
@@ -49794,7 +49794,7 @@ Ingredienti per 6 persone:
 
 Per la pasta:
 
-g 000 di farina
+g 600 di farina
 
 5 uova
 
@@ -51722,7 +51722,7 @@ Ingredienti per 6 persone:
 
 Per la pasta:
 
-g 3500 di farina
+g 500 di farina
 
 5 uova
 
@@ -52907,7 +52907,7 @@ VINO CONSIGLIATO: Trebbianino Val Trebbia
 Gnocchi di erbette Emilia-Romagna
 Ingredienti per 6 persone:
 
-kg ! di erbette (bietola)
+kg 1 di erbette (bietola)
 
 g 500 di ricotta
 
@@ -61490,7 +61490,7 @@ Spaghettini, olio e limone Marche
 Ingredienti per 6 persone:
 Per la pasta:
 
-g 000 di farina
+g 600 di farina
 
 6 uova
 
@@ -61997,7 +61997,7 @@ g 40 di prosciutto macinato
 
 g 35 di burro
 
-g So di farina
+g 50 di farina
 
 sale
 
@@ -62424,7 +62424,7 @@ g 250 di farina
 
 g 250 di semola di grano duro
 
-dl 2,5 di di acqua
+dl 2,5 di acqua
 
 sale
 
@@ -64257,7 +64257,7 @@ g 200 di ricotta (meglio se di pecora)
 
 un uovo
 
-g 00 di parmigiano reggiano grattugiato
+g 60 di parmigiano reggiano grattugiato
 un nonnulla di noce moscata
 
 sale e pepe di mulinello
@@ -66574,7 +66574,7 @@ VINO CONSIGLIATO: Zagarolo
 PASTA SECCA
 
 Bucatini con l’aglio ed i pesci fritti Sicilia
-g p
+
 
 Specialità di Favignana.
 
@@ -67138,7 +67138,7 @@ una cipolla tritata
 
 una costa di sedano tritata
 
-g 00) di capperi in salamoia
+g 60) di capperi in salamoia
 
 mezzo bicchiere di aceto di vino
 
@@ -67554,7 +67554,7 @@ Ingredienti per 6 persone:
 g 500 di maccheroni rigatiì
 
 g 100 di prosciutto fresco, tagliato a dadini
-82 40 di parmigiano reggiano grattugiato
+g 40 di parmigiano reggiano grattugiato
 
 g 40 di groviera grattugiato
 
@@ -68267,7 +68267,7 @@ Ingredienti per 6 persone:
 
 g 500 di maccheroni
 
-1 1,5 di latte
+l 1,5 di latte
 
 g 80 di groviera grattugiata
 
@@ -71963,7 +71963,7 @@ Ingredienti per 6 persone:
 
 g 500 di spaghetti
 
-g 1290 di pancetta (rigatino) tagliata a fette
+g 120 di pancetta (rigatino) tagliata a fette
 2 spicchi di aglio tritati
 
 10 foglie di basilico tritate
@@ -72006,7 +72006,7 @@ dei semi e dell'acqua di vegetazione)
 
 6 foglie di basilico
 
-dl 1,5 di di olio extra vergine di oliva
+dl 1,5 di olio extra vergine di oliva
 
 pecorino o ricotta stagionati, da grattugiare
 a piacere
@@ -72815,7 +72815,7 @@ g 600 di spaghetti
 
 un tartufo bianco
 
-g 00 di burro
+g 60 di burro
 
 un nonnulla di pepe di mulinello
 parmigiano reggiano grattugiato, a piacere
@@ -73839,7 +73839,7 @@ Ingredienti per 6 persone:
 
 g 500 di tagliatelle
 
-a 500 di ceci
+g 500 di ceci
 
 una foglia di alloro
 
@@ -74004,7 +74004,7 @@ sale
 
 Per la pasta frolla:
 
-g 3500 di farina
+g 500 di farina
 
 g 300 di burro
 
@@ -75293,7 +75293,7 @@ Ingredienti per 6 persone:
 Per la polenta (macco):
 
 g 300 di fave secche, sgusciate
-1 2 di acqua
+l 2 di acqua
 
 mezzo dl di olio di oliva
 
@@ -75840,7 +75840,7 @@ Per la polenta:
 
 g 400 di farina gialla
 
-1 1,5 di acqua
+l 1,5 di acqua
 
 sale
 
@@ -76057,12 +76057,12 @@ Ingredienti per 6 persone:
 
 g 600 di farina gialla
 
-1 1,8 di acqua
+l 1,8 di acqua
 
 g 200 di toma fresca
 
 g 80 di gorgonzola, a piacere
-g So di fontina valdostana
+g 50 di fontina valdostana
 
 g 120 di burro
 
@@ -76497,7 +76497,7 @@ Per la polenta:
 
 g 500 di farina gialla
 
-1 2 di acqua
+l 2 di acqua
 
 un cucchiaio di olio di oliva
 sale grosso
@@ -77205,7 +77205,7 @@ Ingredienti per 6 persone:
 g 300 di farina gialla
 
 g 300 di farina nera (di grano saraceno)
-1 2,5 di acqua
+l 2,5 di acqua
 
 un cucchiaio di olio
 
@@ -77392,7 +77392,7 @@ Ris e versi (riso e verza) Piemonte
 
 Ingredienti per 6 persone:
 
-g 3500 di riso Vialone nano
+g 500 di riso Vialone nano
 
 un cavolo verza
 
@@ -78782,7 +78782,7 @@ Ingredienti per 6 persone;
 
 g 600 di riso Carnaroli o Vialone nano
 
-1 1,5 di brodo buono, di carne
+l 1,5 di brodo buono, di carne
 
 g 120 di burro
 
@@ -80997,7 +80997,7 @@ g 200 di concentrato di pomodoro
 g 200 di passata di pomodoro
 
 g 10 di cervellatine (salsiccia fresca)
-dl 2 di di vino rosso, secco
+dl 2 di vino rosso, secco
 
 una cipolla tritata
 
@@ -85105,7 +85105,7 @@ Carne di manzo al ragù Campania
 
 Ingredienti per 6 persone:
 
-kg ! di polpa di manzo
+kg 1 di polpa di manzo
 
 g 60 di prosciutto, tagliato a listarelle
 
@@ -85284,7 +85284,7 @@ una cipolla tritata
 
 una carota tritata
 
-g 00 di burro
+g 60 di burro
 
 mezzo bicchiere di olio di oliva
 
@@ -86486,9 +86486,9 @@ latte
 
 g 50 di parmigiano reggiano grattugiato
 
-2 di di olio extra vergine di oliva, per friggere
+2 dl di olio extra vergine di oliva, per friggere
 
-2 di di olio di semi di arachide, per friggere
+2 dl di olio di semi di arachide, per friggere
 
 sale e pepe di mulinello
 
@@ -87318,7 +87318,7 @@ Filetto di cavallo (o puledro) Sardegna
 Ingredienti per 6 persone:
 
 kg 1 di filetto di cavallo, in 6 fette
-2 di di olio extra vergine di oliva
+2 dl di olio extra vergine di oliva
 2 spicchi di aglio tritati
 
 un ciuffo di prezzemolo tritato
@@ -87915,7 +87915,7 @@ Umido di carne di bue.
 
 Ingredienti per 6 persone:
 
-kg 1! di girello di manzo
+kg 1 di girello di manzo
 
 g 150 di lardo, tagliato a listarelle
 
@@ -88466,7 +88466,7 @@ g 400 di pasta di pane
 
 3 cucchiai di prezzemolo tritato
 
-g 00 di formaggio pecorino grattugiato
+g 60 di formaggio pecorino grattugiato
 
 2 limoni, il succo
 
@@ -90829,7 +90829,7 @@ g 30 di burro
 
 un dl di aceto buono
 
-3 di di latte intero
+3 dl di latte intero
 
 un mestolo di brodo buono, di carne
 
@@ -93039,7 +93039,7 @@ Per la cottura:
 
 3 cuechiai di olio di oliva
 
-82 30 di burro
+g 30 di burro
 
 g 60 di formaggio fondente. affettato
 
@@ -95254,7 +95254,7 @@ farina
 
 3 cucchiai di olio di oliva
 
-g 00 di burro
+g 60 di burro
 
 g 80 di capperini in salamoia
 
@@ -96202,7 +96202,7 @@ Stufatino alla romana Lazio
 
 Ingredienti per 6 persone:
 
-kg ! di polpa di manzo, affettata
+kg 1 di polpa di manzo, affettata
 
 g 25 di strutto (o mezzo dl di olio di oliva)
 
@@ -96863,7 +96863,7 @@ Ingredienti per 6 persone:
 
 g 800 di polpa di manzo, tagliata a fettine
 
-g So di lardo, tagliato a dadi di media grossezza
+g 50 di lardo, tagliato a dadi di media grossezza
 g 200 di prosciutto, affettato
 
 foglie di salvia
@@ -96929,7 +96929,7 @@ Umido marchigiano Marche
 
 Ingredienti per 6 persone:
 
-kg ! di polpa di vitello, in un’'unico pezzo
+kg 1 di polpa di vitello, in un’'unico pezzo
 
 g 60 di prosciutto, da macinare
 
@@ -97778,7 +97778,7 @@ Ingredienti per 6 persone:
 
 kg 1,2 di polpa di vitello, in un unico pezzo
 
-g 00 di burro
+g 60 di burro
 
 3 fette di prosciutto. per avvolgere la carne
 
@@ -99505,7 +99505,7 @@ g 50 di burro
 
 un bicchiere di birra
 
-um di di panna liquida
+un dl di panna liquida
 
 un mazzetto di erba cipollina, tritata
 rosmarino, salvia e timo, tritati assieme
@@ -100487,7 +100487,7 @@ un coniglio, nettato e tagliato a pezzi
 
 2 rametti di rosmarino, tritati
 
-g So di strutto
+g 50 di strutto
 
 un dl di vino bianco secco
 
@@ -102246,7 +102246,7 @@ un bel coniglio, nettato e tagliato a pezzi
 
 Per la marinatura:;
 
-2 dI di olio di oliva
+2 dl di olio di oliva
 
 3 limoni, il solo succo
 
@@ -103670,7 +103670,7 @@ bianca, amarognola)
 
 un bicchiere di aceto
 
-g So di burro
+g 50 di burro
 
 7 cucchiai di olio extra vergine di oliva
 
@@ -105557,7 +105557,7 @@ g 200 di salsiccia fresca, sminuzzata
 
 il fegato dell'oca, tritato
 
-g 00 di funghi freschi, puliti e tritati
+g 60 di funghi freschi, puliti e tritati
 grossolanamente
 
 2 uova
@@ -109610,7 +109610,7 @@ g 60 di pangrattato
 sale e pepe di mulinello
 
 Per la cottura:
-82 25 di strutto
+g 25 di strutto
 sale e pepe di mulinello
 
 In una padellina, rosolate nello strutto i
@@ -116399,7 +116399,7 @@ Per la cottura:
 
 g 30 di burro
 
-g 00 di lardo pestato
+g 60 di lardo pestato
 
 3 sardelle, sfilettate e tritate
 una cipolla tritata
@@ -116560,7 +116560,7 @@ una cipolla tritata grossolanamente
 un mazzetto di erba pepe, maggiorana, basilico, sa
 via e rosmarino legati assieme
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 mezzo l di sugo di pomodoro
 
@@ -119550,7 +119550,7 @@ Per la salsa:
 
 2 dl di acqua
 
-2 di di aceto di vino
+2 dl di aceto di vino
 
 2 mostaccioli (biscotti secchi) tritati
 
@@ -119884,7 +119884,7 @@ un cucchiaio di prezzemolo tritato
 
 un dl di vino rosso
 
-1 1,5 di brodo di carne, bollente
+l 1,5 di brodo di carne, bollente
 
 un rametto di rosmarino
 
@@ -121060,7 +121060,7 @@ Filetti di cervo Trentino-Alto Adige
 Ingredienti per 6 persone:
 
 kg 1 di noce di cervo, in 6 fette
-g 00 di lardo, tagliato a listarelle
+g 60 di lardo, tagliato a listarelle
 farina
 
 mezzo dl di olio di oliva
@@ -123802,7 +123802,7 @@ asportando le zampe e gli occhi
 
 g 80 di burro
 
-1 2,2 di acqua
+l 2,2 di acqua
 
 g 600 di farina gialla
 
@@ -124435,7 +124435,7 @@ Per la cottura:
 
 mezzo dl di olio di oliva
 mezzo dl di vino bianco secco
-È 1 di brodo buono, caldo
+l 1 di brodo buono, caldo
 
 3 foglie di basilico
 
@@ -126024,7 +126024,7 @@ Piemonte
 
 Ingredienti per 6 persone:
 g 400 di fegato di maiale
-g 00 di polmone di maiale
+g 60 di polmone di maiale
 16 foglie di cavolo verza
 una mela renetta tritata
 noce moscata
@@ -126527,7 +126527,7 @@ Ingredienti per 6 persone:
 
 6 colli d'oca
 
-g 00 di carne di oca macinata
+g 60 di carne di oca macinata
 
 g 120 di polpa di maiale macinata
 4 uova
@@ -127118,7 +127118,7 @@ Fegato all’acetillo Campania
 
 Ingredienti per 6 persone:
 
-E 600 di fegato di vitello, affettato
+g 600 di fegato di vitello, affettato
 g 60 di strutto
 
 sale
@@ -128056,7 +128056,7 @@ Ingredienti per 6 persone:
 
 kg 1,2 di granelli di vitello
 
-g So di farina
+g 50 di farina
 
 g 50 di pangrattato, passato al setaccio fine
 strutto, per friggere
@@ -130238,7 +130238,7 @@ Sanguinaccio Umbria
 
 Ingredienti per 6 persone:
 
-1 1,5 di sangue di maiale, appena filtrato
+l 1,5 di sangue di maiale, appena filtrato
 
 g 150 di zucchero
 
@@ -130956,7 +130956,7 @@ Ingredienti per 6 persone:
 g 800 di trippa (meglio se il rumine, detto croce)
 uno zampetto di vitello
 
-g 00 di burro (olio di oliva)
+g 60 di burro (olio di oliva)
 
 una cipolla tritata
 
@@ -133005,7 +133005,7 @@ kg 1,2 di aguglie
 
 Per la marinatura:
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 2 spicchi di aglio tritati
 
@@ -133609,7 +133609,7 @@ Anguilla alla fiorentina Toscana
 
 Ingredienti per 6 persone:
 
-kg ! di anguilla, nettata, pelata, sviscerata e tagliata
+kg 1 di anguilla, nettata, pelata, sviscerata e tagliata
 a pezzi
 
 un dl di olio di oliva
@@ -135463,7 +135463,7 @@ farina
 
 g 400 di cipolla affettata sottilmente
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 noce moscata grattugiata, a piacere
 
@@ -137284,7 +137284,7 @@ Per la marinatura:
 
 un bicchiere di aceto
 
-2 di di olio di oliva
+2 dl di olio di oliva
 sale e pepe di mulinello
 
 Per la cottura:
@@ -138139,7 +138139,7 @@ un bicchiere di latte
 
 3 uova
 
-g 00 di grana padano grattugiato
+g 60 di grana padano grattugiato
 un cucchiaio di prezzemolo tritato
 
 Per la cottura:
@@ -139708,7 +139708,7 @@ farina
 
 g 60 di spinaci
 
-g 00 di bietole
+g 60 di bietole
 
 2 cucchiai di prezzemolo tritato
 2 spicchi di aglio
@@ -140288,7 +140288,7 @@ un ciuffetto di prezzemolo
 
 6 limoni affettati
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 sale
 
@@ -140616,7 +140616,7 @@ olio di oliva e di semi, per friggere
 
 g 800 di cipolla affettata
 
-2 di di aceto di vino
+2 dl di aceto di vino
 
 sale e pepe di mulinello
 
@@ -143048,7 +143048,7 @@ e sviscerate
 un mazzetto odoroso (salvia, rosmarino, timo,
 origano, prezzemolo, basilico) tritato
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 2 limoni, il succo
 
@@ -144662,7 +144662,7 @@ Tonno sott'olio Friuli-Venezia Giulia
 Ingredienti per 6 persone:
 kg 2 di tonno
 
-1 3 di acqua
+l 3 di acqua
 
 mezzo l di aceto
 
@@ -144905,7 +144905,7 @@ alimenti) inumidita
 
 mezzo dl di olio di oliva
 
-g So di pangrattato
+g 50 di pangrattato
 
 uno spicchio di aglio tritato
 
@@ -145896,7 +145896,7 @@ lari della montagna parmense.
 Ingredienti per 6 persone:
 6 belle trote
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 4 limoni, il solo succo
 
@@ -148582,7 +148582,7 @@ kg 1,5 di code di scampi
 
 Per il condimento:
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 3 spicchi di aglio tritati
 
@@ -150056,7 +150056,7 @@ Ingredienti per 6 persone:
 delle branchie, poi tagliati a pezzi (attenzione al
 corallo — le uova -- da tagliare)
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 2 spicchi di aglio tritati
 
@@ -154133,7 +154133,7 @@ Ingredienti per 6 persone:
 
 kg 2,5 di vongole
 
-2 di di olie
+2 dl di olio
 
 3 spicchi di aglio affettato
 pepe nero, macinato all'istante
@@ -155795,7 +155795,7 @@ una cipolla tritata
 3 cucchiai di prezzemolo tritato
 2 limoni, il succo
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 sale e pepe di mulinello
 
@@ -156355,7 +156355,7 @@ g 800 di patate
 g 60 di prosciutto a dadini
 
 g 40 di parmigiano reggiano gratiugiato (a piacere)
-3 di di latte
+3 dl di latte
 
 noce moscata
 
@@ -156878,7 +156878,7 @@ Ingredienti per 6 persone:
 
 7-8 uova
 
-g 3500 di cuori di lattuga, lavati e tagliati a listarelle
+g 500 di cuori di lattuga, lavati e tagliati a listarelle
 g 25 di formaggio pecorino grattugiato
 
 un cucchiaio di strutto
@@ -159624,7 +159624,7 @@ Per il pancotto:
 6 belle fette di pane casereccio
 
 2 spicchi di aglio, per strofinare le fette di pane
-1 1,5 di brodo
+l 1,5 di brodo
 
 mezzo dl di olio di oliva
 
@@ -160416,7 +160416,7 @@ Ingredienti:
 
 g 500 di semolino
 
-dl 4 di di latte (o brodo)
+dl 4 di latte (o brodo)
 
 cannella o noce moscata grattugiata
 pangrattato
@@ -160579,7 +160579,7 @@ Per la pastella:
 
 2-3 uova
 
-g So di farina
+g 50 di farina
 
 sale
 
@@ -162516,7 +162516,7 @@ Ingredienti per 6 persone:
 
 10 uova
 
-82 30 di burro
+g 30 di burro
 
 2 cucchiai di olio di oliva
 
@@ -162702,7 +162702,7 @@ Uova e salsicce Friuli-Venezia Giulia
 
 Ingredienti per 6 persone:
 
-kg ! di salsiccia fresca, affettata
+kg 1 di salsiccia fresca, affettata
 g 30 di burro
 
 6 uova
@@ -163174,7 +163174,7 @@ Ingredienti per 6 persone:
 kg 2,5 di asparagi bianchi, di Bassano del Grappa
 12 uova
 
-2 di di olio di oliva
+2 dl di olio di oliva
 
 aceto di vino
 
@@ -165051,7 +165051,7 @@ sottili e messi a bagno in acqua e succo di limone
 
 un limone, il succo
 
-g So di strutto
+g 50 di strutto
 
 4 foglie di basilico frantumate
 
@@ -167492,7 +167492,7 @@ g 500 di cipolle. affettate
 
 un dl di olio di oliva
 
-g 00 di prosciutto tritato
+g 60 di prosciutto tritato
 
 8-10 foglioline di salvia tritate
 
@@ -169531,7 +169531,7 @@ Ingredienti per 6 persone:
 
 g 750 di asparagi
 
-3 di di panna liquida
+3 dl di panna liquida
 
 4 uova
 
@@ -170671,7 +170671,7 @@ Ingredienti per 6 persone:
 12 patate, lessate in acqua bollente salata, poi
 pelate e tagliate a fette
 
-g 000 di carne avanzata (bollito o quant'altro), a
+g 600 di carne avanzata (bollito o quant'altro), a
 dadini
 
 g 25 di burro
@@ -173829,7 +173829,7 @@ Ingredienti per 6 persone:
 
 latte intero
 
-a 60 di burro
+g 60 di burro
 
 una cipolla affettata
 
@@ -176486,7 +176486,7 @@ kg 1,5 di spinaci
 
 g 100 di burro
 
-g 00 di uva passa
+g 60 di uva passa
 
 g 30 di pinoli
 
@@ -180309,7 +180309,7 @@ da la cupola del berretto.
 
 Ingredienti:
 
-1 2 di latte intero
+l 2 di latte intero
 
 5 uova intere
 
@@ -180828,7 +180828,7 @@ Budino Puglia
 
 Ingredienti:
 
-E 1 di latte
+l 1 di latte
 
 g 220 di zucchero
 
@@ -184741,7 +184741,7 @@ g 200 di zucchero
 g 80 di uvetta, ammollata in acqua tiepida, poi
 strizzata
 
-g o di burro
+g 80 di burro
 
 g 70 di cedro candito, a dadini
 
@@ -185114,7 +185114,7 @@ sale
 
 Mettete sul fuoco una casseruola, con mezzo
 litro di acqua; appena è calda, versatevi ada-
-gio g SO di zucchero, mescolando continua-
+gio g 50 di zucchero, mescolando continua-
 mente, per scioglierlo bene e risultare perfet-
 tamente limpido.
 
@@ -186647,7 +186647,7 @@ g 500 di farina
 g 20 di lievito di birra, sciolto in pochissima acqua
 tiepida
 
-g So di zucchero
+g 50 di zucchero
 
 un limone, la sola scorza grattugiata
 
@@ -186988,7 +186988,7 @@ Ingredienti:
 
 6 mele
 
-2 di di Rhum
+2 dl di Rhum
 
 g 150 di farina
 
@@ -193373,7 +193373,7 @@ g 140 di zucchero
 
 raspatura di cannella
 
-g 00 di scorza di arancia cundita, tagliata a dadini
+g 60 di scorza di arancia cundita, tagliata a dadini
 g 60 di cedro candito, tagliato a dadini
 
 Per la cottura:
@@ -195408,7 +195408,7 @@ Sfojadini Veneto
 
 Ingredienti:
 
-g 3500 di farina
+g 500 di farina
 
 g 300 di burro, ammorbidito
 2 tuorli d'uovo sbattuti
@@ -196547,7 +196547,7 @@ un dl di latte
 
 2 uova
 
-g 00 di zucchero
+g 60 di zucchero
 
 mezzo bicchierino di Grappa
 sale
@@ -199247,7 +199247,7 @@ un bicchierino di liquore forte (Anice o altro)
 
 10 uova
 
-i 1,2 di latte
+l 1,2 di latte
 
 un limone, la sola scorza
 
@@ -199679,7 +199679,7 @@ g 160 di zucchero
 
 g 100 di fichi secchi tritati (o pestati)
 
-g 00 di uvetta, ammollata in poca Grappa
+g 60 di uvetta, ammollata in poca Grappa
 
 g 60 di pinoli
 
@@ -200021,7 +200021,7 @@ grossolanamente
 g 200 di zucchero
 
 g 150 di burro o di strutto (oppure g 100 di burro
-e g So di strutto)
+e g 50 di strutto)
 
 2 tuorli ;
 
