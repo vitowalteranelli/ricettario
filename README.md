@@ -137,7 +137,7 @@ Il catalogo delle fonti è in `datasets/catalog.json`; ogni fonte ha un dataset
 separato, ad esempio `datasets/cbt-pirotta.json` e
 `datasets/ricette-regionali.json`. Gli ID delle ricette sono globalmente univoci
 e prefissati dall’ID fonte. Il dataset CBT contiene 660 ricette con categorie,
-sottocategorie e sezioni ordinate. La fonte “Ricette regionali” contiene 4.521
+sottocategorie e sezioni ordinate. La fonte “Ricette regionali” contiene 4.546
 ricette ricavate dalla trascrizione OCR di
 `output/cucina-regionale-italiana-5000-ricette.md`: non è stato corretto
 editorialmente, ma sono stati corretti gli errori OCR esclusivamente univoci; i

@@ -195,6 +195,32 @@ function findCandidate(line, regionalIndexTitles, regionPatterns) {
     return { title: value, region: '', detection: 'regional-index-title' };
 }
 
+function findContextualCandidate(documentLines, lineIndex, regionalIndexTitles, regionPatterns) {
+    const line = documentLines[lineIndex];
+    const candidate = findCandidate(line, regionalIndexTitles, regionPatterns);
+
+    const value = line.trimmed;
+    if (!value || !isTitleCaseLine(value) || /[.,:;!?]$/.test(value)) return candidate;
+    if (isExcludedHeading(value)) return null;
+
+    let regionIndex = lineIndex + 1;
+    while (regionIndex < documentLines.length && !documentLines[regionIndex].trimmed) regionIndex += 1;
+    const regionLine = documentLines[regionIndex];
+    if (!regionLine || regionLine.page !== line.page || !isStandaloneRegion(regionLine.trimmed)) return candidate;
+
+    let contentIndex = regionIndex + 1;
+    while (contentIndex < documentLines.length && !documentLines[contentIndex].trimmed) contentIndex += 1;
+    const contentLine = documentLines[contentIndex];
+    if (!contentLine || contentLine.page !== line.page) return candidate;
+    if (!/^ingredienti(?:\s+.*)?\s*:?[ \t]*$/i.test(contentLine.trimmed)) return candidate;
+
+    return {
+        ...(candidate || { title: value, detection: 'contextual-region-heading' }),
+        region: regionLine.trimmed,
+        regionLineIndex: regionIndex
+    };
+}
+
 function isStructuralLine(value) {
     if (!value) return true;
     if (/^<!-- PDF page \d{4} \|/.test(value)) return true;
@@ -298,7 +324,7 @@ function parseRecipes(documentLines) {
             subcategory = subcategoryHeadings.get(heading);
         }
 
-        const candidate = findCandidate(line, regionalIndexTitles, regionPatterns);
+        const candidate = findContextualCandidate(documentLines, line.index, regionalIndexTitles, regionPatterns);
         if (candidate) candidates.push({ ...line, ...candidate, category, subcategory });
     }
 
@@ -307,7 +333,9 @@ function parseRecipes(documentLines) {
     for (const [candidateIndex, candidate] of candidates.entries()) {
         const next = candidates[candidateIndex + 1];
         const endIndex = next ? next.index : bodyEndIndex;
-        let contentStartIndex = candidate.index + 1;
+        let contentStartIndex = Number.isInteger(candidate.regionLineIndex)
+            ? candidate.regionLineIndex + 1
+            : candidate.index + 1;
         let sourceRegion = candidate.region;
         let sourceLayout = 'heading-before-body';
         let paragraphs = splitParagraphs(documentLines.slice(contentStartIndex, endIndex));
