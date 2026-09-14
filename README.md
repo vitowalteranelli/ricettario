@@ -100,8 +100,8 @@ Poi apri `http://localhost:8000/index.html` e verifica:
 - aggiunta, modifica, duplicazione ed eliminazione aggiornano il contatore;
 - `Salva e pusha dataset` aggiorna solo il JSON della fonte attiva;
 - il pannello **Fonti** permette di creare e modificare il catalogo delle fonti;
-- il selettore **Tema** alterna tra il tema Classico e quello Mediterraneo e
-  conserva la preferenza solo nel browser;
+- il selettore **Tema** alterna tra il tema Mediterraneo (predefinito) e quello
+  Classico e conserva la preferenza solo nel browser;
 - gestione password lettori continua a funzionare;
 - con una configurazione AI valida, foto e PDF compilano una bozza ricetta;
 - una bozza AI mostra gli eventuali warning e richiede revisione manuale;

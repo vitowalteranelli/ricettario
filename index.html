@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Ricettario">
   <style>
-    :root { color-scheme:light; --bg:#f4f6f8; --card:#fff; --ink:#17212b; --muted:#647383; --accent:#b7352c; --accent-secondary:#e0a22b; --accent-soft:#fff7f5; --line:#d9e0e7; --ok:#176b43; --danger:#a12222; --danger-soft:#fbe8e8; --surface-muted:#e9eef2; --surface-soft:#fbfcfd; --warning-bg:#fff9e9; --warning-line:#e7c98d; --input-bg:#fff; --overlay:#fffffff2; --shadow:#17212b0d; --shadow-strong:#17212b12; --accent-shadow:#b7352c33; --media-bg:#e8ecef; --heading-font:system-ui,-apple-system,"Segoe UI",sans-serif; --olive:var(--muted); }
+    :root { color-scheme:light; --bg:#f4f6f8; --card:#fff; --ink:#17212b; --muted:#647383; --accent:#b7352c; --accent-secondary:#e0a22b; --accent-soft:#fff7f5; --line:#d9e0e7; --ok:#176b43; --danger:#a12222; --danger-soft:#fbe8e8; --surface-muted:#e9eef2; --surface-soft:#fbfcfd; --warning-bg:#fff9e9; --warning-line:#e7c98d; --input-bg:#fff; --overlay:#fffffff2; --shadow:#17212b0d; --shadow-strong:#17212b12; --accent-shadow:#b7352c33; --media-bg:#e8ecef; --heading-font:system-ui,-apple-system,"Segoe UI",sans-serif; --brand-font:Georgia,"Times New Roman",serif; --olive:var(--muted); }
     [data-theme="mediterranean"] { --bg:#f5eee4; --card:#fffaf3; --ink:#30251f; --muted:#77695d; --accent:#b44b35; --accent-secondary:#c68b32; --accent-soft:#f8e8dc; --line:#e5d5c5; --ok:#426d50; --danger:#9d4035; --danger-soft:#f8e4de; --surface-muted:#eee3d7; --surface-soft:#fcf7f0; --warning-bg:#fff4d9; --warning-line:#d9ae62; --input-bg:#fffdf9; --overlay:#fffaf3f2; --shadow:#6f4b321c; --shadow-strong:#6f4b3230; --accent-shadow:#b44b3538; --media-bg:#dec7ad; --heading-font:Georgia,"Times New Roman",serif; --olive:#657151; }
     [data-theme="mediterranean"] body { background-image:radial-gradient(circle at 12% 8%,#fff8ee99,transparent 28rem),linear-gradient(135deg,#f8f1e8,#f1e6d8); }
     [data-theme="mediterranean"] h1,[data-theme="mediterranean"] h2,[data-theme="mediterranean"] h3,[data-theme="mediterranean"] h4,[data-theme="mediterranean"] legend { font-family:var(--heading-font); }
@@ -24,7 +24,7 @@
     .login-brand { display:flex; align-items:center; gap:.75rem; margin-bottom:2rem; }
     .login-mark { display:block; width:2.8rem; height:2.8rem; overflow:hidden; border-radius:12px; box-shadow:0 6px 14px var(--accent-shadow); }
     .login-mark img { display:block; width:100%; height:100%; }
-    .login-brand-name { color:var(--ink); font-size:.9rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .login-brand-name { color:var(--ink); font:700 1.05rem/1 var(--brand-font); letter-spacing:.01em; }
     .login-eyebrow { margin:0 0 .45rem; color:var(--accent); font-size:.75rem; font-weight:850; letter-spacing:.12em; text-transform:uppercase; }
     .login-card h1 { margin-bottom:.65rem; font-size:clamp(1.8rem,5vw,2.5rem); }
     .login-description { max-width:34rem; margin:0 0 1.5rem; color:var(--muted); }
@@ -51,6 +51,13 @@
     form { display:grid; gap:1rem; }
     .actions { display:flex; flex-wrap:wrap; gap:.65rem; align-items:center; }
     .topbar { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem; }
+    .reader-brand { display:flex; align-items:center; gap:.85rem; }
+    .reader-brand-mark { display:grid; place-items:center; width:3rem; height:3rem; overflow:hidden; border-radius:14px 14px 14px 5px; background:var(--accent); box-shadow:0 8px 18px var(--accent-shadow); transform:rotate(-4deg); }
+    .reader-brand-mark img { width:78%; height:78%; transform:rotate(4deg); }
+    .reader-brand-kicker { margin:0 0 .15rem; color:var(--accent); font-size:.68rem; font-weight:850; letter-spacing:.16em; line-height:1; text-transform:uppercase; }
+    .reader-brand h1 { position:relative; display:inline-block; margin:0; color:var(--ink); font:800 clamp(2rem,5vw,2.8rem)/.95 var(--brand-font); letter-spacing:-.045em; }
+    .reader-brand h1::after { display:block; width:2.5rem; height:3px; margin-top:.42rem; border-radius:999px; background:linear-gradient(90deg,var(--accent),var(--accent-secondary)); content:""; }
+    .reader-brand .badge { margin-top:.42rem; }
     .muted { color:var(--muted); }
     .status { min-height:1.5em; color:var(--muted); }
     .status.error { color:var(--danger); }
@@ -175,6 +182,8 @@
       .source-row { grid-template-columns:1fr; }
       .login-card { margin:2rem 0 0; }
       .login-brand { margin-bottom:1.5rem; }
+      .reader-brand-mark { width:2.6rem; height:2.6rem; }
+      .reader-brand h1 { font-size:clamp(1.85rem,10vw,2.35rem); }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior:auto !important; }
@@ -182,8 +191,8 @@
   </style>
   <script>
     try {
-      if (localStorage.getItem('ricettario-theme-v1') === 'mediterranean') document.documentElement.dataset.theme = 'mediterranean';
-    } catch { /* Preferenza grafica non disponibile: resta il tema Classico. */ }
+      if (localStorage.getItem('ricettario-theme-v1') !== 'classic') document.documentElement.dataset.theme = 'mediterranean';
+    } catch { document.documentElement.dataset.theme = 'mediterranean'; }
   </script>
 </head>
 <body>
@@ -209,7 +218,14 @@
 
     <section id="reader-view" hidden>
       <div class="topbar">
-        <div><h1>Ricettario</h1><span id="role-badge" class="badge"></span></div>
+        <div class="reader-brand" aria-label="Ricettario">
+          <span class="reader-brand-mark" aria-hidden="true"><img src="favicon.svg" alt=""></span>
+          <div>
+            <p class="reader-brand-kicker">Archivio personale</p>
+            <h1>Ricettario</h1>
+            <span id="role-badge" class="badge"></span>
+          </div>
+        </div>
         <div class="actions">
           <label class="theme-control">Tema
             <select class="theme-select" aria-label="Tema grafico">
@@ -445,6 +461,7 @@
     const RECIPE_MEDIA_CACHE_KEY = 'ricettario-recipe-media-cache-v1';
     const RECIPE_MEDIA_CACHE_TTL = 1000 * 60 * 60 * 24 * 30;
     const WIKIMEDIA_API_PATH = 'https://commons.wikimedia.org/w/api.php';
+    const WIKIMEDIA_SEARCH_TIMEOUT = 10000;
     const AI_PROMPT_PATH = 'prompts/recipe-extraction.md';
     const AI_SCHEMA_PATH = 'prompts/recipe-schema.json';
     const AI_DEFAULT_MODEL = 'gemini-flash-latest';
@@ -495,8 +512,8 @@
     function storedTheme() {
       try {
         const theme = localStorage.getItem(THEME_STORAGE_KEY);
-        return theme === 'mediterranean' ? theme : 'classic';
-      } catch { return 'classic'; }
+        return theme === 'classic' ? theme : 'mediterranean';
+      } catch { return 'mediterranean'; }
     }
 
     function applyTheme(theme, { persist = true } = {}) {
@@ -761,9 +778,7 @@
       };
     }
 
-    async function searchRecipeMedia(recipe) {
-      const query = [recipe.title, recipe.subcategory, recipe.sourceRegion].filter(Boolean).join(' ').trim();
-      if (!query) return null;
+    async function searchWikimediaImage(query, signal) {
       const url = new URL(WIKIMEDIA_API_PATH);
       url.search = new URLSearchParams({
         action: 'query',
@@ -777,13 +792,37 @@
         format: 'json',
         origin: '*'
       });
-      const response = await fetch(url, { cache: 'no-store' });
+      const response = await fetch(url, { cache: 'no-store', signal });
       if (!response.ok) return null;
       const data = await response.json();
       const page = Object.values(data.query?.pages || {})[0];
       const imageInfo = page?.imageinfo?.[0];
       const imageUrl = safeHttpUrl(imageInfo?.thumburl || imageInfo?.url);
-      if (!imageUrl) return null;
+      return imageUrl ? { imageInfo, imageUrl } : null;
+    }
+
+    async function searchRecipeMedia(recipe) {
+      const queries = [...new Set([
+        [recipe.title, recipe.sourceRegion].filter(Boolean).join(' ').trim(),
+        String(recipe.title || '').trim()
+      ].filter(Boolean))];
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), WIKIMEDIA_SEARCH_TIMEOUT);
+      let result = null;
+      try {
+        for (const query of queries) {
+          try {
+            result = await searchWikimediaImage(query, controller.signal);
+          } catch {
+            result = null;
+          }
+          if (result) break;
+        }
+      } finally {
+        clearTimeout(timeout);
+      }
+      if (!result) return null;
+      const { imageInfo, imageUrl } = result;
       return {
         imageUrl,
         alt: `Immagine suggerita per ${recipe.title}`,
@@ -1208,8 +1247,11 @@
       if (curated || cached) return;
 
       suggestRecipeMedia(recipe).then((suggestion) => {
-        if (!suggestion || !figure.isConnected || selectedRecipeId !== recipe.id) return;
-        figure.replaceWith(createRecipeMediaFigure(recipe, suggestion));
+        if (!figure.isConnected || selectedRecipeId !== recipe.id) return;
+        figure.replaceWith(createRecipeMediaFigure(
+          recipe,
+          suggestion || fallbackRecipeMedia(recipe, 'Non ho trovato una foto illustrativa affidabile.')
+        ));
       });
     }
 
