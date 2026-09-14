@@ -1,0 +1,39 @@
+{
+    "version": 1,
+    "description": "Immagini illustrative associate manualmente a ricette selezionate.",
+    "provider": "Wikimedia Commons",
+    "images": {
+        "ricette-regionali--antipasti-formaggi-e-salumi-arancini": {
+            "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Arancino_Siciliano_.jpg?width=1280",
+            "alt": "Arancino siciliano ripieno di ragù e piselli",
+            "credit": "Enzo Rippa",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:Arancino_Siciliano_.jpg"
+        },
+        "ricette-regionali--primi-piatti-pasta-fresca-e-gnocchi-orecchiette-cime-di-rapa-e-pomodori-secchi": {
+            "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Orecchiette_con_cima_di_rapa.jpg?width=1280",
+            "alt": "Orecchiette con le cime di rapa",
+            "credit": "Bonniebartilomo",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:Orecchiette_con_cima_di_rapa.jpg"
+        },
+        "ricette-regionali--antipasti-formaggi-e-salumi-pizza-margherita": {
+            "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Pizza_Margherita.jpg?width=1280",
+            "alt": "Pizza Margherita",
+            "credit": "Nicholas Gemini",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pizza_Margherita.jpg"
+        },
+        "ricette-regionali--dolci-e-frutta-tiramisu": {
+            "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/001_Tiramisu.jpg?width=1280",
+            "alt": "Tiramisù servito in bicchiere",
+            "credit": "franzconde",
+            "license": "CC BY 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+            "sourceUrl": "https://commons.wikimedia.org/wiki/File:001_Tiramisu.jpg"
+        }
+    }
+}

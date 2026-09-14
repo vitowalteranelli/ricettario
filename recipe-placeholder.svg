@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrazione decorativa di un piatto</title>
+  <desc id="desc">Un piatto stilizzato con foglie e posate su uno sfondo caldo.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c9754b"/>
+      <stop offset="1" stop-color="#7d4d3d"/>
+    </linearGradient>
+    <radialGradient id="plate" cx="50%" cy="42%" r="50%">
+      <stop offset="0" stop-color="#fffaf2"/>
+      <stop offset=".82" stop-color="#f1dfc8"/>
+      <stop offset="1" stop-color="#d9b99a"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#background)"/>
+  <circle cx="600" cy="294" r="205" fill="#5b372f" opacity=".22"/>
+  <circle cx="600" cy="276" r="195" fill="url(#plate)"/>
+  <circle cx="600" cy="276" r="138" fill="none" stroke="#c68b5a" stroke-width="6" opacity=".55"/>
+  <path d="M510 325c28-63 84-91 136-65 20 10 38 28 50 56-34 32-70 47-108 45-32-1-58-13-78-36Z" fill="#82905e"/>
+  <path d="M542 226c-27-50-4-90 39-105 22 43 16 78-18 105Z" fill="#657151"/>
+  <path d="M695 236c22-49 58-59 92-41-9 41-42 59-92 41Z" fill="#9aaf70"/>
+  <path d="M574 313c36-52 76-53 111-9-30 32-69 42-111 9Z" fill="#b44b35" opacity=".78"/>
+  <path d="M316 118l92 356M884 118l-92 356" stroke="#f1dfc8" stroke-width="12" stroke-linecap="round" opacity=".8"/>
+  <path d="M292 118v110M316 118v110M340 118v110M304 228v246M908 118v110M884 118v110M860 118v110M896 228v246" stroke="#f1dfc8" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+</svg>

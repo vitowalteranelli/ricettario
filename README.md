@@ -24,8 +24,17 @@ Usalo solo per contenuti che possono essere distribuiti pubblicamente.
 
 3. **Pubblica i file.** Copia il `config.json` generato nella root e pubblica
    `index.html`, `config.json`, `datasets/`, `favicon.svg`,
-   `manifest.webmanifest`, `sw.js`, la directory `icons/` e la directory
-   `prompts/` tramite GitHub Pages. Configura Pages dalla branch scelta e
+   `manifest.webmanifest`, `sw.js`, `recipe-placeholder.svg`, la directory
+   `icons/` e la directory `prompts/` tramite GitHub Pages. Il manifest
+   opzionale delle immagini illustrative è in `datasets/recipe-media.json` e
+   contiene anche attribuzione, licenza e collegamento alla fonte di ogni
+   immagine. Per le ricette senza immagine curata, la scheda mostra subito il
+   placeholder locale e cerca una sola immagine su Wikimedia Commons: se trova
+   un risultato, lo contrassegna come **Foto suggerita** con l’avviso che
+   potrebbe non corrispondere esattamente alla ricetta e lo conserva nel
+   browser per 30 giorni. Se la ricerca fallisce, resta il placeholder. Le
+   immagini suggerite sono remote e quindi richiedono una connessione; non
+   vengono scritte nei dataset. Configura Pages dalla branch scelta e
    verifica prima il login lettore, poi quello Admin. `setup.html` è un tool
    locale: non è necessario pubblicarlo.
 
@@ -91,6 +100,8 @@ Poi apri `http://localhost:8000/index.html` e verifica:
 - aggiunta, modifica, duplicazione ed eliminazione aggiornano il contatore;
 - `Salva e pusha dataset` aggiorna solo il JSON della fonte attiva;
 - il pannello **Fonti** permette di creare e modificare il catalogo delle fonti;
+- il selettore **Tema** alterna tra il tema Classico e quello Mediterraneo e
+  conserva la preferenza solo nel browser;
 - gestione password lettori continua a funzionare;
 - con una configurazione AI valida, foto e PDF compilano una bozza ricetta;
 - una bozza AI mostra gli eventuali warning e richiede revisione manuale;

@@ -1,9 +1,10 @@
-const CACHE_NAME = 'ricettario-shell-v1';
+const CACHE_NAME = 'ricettario-shell-v2';
 const SHELL_FILES = [
   './',
   './index.html',
   './manifest.webmanifest',
   './favicon.svg',
+  './recipe-placeholder.svg',
   './icons/icon-192.svg',
   './icons/icon-512.svg'
 ];
