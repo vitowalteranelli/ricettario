@@ -24,17 +24,15 @@ Usalo solo per contenuti che possono essere distribuiti pubblicamente.
 
 3. **Pubblica i file.** Copia il `config.json` generato nella root e pubblica
    `index.html`, `config.json`, `datasets/`, `favicon.svg`,
-   `manifest.webmanifest`, `sw.js`, `recipe-placeholder.svg`, la directory
-   `icons/` e la directory `prompts/` tramite GitHub Pages. Il manifest
+   `manifest.webmanifest`, `sw.js`, la directory `icons/` e la directory
+   `prompts/` tramite GitHub Pages. Il manifest
    opzionale delle immagini illustrative è in `datasets/recipe-media.json` e
    contiene anche attribuzione, licenza e collegamento alla fonte di ogni
-   immagine. Per le ricette senza immagine curata, la scheda mostra subito il
-   placeholder locale e cerca una sola immagine su Wikimedia Commons: se trova
-   un risultato, lo contrassegna come **Foto suggerita** con l’avviso che
-   potrebbe non corrispondere esattamente alla ricetta e lo conserva nel
-   browser per 30 giorni. Se la ricerca fallisce, resta il placeholder. Le
-   immagini suggerite sono remote e quindi richiedono una connessione; non
-   vengono scritte nei dataset. Configura Pages dalla branch scelta e
+   immagine. Le ricette senza una voce nel manifest non mostrano alcuna
+   immagine. Le voci suggerite dal batch sono contrassegnate come **Foto
+   suggerita** con l’avviso che potrebbero non corrispondere esattamente alla
+   ricetta; le loro immagini sono remote e richiedono una connessione.
+   Configura Pages dalla branch scelta e
    verifica prima il login lettore, poi quello Admin. `setup.html` è un tool
    locale: non è necessario pubblicarlo.
 
@@ -179,6 +177,16 @@ node tools/migrate-recipes.js
 `Ricettario_CBT.html`: aggiorna `datasets/cbt-pirotta.json` e la relativa voce
 del catalogo. Dopo l’attivazione del CRUD, le modifiche quotidiane dovranno
 essere fatte dai pannelli Admin sui dataset strutturati.
+
+La ricerca batch delle immagini può essere rigenerata con:
+
+```sh
+MEDIA_CONCURRENCY=16 node tools/find-recipe-media.js
+```
+
+Il comando conserva le immagini curate, cerca prima su Openverse e poi su
+Wikimedia Commons, salva progressivamente il manifest e lascia fuori i
+risultati senza una corrispondenza testuale significativa o provenienti da PDF.
 
 GitHub richiede il permesso Contents in scrittura per l'endpoint usato per
 creare o aggiornare file; vedi la [documentazione REST ufficiale](https://docs.github.com/en/rest/repos/contents).

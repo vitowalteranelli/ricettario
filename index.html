@@ -103,7 +103,6 @@
     .recipe-media figcaption a { color:inherit; text-decoration:underline; text-underline-offset:.15em; }
     .recipe-media-label { font-weight:800; }
     .recipe-media.is-suggested { border:1px solid var(--warning-line); }
-    .recipe-media.is-placeholder { background:var(--media-bg); }
     .recipe-card { border:1px solid var(--line); border-radius:12px; padding:1.25rem; background:var(--card); }
     .recipe-card h2 { color:var(--accent); margin:.2rem 0 .25rem; }
     .recipe-card h3 { color:var(--accent); margin:.2rem 0 .25rem; }
@@ -458,10 +457,6 @@
     const CONFIG_PATH = 'config.json';
     const DEFAULT_CATALOG_PATH = 'datasets/catalog.json';
     const RECIPE_MEDIA_PATH = 'datasets/recipe-media.json';
-    const RECIPE_MEDIA_CACHE_KEY = 'ricettario-recipe-media-cache-v1';
-    const RECIPE_MEDIA_CACHE_TTL = 1000 * 60 * 60 * 24 * 30;
-    const WIKIMEDIA_API_PATH = 'https://commons.wikimedia.org/w/api.php';
-    const WIKIMEDIA_SEARCH_TIMEOUT = 10000;
     const AI_PROMPT_PATH = 'prompts/recipe-extraction.md';
     const AI_SCHEMA_PATH = 'prompts/recipe-schema.json';
     const AI_DEFAULT_MODEL = 'gemini-flash-latest';
@@ -486,9 +481,6 @@
     let sourceCatalog = [];
     let sourceDatasets = new Map();
     let recipeMedia = new Map();
-    let recipeMediaCache = new Map();
-    let recipeMediaCacheTimestamps = new Map();
-    let recipeMediaSearches = new Map();
     let adminSourceId = '';
     let sourceEditingId = null;
     let catalogDirty = false;
@@ -730,6 +722,7 @@
           license: String(media.license || '').trim(),
           licenseUrl: safeHttpUrl(media.licenseUrl),
           sourceUrl: safeHttpUrl(media.sourceUrl),
+          provider: String(media.provider || '').trim(),
           matchType: media.matchType === 'suggested' ? 'suggested' : 'curated',
           caption: String(media.caption || '').trim()
         }];
@@ -737,123 +730,7 @@
       return new Map(entries);
     }
 
-    function cleanExternalMetadata(value) {
-      return String(value || '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/gi, ' ').replace(/\s+/g, ' ').trim();
-    }
-
-    function readRecipeMediaCache() {
-      recipeMediaCacheTimestamps = new Map();
-      try {
-        const raw = JSON.parse(localStorage.getItem(RECIPE_MEDIA_CACHE_KEY) || '{}');
-        const entries = Object.entries(raw).filter(([, entry]) => {
-          return entry && typeof entry === 'object' && Number(entry.savedAt) > Date.now() - RECIPE_MEDIA_CACHE_TTL;
-        }).map(([recipeId, entry]) => {
-          const media = normalizeRecipeMedia({ images: { [recipeId]: entry.media } }).get(recipeId);
-          return media ? [recipeId, media, Number(entry.savedAt)] : null;
-        }).filter(Boolean);
-        recipeMediaCacheTimestamps = new Map(entries.map(([recipeId, , savedAt]) => [recipeId, savedAt]));
-        return new Map(entries.map(([recipeId, media]) => [recipeId, media]));
-      } catch {
-        return new Map();
-      }
-    }
-
-    function persistRecipeMediaCache() {
-      try {
-        const raw = Object.fromEntries([...recipeMediaCache.entries()].map(([recipeId, media]) => {
-          const savedAt = Number(recipeMediaCacheTimestamps.get(recipeId)) || Date.now();
-          recipeMediaCacheTimestamps.set(recipeId, savedAt);
-          return [recipeId, { savedAt, media }];
-        }));
-        localStorage.setItem(RECIPE_MEDIA_CACHE_KEY, JSON.stringify(raw));
-      } catch { /* Cache non disponibile: la ricerca resta valida per la sessione. */ }
-    }
-
-    function fallbackRecipeMedia(recipe, message = 'Nessuna corrispondenza affidabile') {
-      return {
-        imageUrl: 'recipe-placeholder.svg',
-        alt: `Illustrazione decorativa per ${recipe.title}`,
-        matchType: 'fallback',
-        caption: message
-      };
-    }
-
-    async function searchWikimediaImage(query, signal) {
-      const url = new URL(WIKIMEDIA_API_PATH);
-      url.search = new URLSearchParams({
-        action: 'query',
-        generator: 'search',
-        gsrsearch: query,
-        gsrnamespace: '6',
-        gsrlimit: '1',
-        prop: 'imageinfo',
-        iiprop: 'url|extmetadata',
-        iiurlwidth: '1280',
-        format: 'json',
-        origin: '*'
-      });
-      const response = await fetch(url, { cache: 'no-store', signal });
-      if (!response.ok) return null;
-      const data = await response.json();
-      const page = Object.values(data.query?.pages || {})[0];
-      const imageInfo = page?.imageinfo?.[0];
-      const imageUrl = safeHttpUrl(imageInfo?.thumburl || imageInfo?.url);
-      return imageUrl ? { imageInfo, imageUrl } : null;
-    }
-
-    async function searchRecipeMedia(recipe) {
-      const queries = [...new Set([
-        [recipe.title, recipe.sourceRegion].filter(Boolean).join(' ').trim(),
-        String(recipe.title || '').trim()
-      ].filter(Boolean))];
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), WIKIMEDIA_SEARCH_TIMEOUT);
-      let result = null;
-      try {
-        for (const query of queries) {
-          try {
-            result = await searchWikimediaImage(query, controller.signal);
-          } catch {
-            result = null;
-          }
-          if (result) break;
-        }
-      } finally {
-        clearTimeout(timeout);
-      }
-      if (!result) return null;
-      const { imageInfo, imageUrl } = result;
-      return {
-        imageUrl,
-        alt: `Immagine suggerita per ${recipe.title}`,
-        credit: cleanExternalMetadata(imageInfo.extmetadata?.Artist?.value) || 'Wikimedia Commons',
-        license: cleanExternalMetadata(imageInfo.extmetadata?.LicenseShortName?.value),
-        licenseUrl: safeHttpUrl(imageInfo.extmetadata?.LicenseUrl?.value),
-        sourceUrl: safeHttpUrl(imageInfo.descriptionurl),
-        matchType: 'suggested',
-        caption: 'Potrebbe non corrispondere esattamente alla ricetta.'
-      };
-    }
-
-    function suggestRecipeMedia(recipe) {
-      if (recipeMediaSearches.has(recipe.id)) return recipeMediaSearches.get(recipe.id);
-      const promise = searchRecipeMedia(recipe).then((media) => {
-        if (media) {
-          recipeMediaCache.set(recipe.id, media);
-          recipeMediaCacheTimestamps.set(recipe.id, Date.now());
-          persistRecipeMediaCache();
-        }
-        return media;
-      }).catch((error) => {
-        console.warn(`Ricerca immagine non riuscita per “${recipe.title}”.`, error);
-        return null;
-      }).finally(() => recipeMediaSearches.delete(recipe.id));
-      recipeMediaSearches.set(recipe.id, promise);
-      return promise;
-    }
-
     async function loadRecipeMedia() {
-      recipeMediaCache = readRecipeMediaCache();
       try {
         return normalizeRecipeMedia(await fetchJson(RECIPE_MEDIA_PATH, 'Manifest immagini'));
       } catch (error) {
@@ -1189,38 +1066,25 @@
 
     function createRecipeMediaFigure(recipe, media) {
       const figure = document.createElement('figure');
-      figure.className = `recipe-media${media.matchType === 'suggested' ? ' is-suggested' : ''}${media.matchType === 'fallback' ? ' is-placeholder' : ''}`;
+      figure.className = `recipe-media${media.matchType === 'suggested' ? ' is-suggested' : ''}`;
 
       const image = document.createElement('img');
       image.src = media.imageUrl;
       image.alt = media.alt || `Immagine illustrativa di ${recipe.title}`;
       image.loading = 'lazy';
       image.decoding = 'async';
-      image.addEventListener('error', () => {
-        if (media.matchType === 'fallback') {
-          figure.remove();
-          return;
-        }
-        if (media.matchType === 'suggested' && recipeMediaCache.get(recipe.id)?.imageUrl === media.imageUrl) {
-          recipeMediaCache.delete(recipe.id);
-          recipeMediaCacheTimestamps.delete(recipe.id);
-          persistRecipeMediaCache();
-        }
-        const fallback = fallbackRecipeMedia(recipe, 'Questa immagine non è disponibile.');
-        figure.replaceWith(createRecipeMediaFigure(recipe, fallback));
-      }, { once: true });
+      image.addEventListener('error', () => figure.remove(), { once: true });
       figure.appendChild(image);
 
       const caption = document.createElement('figcaption');
       const label = document.createElement('span');
       label.className = 'recipe-media-label';
       label.textContent = media.matchType === 'suggested'
-        ? 'Foto suggerita'
-        : media.matchType === 'fallback' ? 'Immagine decorativa' : 'Immagine illustrativa';
+        ? 'Foto suggerita' : 'Immagine illustrativa';
       caption.appendChild(label);
 
       if (media.caption) caption.appendChild(document.createTextNode(` · ${media.caption}`));
-      const attribution = [media.credit, media.license].filter(Boolean).join(' · ');
+      const attribution = [media.provider, media.credit, media.license].filter(Boolean).join(' · ');
       if (attribution) {
         caption.appendChild(document.createTextNode(' · '));
         if (media.sourceUrl) {
@@ -1239,20 +1103,8 @@
     }
 
     function renderRecipeMedia(recipe, parent) {
-      const curated = recipeMedia.get(recipe.id);
-      const cached = recipeMediaCache.get(recipe.id);
-      const initial = curated || cached || fallbackRecipeMedia(recipe, 'Ricerca di una foto illustrativa…');
-      const figure = createRecipeMediaFigure(recipe, initial);
-      parent.appendChild(figure);
-      if (curated || cached) return;
-
-      suggestRecipeMedia(recipe).then((suggestion) => {
-        if (!figure.isConnected || selectedRecipeId !== recipe.id) return;
-        figure.replaceWith(createRecipeMediaFigure(
-          recipe,
-          suggestion || fallbackRecipeMedia(recipe, 'Non ho trovato una foto illustrativa affidabile.')
-        ));
-      });
+      const media = recipeMedia.get(recipe.id);
+      if (media) parent.appendChild(createRecipeMediaFigure(recipe, media));
     }
 
     function renderRecipeDetail(recipe, parent) {
@@ -1897,9 +1749,6 @@
       recipeDatasetSource = '';
       recipeDatasetSourceId = '';
       recipeMedia = new Map();
-      recipeMediaCache = new Map();
-      recipeMediaCacheTimestamps = new Map();
-      recipeMediaSearches = new Map();
       editingRecipeId = null;
       $('#recipe-list').replaceChildren();
       $('#recipe-count').textContent = '';
