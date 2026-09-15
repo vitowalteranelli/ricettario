@@ -25,6 +25,7 @@
   ],
   "ai": {
     "provider": "gemini",
+    "model": "gemini-flash-lite-latest",
     "crypto": {
       "algorithm": "AES-256-GCM",
       "kdf": "PBKDF2-HMAC-SHA-256",

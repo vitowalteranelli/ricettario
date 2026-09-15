@@ -39,7 +39,7 @@
                 <option value="gemini">Google Gemini</option>
               </select>
             </label>
-            <p class="hint">Modello: <code>gemini-flash-latest</code>. L’app usa automaticamente l’ultima versione Flash disponibile.</p>
+            <p class="hint">Modello predefinito: <code>gemini-flash-lite-latest</code>. È ottimizzato per ridurre consumo e quota; potrai selezionare un altro modello compatibile dall’app.</p>
           </div>
           <label>API key Gemini <span class="field-hint">lascia vuoto per disattivare l’importazione AI</span><input id="llm-api-key" type="password" autocomplete="off"></label>
         </div>
@@ -134,6 +134,7 @@
         if (llmApiKey) {
           config.ai = {
             provider: $('#llm-provider').value,
+            model: 'gemini-flash-lite-latest',
             crypto: await encryptSecret(llmApiKey, adminPassword)
           };
         }

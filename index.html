@@ -106,6 +106,13 @@
     .ingredient-results-header { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
     .ingredient-results-header h3,.ingredient-results-header p { margin:0; }
     .ingredient-results-header p { color:var(--muted); font-size:.85rem; }
+    .ingredient-category-filter { display:grid; gap:.5rem; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:var(--surface-soft); }
+    .ingredient-category-filter-header { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.35rem 1rem; align-items:baseline; }
+    .ingredient-category-filter-header strong { color:var(--ink); }
+    .ingredient-category-filter-header span { color:var(--muted); font-size:.82rem; }
+    .ingredient-category-options { display:flex; flex-wrap:wrap; gap:.45rem; }
+    .ingredient-category-option { display:inline-flex; width:auto; flex-direction:row; align-items:center; gap:.4rem; padding:.4rem .65rem; border:1px solid var(--line); border-radius:999px; background:var(--card); color:var(--ink); font-size:.82rem; cursor:pointer; }
+    .ingredient-category-option input { width:auto; margin:0; accent-color:var(--accent); }
     .ingredient-recipe-list { display:grid; gap:.55rem; }
     .ingredient-recipe-result { display:grid; gap:.2rem; width:100%; padding:.85rem 1rem; border:1px solid var(--line); border-radius:10px; background:var(--card); color:var(--ink); text-align:left; }
     .ingredient-recipe-result:hover { border-color:var(--accent); box-shadow:0 4px 14px var(--shadow-strong); }
@@ -339,6 +346,13 @@
             <div class="ingredient-results-header">
               <h3>Ricette possibili</h3>
               <p id="ingredient-results-count"></p>
+            </div>
+            <div id="ingredient-category-filter" class="ingredient-category-filter" hidden>
+              <div class="ingredient-category-filter-header">
+                <strong>Filtra per categoria</strong>
+                <span>Seleziona una o più categorie; nessuna selezione mostra tutte.</span>
+              </div>
+              <div id="ingredient-category-options" class="ingredient-category-options"></div>
             </div>
             <div id="ingredient-recipe-list" class="ingredient-recipe-list"></div>
             <p id="ingredient-no-results" class="status" hidden>Nessuna ricetta ha ingredienti riconosciuti sufficienti. Prova ad aggiungere o correggere una voce.</p>
@@ -601,7 +615,7 @@
     const AI_INGREDIENT_PROMPT_PATH = 'prompts/ingredient-detection.md';
     const AI_INGREDIENT_SCHEMA_PATH = 'prompts/ingredient-detection-schema.json';
     const AI_MODELS_PATH = 'https://generativelanguage.googleapis.com/v1beta/models';
-    const AI_DEFAULT_MODEL = 'gemini-flash-latest';
+    const AI_DEFAULT_MODEL = 'gemini-flash-lite-latest';
     const INGREDIENT_MODEL_UI = { pickerId: '#ingredient-model-picker', errorId: '#ingredient-model-error', statusId: '#ingredient-model-status', selectId: '#ingredient-model-select' };
     const RECIPE_MODEL_UI = { pickerId: '#recipe-model-picker', errorId: '#recipe-model-error', statusId: '#recipe-model-status', selectId: '#recipe-model-select' };
     const AI_MAX_FILE_BYTES = 20 * 1024 * 1024;
@@ -639,6 +653,7 @@
     let ingredientFiles = [];
     let detectedIngredients = [];
     let ingredientSearchResults = [];
+    let ingredientSelectedCategories = new Set();
     let ingredientFrequency = null;
     let aiModel = AI_DEFAULT_MODEL;
     let aiModels = [];
@@ -964,6 +979,8 @@
       const config = await response.json();
       if (config.setupRequired || !config.crypto?.salt || !config.crypto?.iv || !config.crypto?.ciphertext) throw new Error('Configurazione non inizializzata.');
       if (!Array.isArray(config.readOnlyPasswords)) throw new Error('config.json non valido.');
+      const configuredModel = String(config.ai?.model || '').trim();
+      aiModel = /^gemini-[a-z0-9.-]+$/i.test(configuredModel) ? configuredModel : AI_DEFAULT_MODEL;
       return config;
     }
 
@@ -1353,6 +1370,7 @@
 
     function invalidateIngredientResults() {
       ingredientSearchResults = [];
+      ingredientSelectedCategories = new Set();
       $('#ingredient-results').hidden = true;
       closeIngredientRecipeDetail({ focus: false });
     }
@@ -1549,11 +1567,58 @@
         .sort((left, right) => right.score - left.score || right.coverage - left.coverage || right.matchedCount - left.matchedCount || left.index - right.index);
     }
 
+    function ingredientResultCategory(recipe) {
+      return String(recipe.category || '').trim() || 'Senza categoria';
+    }
+
+    function renderIngredientCategoryFilter() {
+      const filter = $('#ingredient-category-filter');
+      const options = $('#ingredient-category-options');
+      options.replaceChildren();
+      const counts = new Map();
+      ingredientSearchResults.forEach((entry) => {
+        const category = ingredientResultCategory(entry.recipe);
+        counts.set(category, (counts.get(category) || 0) + 1);
+      });
+      const categories = [...counts.entries()].sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0], 'it'));
+      if (!categories.length) {
+        filter.hidden = true;
+        return;
+      }
+      ingredientSelectedCategories = new Set([...ingredientSelectedCategories].filter((category) => counts.has(category)));
+      filter.hidden = false;
+      categories.forEach(([category, count]) => {
+        const label = document.createElement('label');
+        label.className = 'ingredient-category-option';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = category;
+        checkbox.checked = ingredientSelectedCategories.has(category);
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) ingredientSelectedCategories.add(category);
+          else ingredientSelectedCategories.delete(category);
+          renderIngredientRecipeResults();
+        });
+        label.appendChild(checkbox);
+        const text = document.createElement('span');
+        text.textContent = `${category} (${count})`;
+        label.appendChild(text);
+        options.appendChild(label);
+      });
+    }
+
+    function visibleIngredientSearchResults() {
+      if (!ingredientSelectedCategories.size) return ingredientSearchResults;
+      return ingredientSearchResults.filter((entry) => ingredientSelectedCategories.has(ingredientResultCategory(entry.recipe)));
+    }
+
     function renderIngredientRecipeResults() {
       closeIngredientRecipeDetail({ focus: false });
+      renderIngredientCategoryFilter();
       const container = $('#ingredient-recipe-list');
       container.replaceChildren();
-      ingredientSearchResults.forEach((entry) => {
+      const visibleResults = visibleIngredientSearchResults();
+      visibleResults.forEach((entry) => {
         const result = document.createElement('button');
         result.type = 'button';
         result.className = 'ingredient-recipe-result';
@@ -1578,14 +1643,15 @@
         container.appendChild(result);
       });
       $('#ingredient-results').hidden = false;
-      $('#ingredient-results-count').textContent = ingredientSearchResults.length
-        ? `${ingredientSearchResults.length} risultati ordinati per ingredienti rari e copertura`
+      $('#ingredient-results-count').textContent = visibleResults.length
+        ? `${visibleResults.length}${visibleResults.length !== ingredientSearchResults.length ? ` di ${ingredientSearchResults.length}` : ''} risultati ordinati per ingredienti rari e copertura`
         : '';
-      $('#ingredient-no-results').hidden = ingredientSearchResults.length > 0;
+      $('#ingredient-no-results').hidden = visibleResults.length > 0;
     }
 
     function findIngredientRecipes() {
       detectedIngredients = readIngredientInventory();
+      ingredientSelectedCategories = new Set();
       ingredientSearchResults = rankRecipesByIngredients(detectedIngredients).slice(0, 50);
       renderIngredientInventory();
       renderIngredientRecipeResults();
@@ -2484,6 +2550,8 @@
       const latestConfig = await githubGetFile(CONFIG_PATH);
       appConfig = JSON.parse(latestConfig.text);
       configSha = latestConfig.sha;
+      const configuredModel = String(appConfig.ai?.model || '').trim();
+      aiModel = /^gemini-[a-z0-9.-]+$/i.test(configuredModel) ? configuredModel : AI_DEFAULT_MODEL;
       session.llmKey = null;
       if (appConfig.ai?.crypto) {
         try {
@@ -2618,6 +2686,8 @@
         const latestConfig = await githubGetFile(CONFIG_PATH);
         appConfig = JSON.parse(latestConfig.text);
         configSha = latestConfig.sha;
+        const configuredModel = String(appConfig.ai?.model || '').trim();
+        aiModel = /^gemini-[a-z0-9.-]+$/i.test(configuredModel) ? configuredModel : AI_DEFAULT_MODEL;
 
         if (appConfig.ai?.crypto) {
           authStage = 'ai-decrypt';

@@ -17,7 +17,9 @@ Usalo solo per contenuti che possono essere distribuiti pubblicamente.
    password Admin e le password lettore, poi scarica `config.json`. Se vuoi
    l’importazione da foto/PDF, inserisci anche una API key Gemini: viene cifrata
    separatamente con la stessa password Admin. L’app usa l’alias
-   `gemini-flash-latest`, quindi segue automaticamente l’ultima versione Flash.
+   `gemini-flash-lite-latest` come modello predefinito, ottimizzato per ridurre
+   consumo e quota; dall’app è possibile selezionare un altro modello
+   compatibile.
    Il helper usa
    PBKDF2-HMAC-SHA-256 con 120.000 iterazioni e AES-256-GCM; i segreti vengono
    cifrati in memoria.
