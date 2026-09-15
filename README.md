@@ -65,8 +65,10 @@ nella sessione. Se l’utente è già entrato come Admin e ha riattivato le funz
 Admin, non viene richiesta una seconda volta. La chiave e le fotografie restano
 solo nella memoria della scheda e non vengono salvate nel dataset o nel browser.
 
-Il ranking delle ricette è locale: considera la percentuale di ingredienti
-coperti e dà più peso agli ingredienti rari nel dataset. Le corrispondenze sono
+Il ranking delle ricette è locale: per ogni ingrediente conta in quante ricette
+compare nel catalogo complessivo; meno ricette lo contengono, maggiore è la sua
+priorità. L’ingrediente disponibile più raro pesa più della sola percentuale di
+ingredienti coperti, che resta un criterio secondario. Le corrispondenze sono
 indicative; l’elenco mostra anche gli ingredienti eventualmente mancanti e non
 modifica mai le ricette.
 

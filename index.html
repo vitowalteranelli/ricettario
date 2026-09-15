@@ -1434,6 +1434,9 @@
           inventoryTerms.set(term, Math.max(inventoryTerms.get(term) || 0, confidence));
         }
       }
+      const availableRarity = [...inventoryTerms.keys()].map((term) => ingredientRarity(term));
+      const totalAvailableRarity = availableRarity.reduce((total, rarity) => total + rarity, 0);
+      const rarestAvailableRarity = Math.max(...availableRarity, 1);
       const matchesTerm = (term) => [...inventoryTerms.keys()].some((available) => available === term);
       return recipeDataset.map((recipe, index) => {
         const required = [...new Set(ingredientTerms(recipeIngredientItems(recipe).join(' ')))];
@@ -1445,14 +1448,20 @@
         const matchedRarity = matched.reduce((total, term) => total + ingredientRarity(term), 0);
         const coverage = matched.length / required.length;
         const rareCoverage = matchedRarity / totalRarity;
+        const rarestMatchedRarity = Math.max(...matched.map((term) => ingredientRarity(term)), 0);
+        const rarestIngredientCoverage = rarestMatchedRarity / rarestAvailableRarity;
+        const availableIngredientCoverage = totalAvailableRarity ? matchedRarity / totalAvailableRarity : 0;
+        // La presenza dell'ingrediente più raro ha priorità sulla sola copertura.
+        const rarityPriority = .8 * rarestIngredientCoverage + .2 * availableIngredientCoverage;
         const confidence = matched.reduce((total, term) => total + (inventoryTerms.get(term) || 0), 0) / matched.length;
         const countFactor = 1 - Math.exp(-matched.length / 3);
         return {
           recipe,
           index,
-          score: .55 * coverage + .25 * rareCoverage + .1 * confidence + .1 * countFactor,
+          score: .9 * rarityPriority + .05 * coverage + .03 * confidence + .02 * countFactor,
           coverage,
           rareCoverage,
+          rarityPriority,
           matchedCount: matched.length,
           requiredCount: required.length,
           missing: missing.slice(0, 5)
@@ -1490,7 +1499,7 @@
       });
       $('#ingredient-results').hidden = false;
       $('#ingredient-results-count').textContent = ingredientSearchResults.length
-        ? `${ingredientSearchResults.length} risultati ordinati per copertura e rarità`
+        ? `${ingredientSearchResults.length} risultati ordinati per ingredienti rari e copertura`
         : '';
       $('#ingredient-no-results').hidden = ingredientSearchResults.length > 0;
     }
