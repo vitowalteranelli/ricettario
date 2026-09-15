@@ -1,7 +1,7 @@
 {
     "version": 1,
-    "description": "Immagini illustrative curate o suggerite automaticamente; le immagini suggerite richiedono verifica.",
-    "provider": "Openverse e Wikimedia Commons",
+    "description": "Immagini illustrative curate o suggerite da pagine ricetta, Openverse e Wikimedia Commons; le immagini suggerite richiedono verifica.",
+    "provider": "Pagine ricetta, Openverse e Wikimedia Commons",
     "images": {
         "cbt-pirotta--carni-manzo-flat-iron-steak": {
             "imageUrl": "https://live.staticflickr.com/3178/2787014639_a764736717_b.jpg",
@@ -178,6 +178,21 @@
             "provider": "Openverse · wikimedia",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "cbt-pirotta--salse-cacio-e-pepe": {
+            "imageUrl": "https://www.giallozafferano.it/images/ricette/219/21989/foto_hd/hd650x433_wm.jpg",
+            "alt": "Immagine suggerita per Cacio e pepe",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Spaghetti-Cacio-e-Pepe.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Cacio e pepe ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Spaghetti Cacio e Pepe",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "cbt-pirotta--salse-ragu-alla-bolognese": {
             "imageUrl": "https://live.staticflickr.com/240/3264340270_4b4a336e3d_b.jpg",
@@ -453,6 +468,21 @@
             "provider": "Openverse · flickr",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--condimenti-salse-sughi-agliata-aggiadda": {
+            "imageUrl": "https://blog.giallozafferano.it/cucinaprediletta/wp-content/uploads/2018/07/Agliata-agghiata-ev-L.jpg",
+            "alt": "Immagine suggerita per Agliata (Aggiadda)",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://blog.giallozafferano.it/cucinaprediletta/agliata/",
+            "provider": "Pagina ricetta · blog.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Agliata (Aggiadda) ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Agliata (agghiata)",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--condimenti-salse-sughi-aglio-olio-e-peperoncino": {
             "imageUrl": "https://live.staticflickr.com/47/138067687_532c320c00_b.jpg",
@@ -1048,6 +1078,21 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--pani-focacce-torte-focaccia-fugassa": {
+            "imageUrl": "https://www.giallozafferano.it/images/ricette/168/16876/foto_hd/hd650x433_wm.jpg",
+            "alt": "Immagine suggerita per Focaccia (Fugassa)",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Focaccia.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Focaccia (Fugassa) Liguria ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Focaccia",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--pani-focacce-torte-galletta": {
             "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/da/Natale_Galletta.png",
             "alt": "Immagine suggerita per Galletta",
@@ -1256,6 +1301,21 @@
             "provider": "Openverse · flickr",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--pani-focacce-torte-piadina-pie": {
+            "imageUrl": "https://www.giallozafferano.it/images/ricette/179/17984/foto_hd/hd650x433_wm.jpg",
+            "alt": "Immagine suggerita per Piadina (piè)",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Piadina-Romagnola.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Piadina (piè) Emilia-Romagna ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Piadina romagnola fatta in casa",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--pani-focacce-torte-pitta-pizza": {
             "imageUrl": "https://live.staticflickr.com/8468/8398532862_fd2a586fec_b.jpg",
@@ -2014,6 +2074,21 @@
             "provider": "Openverse · flickr",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--antipasti-formaggi-e-salumi-fettunta-bruschetta": {
+            "imageUrl": "https://www.ciaotoscana.it/wp-content/uploads/2023/10/Fettunta-o-Bruschetta-Toscana-1.webp",
+            "alt": "Immagine suggerita per Fettunta (Bruschetta)",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://www.ciaotoscana.it/cucina-toscana/la-fettunta-toscana-ricetta-originale/",
+            "provider": "Pagina ricetta · ciaotoscana.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Fettunta (Bruschetta) Toscana ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Fettunta Toscana",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--antipasti-formaggi-e-salumi-finocchiona": {
             "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Finocchiona_from_Tuscany.JPG",
@@ -2817,6 +2892,21 @@
             "provider": "Openverse · flickr",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--antipasti-formaggi-e-salumi-panzanella-pan-bagnato-o-pan-molle": {
+            "imageUrl": "https://www.giallozafferano.it/images/2-283/Panzanella_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Panzanella (Pan bagnato o Pan molle)",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Panzanella.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Panzanella (Pan bagnato o Pan molle) ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Panzanella",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--contorni-e-verdure-panzerotti": {
             "imageUrl": "https://live.staticflickr.com/3642/3504766802_9ef6a6296e_b.jpg",
@@ -3675,6 +3765,21 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--antipasti-formaggi-e-salumi-vitello-tonnato-tonne": {
+            "imageUrl": "https://www.giallozafferano.it/images/ricette/176/17697/foto_hd/hd650x433_wm.jpg",
+            "alt": "Immagine suggerita per Vitello tonnato (tonné)",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Vitello-tonnato.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Vitello tonnato (tonné) Piemonte ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Vitello tonnato",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--antipasti-formaggi-e-salumi-wurst": {
             "imageUrl": "https://live.staticflickr.com/7355/14167328863_457480839f_b.jpg",
             "alt": "Immagine suggerita per Wurst",
@@ -3762,6 +3867,36 @@
             "provider": "Openverse · wikimedia",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--primi-piatti-brodi-minestre-e-zuppe-buridda-pescio-a-buridda": {
+            "imageUrl": "https://staticcookist.akamaized.net/wp-content/uploads/sites/21/2023/09/buridda-ligure-still-life-1200x675.jpg",
+            "alt": "Immagine suggerita per Buridda (Pescio a buridda)",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://www.cookist.it/buridda-ligure-ricetta/",
+            "provider": "Pagina ricetta · cookist.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Buridda (Pescio a buridda) ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Buridda ligure",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--primi-piatti-busecca": {
+            "imageUrl": "https://www.giallozafferano.it/images/ricette/4/433/foto_hd/hd650x433_wm.jpg",
+            "alt": "Immagine suggerita per Busecca",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Trippa-alla-milanese-busecca.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Busecca Lombardia ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Trippa alla milanese (busecca)",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--primi-piatti-carcerato": {
             "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Pietro_e_giuliano_da_rimini%2C_storie_di_s._nicola_del_cappellone_di_s._nicola%2C_1320-25_ca.%2C_liberazione_di_un_carcerato_01.jpg",
@@ -3983,6 +4118,21 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--primi-piatti-brodi-minestre-e-zuppe-minestrone-estivo": {
+            "imageUrl": "https://blog.giallozafferano.it/cucinoperpassione/wp-content/uploads/2020/06/minestrone-estivo.jpg",
+            "alt": "Immagine suggerita per Minestrone estivo",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://blog.giallozafferano.it/cucinoperpassione/minestrone-estivo/",
+            "provider": "Pagina ricetta · blog.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Minestrone estivo ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Minestrone estivo",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--primi-piatti-brodi-minestre-e-zuppe-orzetto": {
             "imageUrl": "https://live.staticflickr.com/7503/15788639677_7d25c36aff.jpg",
             "alt": "Immagine suggerita per Orzetto",
@@ -4015,6 +4165,66 @@
             "provider": "Openverse · wikimedia",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--primi-piatti-brodi-minestre-e-zuppe-pancotto": {
+            "imageUrl": "https://blog.giallozafferano.it/valeriaciccotti/wp-content/uploads/2022/01/pancotto.jpg",
+            "alt": "Immagine suggerita per Pancotto",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://blog.giallozafferano.it/valeriaciccotti/pancotto/",
+            "provider": "Pagina ricetta · blog.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Pancotto Basilicata ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "PANCOTTO",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--primi-piatti-brodi-minestre-e-zuppe-pancotto-2": {
+            "imageUrl": "https://blog.giallozafferano.it/valeriaciccotti/wp-content/uploads/2022/01/pancotto.jpg",
+            "alt": "Immagine suggerita per Pancotto",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://blog.giallozafferano.it/valeriaciccotti/pancotto/",
+            "provider": "Pagina ricetta · blog.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Pancotto Calabria ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "PANCOTTO",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--primi-piatti-brodi-minestre-e-zuppe-pancotto-3": {
+            "imageUrl": "https://blog.giallozafferano.it/valeriaciccotti/wp-content/uploads/2022/01/pancotto.jpg",
+            "alt": "Immagine suggerita per Pancotto",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://blog.giallozafferano.it/valeriaciccotti/pancotto/",
+            "provider": "Pagina ricetta · blog.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Pancotto Puglia ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "PANCOTTO",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--primi-piatti-brodi-minestre-e-zuppe-pancotto-4": {
+            "imageUrl": "https://blog.giallozafferano.it/valeriaciccotti/wp-content/uploads/2022/01/pancotto.jpg",
+            "alt": "Immagine suggerita per Pancotto",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://blog.giallozafferano.it/valeriaciccotti/pancotto/",
+            "provider": "Pagina ricetta · blog.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Pancotto Toscana ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "PANCOTTO",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--primi-piatti-brodi-minestre-e-zuppe-panissa": {
             "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Panissa_ai_cipollotti.jpg",
@@ -4719,6 +4929,21 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--primi-piatti-pasta-fresca-e-gnocchi-pasta-e-lenticchie": {
+            "imageUrl": "https://www.giallozafferano.it/images/ricette/170/17002/foto_hd/hd650x433_wm.jpg",
+            "alt": "Immagine suggerita per Pasta e lenticchie",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Pasta-e-lenticchie.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Pasta e lenticchie ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Pasta e lenticchie",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--primi-piatti-pasta-fresca-e-gnocchi-paternostri": {
             "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Ditalini_o_paternostri.jpg",
             "alt": "Immagine suggerita per Paternostri",
@@ -5291,6 +5516,21 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--primi-piatti-polenta-e-riso-riso-in-cagnone": {
+            "imageUrl": "https://media-assets.lacucinaitaliana.it/photos/690e3b62c1607a4348c8551c/16:9/w_1280,c_limit/923733846",
+            "alt": "Immagine suggerita per Riso in cagnone",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://www.lacucinaitaliana.it/article/riso-in-cagnone-la-ricetta-tradizionale-contadina/",
+            "provider": "Pagina ricetta · lacucinaitaliana.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Riso in cagnone ricetta",
+            "extraction": "og:image",
+            "pageTitle": "Riso in cagnone: come si prepara e perché si chiama così",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--primi-piatti-polenta-e-riso-riso-saporito": {
             "imageUrl": "https://live.staticflickr.com/597/21334890605_79e1b6fd89_b.jpg",
             "alt": "Immagine suggerita per Riso “saporito”",
@@ -5335,6 +5575,21 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--primi-piatti-polenta-e-riso-risotto-alla-parmigiana": {
+            "imageUrl": "https://www.giallozafferano.it/images/9-946/Risotto-alla-parmigiana_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Risotto alla parmigiana",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Risotto-alla-parmigiana.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Risotto alla parmigiana ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Risotto alla parmigiana",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--primi-piatti-polenta-e-riso-risotto-al-nero-di-seppia": {
             "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/83/Risotto_al_nero_di_seppia.jpg",
             "alt": "Immagine suggerita per Risotto al nero di seppia",
@@ -5345,6 +5600,21 @@
             "provider": "Openverse · wikimedia",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--primi-piatti-polenta-e-riso-risotto-con-i-peperoni": {
+            "imageUrl": "https://www.giallozafferano.it/images/ricette/168/16829/foto_hd/hd650x433_wm.jpg",
+            "alt": "Immagine suggerita per Risotto con i peperoni",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Risotto-ai-peperoni.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Risotto con i peperoni ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Risotto ai peperoni",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--primi-piatti-polenta-e-riso-risotto-di-scampi": {
             "imageUrl": "https://live.staticflickr.com/5334/6910491024_d5d692654c.jpg",
@@ -5378,6 +5648,21 @@
             "provider": "Openverse · wikimedia",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--secondi-piatti-carni-bovine-maiale-cavallo-somaro-arista-di-maiale-arrosto": {
+            "imageUrl": "https://www.giallozafferano.it/images/181-18145/Arista-di-maiale-arrosto_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Arista di maiale arrosto",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Arista-di-maiale-arrosto.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 3.75,
+            "searchQuery": "Arista di maiale arrosto Toscana ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Arista di maiale arrosto",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--secondi-piatti-carni-bovine-maiale-cavallo-somaro-arrosto-di-maiale": {
             "imageUrl": "https://live.staticflickr.com/7165/6561376827_b99becc220_b.jpg",
@@ -6116,6 +6401,21 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--secondi-piatti-carni-bovine-maiale-cavallo-somaro-vitello-tonnato-tonne": {
+            "imageUrl": "https://www.giallozafferano.it/images/ricette/176/17697/foto_hd/hd650x433_wm.jpg",
+            "alt": "Immagine suggerita per Vitello tonnato (tonné)",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Vitello-tonnato.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Vitello tonnato (tonné) Piemonte ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Vitello tonnato",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--secondi-piatti-zampette": {
             "imageUrl": "https://live.staticflickr.com/65535/49257587401_1f757ce11d_b.jpg",
             "alt": "Immagine suggerita per Zampette",
@@ -6666,6 +6966,51 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--secondi-piatti-carni-ovine-agnello-in-umido": {
+            "imageUrl": "https://www.giallozafferano.it/images/232-23204/Agnello-in-umido_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Agnello in umido",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Agnello-in-umido.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Agnello in umido Abruzzo-Molise ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Agnello in umido",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--secondi-piatti-carni-ovine-agnello-in-umido-2": {
+            "imageUrl": "https://www.giallozafferano.it/images/232-23204/Agnello-in-umido_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Agnello in umido",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Agnello-in-umido.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Agnello in umido Emilia-Romagna ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Agnello in umido",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--secondi-piatti-carni-ovine-agnello-in-umido-3": {
+            "imageUrl": "https://www.giallozafferano.it/images/232-23204/Agnello-in-umido_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Agnello in umido",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Agnello-in-umido.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Agnello in umido Sicilia ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Agnello in umido",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--secondi-piatti-carni-ovine-buglione": {
             "imageUrl": "https://live.staticflickr.com/3838/14603402412_507a9725d9_b.jpg",
             "alt": "Immagine suggerita per Buglione",
@@ -6676,6 +7021,81 @@
             "provider": "Openverse · flickr",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--secondi-piatti-carni-ovine-capretto-al-forno": {
+            "imageUrl": "https://www.giallozafferano.it/images/166-16609/Capretto-al-forno-con-patate_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Capretto al forno",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Capretto-al-forno-con-patate.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Capretto al forno Calabria ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Capretto al forno con patate",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--secondi-piatti-carni-ovine-capretto-al-forno-2": {
+            "imageUrl": "https://www.giallozafferano.it/images/166-16609/Capretto-al-forno-con-patate_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Capretto al forno",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Capretto-al-forno-con-patate.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Capretto al forno Campania ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Capretto al forno con patate",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--secondi-piatti-carni-ovine-capretto-al-forno-3": {
+            "imageUrl": "https://www.giallozafferano.it/images/166-16609/Capretto-al-forno-con-patate_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Capretto al forno",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Capretto-al-forno-con-patate.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Capretto al forno Piemonte ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Capretto al forno con patate",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--secondi-piatti-capretto-al-forno": {
+            "imageUrl": "https://www.giallozafferano.it/images/166-16609/Capretto-al-forno-con-patate_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Capretto al forno",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Capretto-al-forno-con-patate.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Capretto al forno Sardegna ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Capretto al forno con patate",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--secondi-piatti-capretto-al-forno-2": {
+            "imageUrl": "https://www.giallozafferano.it/images/166-16609/Capretto-al-forno-con-patate_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Capretto al forno",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Capretto-al-forno-con-patate.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Capretto al forno Trentino-Alto Adige ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Capretto al forno con patate",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--secondi-piatti-carni-ovine-capretto-arrosto": {
             "imageUrl": "https://live.staticflickr.com/3214/2864627063_f095447a0d_b.jpg",
@@ -7051,6 +7471,21 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--secondi-piatti-burrida": {
+            "imageUrl": "https://www.arborea1956.com/wp-content/uploads/2025/06/buridda-arborea.jpg",
+            "alt": "Immagine suggerita per Burrida",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://www.arborea1956.com/ricette/burrida/",
+            "provider": "Pagina ricetta · arborea1956.com",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Burrida Sardegna ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Burrida",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--secondi-piatti-pesci-cacciucco-alla-livornese": {
             "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/50/Mezzo_cacciucco_alla_livornese%2C_2026.jpg",
             "alt": "Immagine suggerita per Cacciucco alla livornese",
@@ -7149,6 +7584,21 @@
             "provider": "Openverse · wikimedia",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--secondi-piatti-pesci-polpette-di-baccala": {
+            "imageUrl": "https://www.giallozafferano.it/images/19-1901/Polpette-di-baccala_650x433_wm.jpg",
+            "alt": "Immagine suggerita per Polpette di baccalà",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Polpette-di-baccala.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Polpette di baccalà ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Polpette di baccalà",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--secondi-piatti-pesci-polpette-di-tonno": {
             "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cicchetti_Venetian_cuisine_appetizers_-_polpette_fritte_di_tonno_%28tuna_fried_meatballs%29.jpg",
@@ -7513,6 +7963,51 @@
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
         },
+        "ricette-regionali--secondi-piatti-totani-ripieni": {
+            "imageUrl": "https://www.fattoincasadabenedetta.it/wp-content/uploads/2026/02/TOTANI-RIPIENI-16-9.jpg",
+            "alt": "Immagine suggerita per Totani ripieni",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://www.fattoincasadabenedetta.it/ricetta/totani-ripieni/",
+            "provider": "Pagina ricetta · fattoincasadabenedetta.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Totani ripieni ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Totani ripieni",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--secondi-piatti-crostacei-frutti-di-mare-molluschi-rane-e-lumache-totani-ripieni": {
+            "imageUrl": "https://www.fattoincasadabenedetta.it/wp-content/uploads/2026/02/TOTANI-RIPIENI-16-9.jpg",
+            "alt": "Immagine suggerita per Totani ripieni",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://www.fattoincasadabenedetta.it/ricetta/totani-ripieni/",
+            "provider": "Pagina ricetta · fattoincasadabenedetta.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Totani ripieni ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Totani ripieni",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
+        "ricette-regionali--secondi-piatti-crostacei-frutti-di-mare-molluschi-rane-e-lumache-totani-ripieni-2": {
+            "imageUrl": "https://www.fattoincasadabenedetta.it/wp-content/uploads/2026/02/TOTANI-RIPIENI-16-9.jpg",
+            "alt": "Immagine suggerita per Totani ripieni",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://www.fattoincasadabenedetta.it/ricetta/totani-ripieni/",
+            "provider": "Pagina ricetta · fattoincasadabenedetta.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Totani ripieni ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Totani ripieni",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
+        },
         "ricette-regionali--secondi-piatti-uova-e-fritti-carciofi-fritti": {
             "imageUrl": "https://live.staticflickr.com/2725/4079494425_499f1f8767_b.jpg",
             "alt": "Immagine suggerita per Carciofi fritti",
@@ -7699,6 +8194,21 @@
             "provider": "Openverse · flickr",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--secondi-piatti-fritto-di-pesce": {
+            "imageUrl": "https://www.giallozafferano.it/images/ricette/195/19593/foto_hd/hd650x433_wm.jpg",
+            "alt": "Immagine suggerita per Fritto di pesce",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://ricette.giallozafferano.it/Fritto-misto-di-pesce.html",
+            "provider": "Pagina ricetta · ricette.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Fritto di pesce Liguria ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Fritto misto di pesce",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--secondi-piatti-uova-e-fritti-fritto-misto": {
             "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Italy-Italia_Italian_Food_Fritto_misto_alla_piemontese_PxT.JPG",
@@ -8645,6 +9155,21 @@
             "provider": "Openverse · wikimedia",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--contorni-e-verdure-sformato-di-verdure": {
+            "imageUrl": "https://www.tavolartegusto.it/wp/wp-content/uploads/2026/09/sformato-di-verdure-.jpg",
+            "alt": "Immagine suggerita per Sformato di verdure",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://www.tavolartegusto.it/ricetta/ricetta-sformato-di-verdure/",
+            "provider": "Pagina ricetta · tavolartegusto.it",
+            "matchType": "suggested",
+            "matchScore": 2.5,
+            "searchQuery": "Sformato di verdure Lombardia ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Sformato di verdure (Veloce e Varianti)",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--contorni-e-verdure-torta-di-carciofi": {
             "imageUrl": "https://live.staticflickr.com/2147/2438614378_230de8b517_b.jpg",
@@ -10152,6 +10677,21 @@
             "provider": "Openverse · wikimedia",
             "matchType": "suggested",
             "caption": "Potrebbe non corrispondere esattamente alla ricetta."
+        },
+        "ricette-regionali--dolci-e-frutta-sugal-sughi": {
+            "imageUrl": "https://blog.giallozafferano.it/asilannablu/wp-content/uploads/2017/09/Sugal-romagnoli-.jpg",
+            "alt": "Immagine suggerita per Sugal (sughi)",
+            "credit": "",
+            "license": "Da verificare",
+            "licenseUrl": "",
+            "sourceUrl": "https://blog.giallozafferano.it/asilannablu/ricetta-sugal-romagnoli/",
+            "provider": "Pagina ricetta · blog.giallozafferano.it",
+            "matchType": "suggested",
+            "matchScore": 1.25,
+            "searchQuery": "Sugal (sughi) Emilia-Romagna ricetta",
+            "extraction": "recipe-jsonld",
+            "pageTitle": "Sugal romagnoli",
+            "caption": "Immagine trovata su una pagina ricetta; verifica corrispondenza e diritti d’uso."
         },
         "ricette-regionali--dolci-e-frutta-sussameli": {
             "imageUrl": "https://live.staticflickr.com/7056/6835820926_042cb4e598_b.jpg",

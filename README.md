@@ -184,9 +184,16 @@ La ricerca batch delle immagini può essere rigenerata con:
 MEDIA_CONCURRENCY=16 node tools/find-recipe-media.js
 ```
 
-Il comando conserva le immagini curate, cerca prima su Openverse e poi su
-Wikimedia Commons, salva progressivamente il manifest e lascia fuori i
-risultati senza una corrispondenza testuale significativa o provenienti da PDF.
+Il comando conserva le immagini già presenti, cerca prima pagine web di ricette
+tramite Bing e DuckDuckGo e analizza `Recipe` JSON-LD e `og:image`; usa poi
+Openverse e Wikimedia Commons come fallback. Per le pagine web confronta il
+titolo completo e il contesto regionale, salva progressivamente il manifest e
+lascia fuori pagine generiche, immagini non pertinenti e PDF. Le immagini web
+sono sempre `suggested` e hanno licenza da verificare.
+
+Per limitare o riprendere un lotto si possono usare `MEDIA_SOURCE`,
+`MEDIA_LIMIT` e `MEDIA_OFFSET`; `MEDIA_REFRESH_SUGGESTED=1` abilita
+esplicitamente la sostituzione dei suggerimenti già presenti.
 
 GitHub richiede il permesso Contents in scrittura per l'endpoint usato per
 creare o aggiornare file; vedi la [documentazione REST ufficiale](https://docs.github.com/en/rest/repos/contents).
