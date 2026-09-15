@@ -292,7 +292,7 @@
           </div>
           <div class="reader-search-mode-buttons">
             <button id="manual-search-mode-button" class="reader-search-mode-button secondary" type="button" aria-pressed="true">Cerca nel ricettario</button>
-            <button id="ingredient-search-mode-button" class="reader-search-mode-button secondary" type="button" aria-pressed="false">Cerca con ingredienti</button>
+            <button id="ingredient-search-mode-button" class="reader-search-mode-button secondary" type="button" aria-pressed="false">Cerca con foto</button>
           </div>
         </nav>
         <section id="ingredient-search-panel" class="ingredient-search-panel" hidden aria-labelledby="ingredient-search-title">
@@ -1474,10 +1474,11 @@
         if (!required.length) return null;
         const matched = required.filter(matchesTerm);
         if (!matched.length) return null;
+        const coverage = matched.length / required.length;
+        if (required.length > 4 && coverage < .25) return null;
         const missing = required.filter((term) => !matchesTerm(term)).sort((left, right) => ingredientRarity(right) - ingredientRarity(left));
         const totalRarity = required.reduce((total, term) => total + ingredientRarity(term), 0);
         const matchedRarity = matched.reduce((total, term) => total + ingredientRarity(term), 0);
-        const coverage = matched.length / required.length;
         const rareCoverage = matchedRarity / totalRarity;
         const rarestMatchedRarity = Math.max(...matched.map((term) => ingredientRarity(term)), 0);
         const rarestIngredientCoverage = rarestMatchedRarity / rarestAvailableRarity;
@@ -1499,7 +1500,7 @@
         return {
           recipe,
           index,
-          score: .9 * rarityPriority + .05 * coverage + .03 * confidence + .02 * countFactor,
+          score: .65 * coverage + .2 * rarityPriority + .1 * confidence + .05 * countFactor,
           coverage,
           rareCoverage,
           rarityPriority,

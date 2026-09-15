@@ -67,12 +67,13 @@ solo nella memoria della scheda e non vengono salvate nel dataset o nel browser.
 
 Il ranking delle ricette è locale: per ogni ingrediente conta in quante ricette
 compare nel catalogo complessivo; meno ricette lo contengono, maggiore è la sua
-priorità. L’ingrediente disponibile più raro pesa più della sola percentuale di
-ingredienti coperti, che resta un criterio secondario; se manca un ingrediente
-più raro di quelli disponibili nella ricetta, questa viene penalizzata in modo
-netto. Le
-corrispondenze sono indicative; l’elenco mostra anche gli ingredienti
-eventualmente mancanti e non modifica mai le ricette.
+priorità. La percentuale di ingredienti coperti è il criterio principale; la
+presenza di un ingrediente raro aggiunge un bonus ragionevole, mentre se manca
+un ingrediente più raro di quelli disponibili nella ricetta, questa viene
+penalizzata in modo netto. Le ricette con più di quattro voci ingredienti e
+meno del 25% di copertura non vengono proposte. Le corrispondenze sono
+indicative; l’elenco mostra anche gli ingredienti eventualmente mancanti e non
+modifica mai le ricette.
 
 Se una chiamata VLM fallisce, sia la ricerca ingredienti sia l’importazione da
 foto/PDF propongono un menu di modelli Gemini compatibili con
