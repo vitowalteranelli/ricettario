@@ -1451,8 +1451,18 @@
         const rarestMatchedRarity = Math.max(...matched.map((term) => ingredientRarity(term)), 0);
         const rarestIngredientCoverage = rarestMatchedRarity / rarestAvailableRarity;
         const availableIngredientCoverage = totalAvailableRarity ? matchedRarity / totalAvailableRarity : 0;
-        // La presenza dell'ingrediente più raro ha priorità sulla sola copertura.
-        const rarityPriority = .8 * rarestIngredientCoverage + .2 * availableIngredientCoverage;
+        const rarestMissingRarity = missing.length
+          ? Math.max(...missing.map((term) => ingredientRarity(term)))
+          : 0;
+        const missingRarityPenalty = clamp(
+          (rarestMissingRarity - rarestMatchedRarity) / rarestAvailableRarity,
+          0,
+          1
+        );
+        // La rarità dà priorità agli ingredienti presenti. Se manca un ingrediente
+        // più raro di quelli abbinati, la ricetta viene penalizzata nettamente.
+        const baseRarityPriority = .8 * rarestIngredientCoverage + .2 * availableIngredientCoverage;
+        const rarityPriority = baseRarityPriority * (1 - .75 * missingRarityPenalty);
         const confidence = matched.reduce((total, term) => total + (inventoryTerms.get(term) || 0), 0) / matched.length;
         const countFactor = 1 - Math.exp(-matched.length / 3);
         return {
@@ -1462,6 +1472,7 @@
           coverage,
           rareCoverage,
           rarityPriority,
+          missingRarityPenalty,
           matchedCount: matched.length,
           requiredCount: required.length,
           missing: missing.slice(0, 5)
