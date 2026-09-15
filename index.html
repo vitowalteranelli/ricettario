@@ -83,6 +83,9 @@
     .ingredient-file-list { margin:0; color:var(--muted); font-size:.85rem; }
     .ingredient-ai-unlock { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:end; padding:.75rem; border:1px solid var(--warning-line); border-radius:9px; background:var(--warning-bg); }
     .ingredient-ai-unlock p { grid-column:1 / -1; margin:0; color:var(--muted); font-size:.88rem; }
+    .ingredient-model-picker { display:grid; gap:.65rem; padding:.75rem; border:1px solid var(--warning-line); border-radius:9px; background:var(--warning-bg); }
+    .ingredient-model-picker p { margin:0; color:var(--muted); font-size:.88rem; }
+    .ingredient-model-controls { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:end; }
     .ingredient-inventory { display:grid; gap:.65rem; padding-top:.35rem; border-top:1px solid var(--line); }
     .ingredient-inventory-header { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
     .ingredient-inventory-header h3,.ingredient-inventory-header p { margin:0; }
@@ -210,7 +213,7 @@
       .admin-reauth-form { grid-template-columns:1fr; }
       .reader-row { grid-template-columns:1fr; align-items:stretch; }
       .ingredient-search-header,.ingredient-inventory-header,.ingredient-results-header { align-items:flex-start; flex-direction:column; }
-      .ingredient-ai-unlock,.ingredient-row { grid-template-columns:1fr; align-items:stretch; }
+      .ingredient-ai-unlock,.ingredient-model-controls,.ingredient-row { grid-template-columns:1fr; align-items:stretch; }
       .topbar { align-items:flex-start; flex-direction:column; }
       .source-row { grid-template-columns:1fr; }
       .login-card { margin:2rem 0 0; }
@@ -314,6 +317,18 @@
             <div id="ingredient-recipe-list" class="ingredient-recipe-list"></div>
             <p id="ingredient-no-results" class="status" hidden>Nessuna ricetta ha ingredienti riconosciuti sufficienti. Prova ad aggiungere o correggere una voce.</p>
           </div>
+          <div id="ingredient-model-picker" class="ingredient-model-picker" hidden>
+            <p id="ingredient-model-error">Il modello selezionato ha restituito un errore. Puoi scegliere un altro modello compatibile e riprovare.</p>
+            <div class="ingredient-model-controls">
+              <label for="ingredient-model-select">Modello per l’analisi
+                <select id="ingredient-model-select" disabled>
+                  <option value="">Caricamento modelli…</option>
+                </select>
+              </label>
+              <button id="ingredient-model-refresh-button" class="secondary" type="button">Aggiorna modelli</button>
+            </div>
+            <p id="ingredient-model-status" class="status" role="status" aria-live="polite"></p>
+          </div>
           <p id="ingredient-ai-status" class="status" role="status" aria-live="polite"></p>
         </section>
         <div class="reader-toolbar">
@@ -412,6 +427,18 @@
               <span id="recipe-source-name" class="hint"></span>
             </div>
             <p id="ai-status" class="status" role="status" aria-live="polite"></p>
+            <div id="recipe-model-picker" class="ingredient-model-picker" hidden>
+              <p id="recipe-model-error">Il modello selezionato ha restituito un errore. Puoi scegliere un altro modello compatibile e riprovare.</p>
+              <div class="ingredient-model-controls">
+                <label for="recipe-model-select">Modello per l’importazione
+                  <select id="recipe-model-select" disabled>
+                    <option value="">Caricamento modelli…</option>
+                  </select>
+                </label>
+                <button id="recipe-model-refresh-button" class="secondary" type="button">Aggiorna modelli</button>
+              </div>
+              <p id="recipe-model-status" class="status" role="status" aria-live="polite"></p>
+            </div>
           </section>
           <div class="admin-recipe-workspace">
             <div class="admin-recipe-browser">
@@ -545,7 +572,10 @@
     const AI_SCHEMA_PATH = 'prompts/recipe-schema.json';
     const AI_INGREDIENT_PROMPT_PATH = 'prompts/ingredient-detection.md';
     const AI_INGREDIENT_SCHEMA_PATH = 'prompts/ingredient-detection-schema.json';
+    const AI_MODELS_PATH = 'https://generativelanguage.googleapis.com/v1beta/models';
     const AI_DEFAULT_MODEL = 'gemini-flash-latest';
+    const INGREDIENT_MODEL_UI = { pickerId: '#ingredient-model-picker', errorId: '#ingredient-model-error', statusId: '#ingredient-model-status', selectId: '#ingredient-model-select' };
+    const RECIPE_MODEL_UI = { pickerId: '#recipe-model-picker', errorId: '#recipe-model-error', statusId: '#recipe-model-status', selectId: '#recipe-model-select' };
     const AI_MAX_FILE_BYTES = 20 * 1024 * 1024;
     const AI_MAX_INGREDIENT_IMAGES = 6;
     const AI_MAX_INGREDIENT_FILE_BYTES = 12 * 1024 * 1024;
@@ -580,6 +610,9 @@
     let detectedIngredients = [];
     let ingredientSearchResults = [];
     let ingredientFrequency = null;
+    let aiModel = AI_DEFAULT_MODEL;
+    let aiModels = [];
+    let aiModelLoadPromise = null;
 
     const $ = (selector) => document.querySelector(selector);
     const loginView = $('#login-view');
@@ -975,6 +1008,30 @@
       return JSON.parse(clean.slice(start, end + 1));
     }
 
+    async function requestGeminiContent(model, request) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+      let response;
+      try {
+        response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': session.llmKey },
+          body: JSON.stringify(request)
+        });
+      } catch (error) {
+        const requestError = error instanceof Error ? error : new Error(String(error));
+        requestError.modelRequest = true;
+        throw requestError;
+      }
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(result.error?.message || `Gemini API: HTTP ${response.status}`);
+        error.httpStatus = response.status;
+        error.modelRequest = true;
+        throw error;
+      }
+      return result;
+    }
+
     async function loadAiExtractionAssets() {
       const version = encodeURIComponent(String(appConfig.version || Date.now()));
       const [promptResponse, schemaResponse] = await Promise.all([
@@ -997,8 +1054,7 @@
       const { prompt, schema } = await loadAiExtractionAssets();
       const mimeType = isPdf ? 'application/pdf' : file.type;
       const data = bytesToBase64(new Uint8Array(await file.arrayBuffer()));
-      const model = AI_DEFAULT_MODEL;
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+      const model = aiModel || AI_DEFAULT_MODEL;
       const request = {
         contents: [{ parts: [
           { text: `${prompt}\n\nSchema JSON obbligatorio:\n${JSON.stringify(schema, null, 2)}\n\nRestituisci esclusivamente un oggetto JSON valido.` },
@@ -1006,16 +1062,18 @@
         ] }],
         generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 8192 }
       };
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': session.llmKey },
-        body: JSON.stringify(request)
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.error?.message || `Gemini API: HTTP ${response.status}`);
+      const result = await requestGeminiContent(model, request);
       const modelText = (result.candidates?.[0]?.content?.parts || []).map((part) => part.text || '').join('');
-      const draft = normalizeRecipeDraft(parseModelJson(modelText));
+      let draft;
+      try {
+        draft = normalizeRecipeDraft(parseModelJson(modelText));
+      } catch (error) {
+        error.modelRequest = true;
+        throw error;
+      }
       openRecipeEditor({ ...draft.recipe, sourceId }, 'new');
+      $('#recipe-model-picker').hidden = true;
+      setStatus($('#recipe-model-status'), '');
       const warnings = [...draft.warnings, ...draft.uncertainFields.map((field) => `Verifica: ${field}`)];
       setStatus($('#recipe-editor-status'), warnings.length ? `Bozza importata. Controlla: ${warnings.join(' · ')}` : 'Bozza importata. Controlla il form prima di salvare.', warnings.length ? '' : 'ok');
       setStatus($('#ai-status'), `Analisi completata: ${file.name}.`, 'ok');
@@ -1117,6 +1175,106 @@
       ]);
       if (!promptResponse.ok || !schemaResponse.ok) throw new Error('Prompt o schema per gli ingredienti non disponibili.');
       return { prompt: await promptResponse.text(), schema: await schemaResponse.json() };
+    }
+
+    function normalizeAiModel(model) {
+      if (!model || typeof model !== 'object') return null;
+      const methods = Array.isArray(model.supportedGenerationMethods)
+        ? model.supportedGenerationMethods
+        : (Array.isArray(model.supportedActions) ? model.supportedActions : []);
+      if (!methods.some((method) => String(method).toLowerCase() === 'generatecontent')) return null;
+      const id = String(model.baseModelId || model.name || '').replace(/^models\//, '').trim();
+      if (!id || !/^gemini-/i.test(id) || /(embedding|tts|image|veo|lyria|live|robotics|aqa)/i.test(id)) return null;
+      return {
+        id,
+        label: String(model.displayName || id).trim(),
+        description: String(model.description || '').trim()
+      };
+    }
+
+    function renderAiModelSelect(selectId = '#ingredient-model-select') {
+      const select = $(selectId);
+      select.replaceChildren();
+      if (!aiModels.length) {
+        select.add(new Option('Nessun modello disponibile', ''));
+        select.disabled = true;
+        return;
+      }
+      aiModels.forEach((model) => {
+        const option = new Option(model.label === model.id ? model.id : `${model.label} · ${model.id}`, model.id);
+        if (model.description) option.title = model.description;
+        select.add(option);
+      });
+      if (!aiModels.some((model) => model.id === aiModel)) aiModel = aiModels[0].id;
+      select.value = aiModel;
+      select.disabled = false;
+    }
+
+    async function loadAiModels({ force = false } = {}) {
+      if (!session.llmKey) throw new Error('Sblocca prima l’analisi con la password Admin.');
+      if (aiModels.length && !force) {
+        renderAiModelSelect();
+        return aiModels;
+      }
+      if (aiModelLoadPromise) return aiModelLoadPromise;
+
+      const load = (async () => {
+        const models = [];
+        const seenTokens = new Set();
+        let pageToken = '';
+        do {
+          const url = new URL(AI_MODELS_PATH);
+          url.searchParams.set('pageSize', '1000');
+          if (pageToken) url.searchParams.set('pageToken', pageToken);
+          const response = await fetch(url, {
+            headers: { 'x-goog-api-key': session.llmKey },
+            cache: 'no-store'
+          });
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(result.error?.message || `Gemini models.list: HTTP ${response.status}`);
+          models.push(...(Array.isArray(result.models) ? result.models : []));
+          const nextToken = String(result.nextPageToken || '');
+          if (!nextToken || seenTokens.has(nextToken)) break;
+          seenTokens.add(nextToken);
+          pageToken = nextToken;
+        } while (pageToken);
+
+        const byId = new Map();
+        models.map(normalizeAiModel).filter(Boolean).forEach((model) => {
+          if (!byId.has(model.id)) byId.set(model.id, model);
+        });
+        if (!byId.has(aiModel)) byId.set(aiModel, { id: aiModel, label: `${aiModel} (attuale)`, description: '' });
+        aiModels = [...byId.values()].sort((left, right) => {
+          if (left.id === aiModel) return -1;
+          if (right.id === aiModel) return 1;
+          return left.id.localeCompare(right.id);
+        });
+        renderAiModelSelect();
+        return aiModels;
+      })();
+      aiModelLoadPromise = load;
+      try {
+        return await load;
+      } finally {
+        if (aiModelLoadPromise === load) aiModelLoadPromise = null;
+      }
+    }
+
+    async function showAiModelPicker(error, ui = INGREDIENT_MODEL_UI) {
+      $(ui.pickerId).hidden = false;
+      $(ui.errorId).textContent = error?.httpStatus
+        ? `Il modello ha restituito un errore HTTP ${error.httpStatus}. Puoi scegliere un altro modello compatibile e riprovare.`
+        : 'Il modello selezionato ha restituito un errore. Puoi scegliere un altro modello compatibile e riprovare.';
+      setStatus($(ui.statusId), 'Caricamento dei modelli compatibili…');
+      try {
+        const models = await loadAiModels();
+        renderAiModelSelect(ui.selectId);
+        setStatus($(ui.statusId), `${models.length} modelli disponibili. La scelta resta attiva per questa scheda.`, 'ok');
+      } catch (loadError) {
+        aiModels = [{ id: aiModel, label: `${aiModel} (attuale)`, description: '' }];
+        renderAiModelSelect(ui.selectId);
+        setStatus($(ui.statusId), `Impossibile caricare l’elenco dei modelli: ${loadError.message}`, 'error');
+      }
     }
 
     function updateIngredientSearchControls() {
@@ -1367,8 +1525,7 @@
       const imageParts = await Promise.all(ingredientFiles.map(async (file) => ({
         inlineData: { mimeType: file.type || 'image/jpeg', data: bytesToBase64(new Uint8Array(await file.arrayBuffer())) }
       })));
-      const model = AI_DEFAULT_MODEL;
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+      const model = aiModel || AI_DEFAULT_MODEL;
       const request = {
         contents: [{ parts: [
           { text: `${prompt}\n\nSchema JSON obbligatorio:\n${JSON.stringify(schema, null, 2)}\n\nRestituisci esclusivamente un oggetto JSON valido.` },
@@ -1376,15 +1533,15 @@
         ] }],
         generationConfig: { responseMimeType: 'application/json', temperature: 0, maxOutputTokens: 4096 }
       };
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': session.llmKey },
-        body: JSON.stringify(request)
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.error?.message || `Gemini API: HTTP ${response.status}`);
+      const result = await requestGeminiContent(model, request);
       const modelText = (result.candidates?.[0]?.content?.parts || []).map((part) => part.text || '').join('');
-      const detection = normalizeIngredientDetection(parseModelJson(modelText));
+      let detection;
+      try {
+        detection = normalizeIngredientDetection(parseModelJson(modelText));
+      } catch (error) {
+        error.modelRequest = true;
+        throw error;
+      }
       detectedIngredients = detection.ingredients;
       ingredientSearchResults = [];
       renderIngredientInventory();
@@ -1403,6 +1560,10 @@
       $('#ingredient-photo-input').value = '';
       $('#ingredient-ai-unlock').hidden = true;
       $('#ingredient-ai-password').value = '';
+      $('#ingredient-model-picker').hidden = true;
+      $('#ingredient-model-select').replaceChildren(new Option('Caricamento modelli…', ''));
+      $('#ingredient-model-select').disabled = true;
+      setStatus($('#ingredient-model-status'), '');
       $('#ingredient-results').hidden = true;
       renderIngredientFiles();
       renderIngredientInventory();
@@ -2243,6 +2404,10 @@
 
     function logout() {
       clearIngredientSearch();
+      aiModel = AI_DEFAULT_MODEL;
+      aiModels = [];
+      $('#recipe-model-picker').hidden = true;
+      setStatus($('#recipe-model-status'), '');
       session = { role: null, token: null, llmKey: null };
       updatePageTitle();
       clearSessionRole();
@@ -2415,6 +2580,7 @@
         setStatus($('#ingredient-ai-status'), 'Analisi delle foto in corso…');
         await analyzeIngredientPhotos();
       } catch (error) {
+        if (error.modelRequest) void showAiModelPicker(error);
         setStatus($('#ingredient-ai-status'), error.message, 'error');
       } finally {
         updateIngredientSearchControls();
@@ -2441,6 +2607,7 @@
           try {
             await analyzeIngredientPhotos();
           } catch (error) {
+            if (error.modelRequest) void showAiModelPicker(error);
             setStatus($('#ingredient-ai-status'), `${error.message} Puoi riprovare senza reinserire la password.`, 'error');
           }
         } else {
@@ -2456,6 +2623,51 @@
     $('#ingredient-clear-button').addEventListener('click', clearIngredientSearch);
     $('#add-ingredient-button').addEventListener('click', addManualIngredient);
     $('#ingredient-list').addEventListener('input', invalidateIngredientResults);
+    $('#ingredient-model-select').addEventListener('change', () => {
+      const select = $('#ingredient-model-select');
+      if (!select.value) return;
+      aiModel = select.value;
+      setStatus($('#ingredient-model-status'), `Modello selezionato: ${aiModel}. Premi “Analizza ingredienti” per riprovare.`, 'ok');
+    });
+    $('#recipe-model-select').addEventListener('change', () => {
+      const select = $('#recipe-model-select');
+      if (!select.value) return;
+      aiModel = select.value;
+      setStatus($('#recipe-model-status'), `Modello selezionato: ${aiModel}. Premi “Analizza e compila” per riprovare.`, 'ok');
+    });
+    $('#ingredient-model-refresh-button').addEventListener('click', async () => {
+      const button = $('#ingredient-model-refresh-button');
+      button.disabled = true;
+      setStatus($('#ingredient-model-status'), 'Aggiornamento dei modelli compatibili…');
+      try {
+        aiModels = [];
+        const models = await loadAiModels({ force: true });
+        setStatus($('#ingredient-model-status'), `${models.length} modelli disponibili.`, 'ok');
+      } catch (error) {
+        aiModels = [{ id: aiModel, label: `${aiModel} (attuale)`, description: '' }];
+        renderAiModelSelect();
+        setStatus($('#ingredient-model-status'), `Impossibile aggiornare l’elenco: ${error.message}`, 'error');
+      } finally {
+        button.disabled = false;
+      }
+    });
+    $('#recipe-model-refresh-button').addEventListener('click', async () => {
+      const button = $('#recipe-model-refresh-button');
+      button.disabled = true;
+      setStatus($('#recipe-model-status'), 'Aggiornamento dei modelli compatibili…');
+      try {
+        aiModels = [];
+        const models = await loadAiModels({ force: true });
+        renderAiModelSelect(RECIPE_MODEL_UI.selectId);
+        setStatus($('#recipe-model-status'), `${models.length} modelli disponibili.`, 'ok');
+      } catch (error) {
+        aiModels = [{ id: aiModel, label: `${aiModel} (attuale)`, description: '' }];
+        renderAiModelSelect(RECIPE_MODEL_UI.selectId);
+        setStatus($('#recipe-model-status'), `Impossibile aggiornare l’elenco: ${error.message}`, 'error');
+      } finally {
+        button.disabled = false;
+      }
+    });
     $('#find-ingredient-recipes-button').addEventListener('click', findIngredientRecipes);
     $('#ingredient-recipe-list').addEventListener('click', (event) => {
       const result = event.target.closest('.ingredient-recipe-result');
@@ -2567,6 +2779,7 @@
         setStatus($('#ai-status'), `Analisi di ${file?.name || 'file'} in corso…`);
         await extractRecipeFromFile(file);
       } catch (error) {
+        if (error.modelRequest) void showAiModelPicker(error, RECIPE_MODEL_UI);
         setStatus($('#ai-status'), error.message, 'error');
       } finally {
         updateAiImportControls();

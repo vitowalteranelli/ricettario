@@ -70,6 +70,12 @@ coperti e dà più peso agli ingredienti rari nel dataset. Le corrispondenze son
 indicative; l’elenco mostra anche gli ingredienti eventualmente mancanti e non
 modifica mai le ricette.
 
+Se una chiamata VLM fallisce, sia la ricerca ingredienti sia l’importazione da
+foto/PDF propongono un menu di modelli Gemini compatibili con
+`generateContent`, recuperati dinamicamente dall’endpoint `models.list`. La
+scelta resta solo nella scheda corrente e permette di riprovare mantenendo lo
+sblocco Admin.
+
 ## Sostituire il PAT passo per passo
 
 La sostituzione del PAT rigenera il payload cifrato e non richiede modifiche a
