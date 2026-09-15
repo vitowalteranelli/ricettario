@@ -491,23 +491,24 @@ function extractGeographicReferences(notes, sections) {
 function findBodyBeforeHeading(documentLines, previousCandidate, candidate) {
     if (!previousCandidate) return null;
 
-    let wineIndex = -1;
     for (let index = previousCandidate.index + 1; index < candidate.index; index += 1) {
-        if (/^vino consigliato\s*:/i.test(documentLines[index].trimmed)) wineIndex = index;
-    }
-    if (wineIndex < 0) return null;
+        if (!/^vino consigliato\s*:/i.test(documentLines[index].trimmed)) continue;
 
-    let nonEmptyLines = 0;
-    for (let index = wineIndex + 1; index < candidate.index && nonEmptyLines < 8; index += 1) {
-        const value = documentLines[index].trimmed;
-        if (!value) continue;
-        if (isStandaloneRegion(value)) {
-            const paragraphs = splitParagraphs(documentLines.slice(index + 1, candidate.index));
-            if (!paragraphs.length) return null;
-            return { regionIndex: index, region: value, paragraphs };
+        let nonEmptyLines = 0;
+        for (let nextIndex = index + 1; nextIndex < candidate.index && nonEmptyLines < 8; nextIndex += 1) {
+            const value = documentLines[nextIndex].trimmed;
+            if (!value) continue;
+            if (isStandaloneRegion(value)) {
+                const paragraphs = splitParagraphs(documentLines.slice(nextIndex + 1, candidate.index));
+                if (paragraphs.length) {
+                    return { regionIndex: nextIndex, region: value, paragraphs };
+                }
+                break;
+            }
+            nonEmptyLines += 1;
         }
-        nonEmptyLines += 1;
     }
+
     return null;
 }
 

@@ -10310,12 +10310,7 @@
             "Dopo aver nettato il baccalà, togliendo le lische, tagliatelo a riquadri di circa 4 cm di lato.",
             "In una ciotola ampia, sbattete con la frusta da pasticceri le uova insieme al trito di aglio e prezzemolo, a cui aggiungete, sempre lavorando, il vino bianco, l’olio, sale e pepe; ora unite, poca per volta, la farina, senza esagerare, badando di mantenere il composto piuttosto liquido.",
             "Qui tuffate i riquadri di baccalà, sgocciolateli con una forchetta, poi tuffateli nell’olio bollente, per friggerli.",
-            "Appena dorano, scolateli con la schiumarola, asciugateli sopra fogli assorbenti e servite. VINO CONSIGLIATO: Gambellara",
-            "Marche",
-            "Secondo la tradizione di Fano e di Senigallia (noto come formaggio di Bagiotto).",
-            "Prodotto caseario di solo latte pecorino, a pasta tenera; consumato anche dopo breve asciugatura, semistagionato.",
-            "A forma cilindrica, del peso di circa 1 kg, con crosta sottile giallo oro; la pasta bianca, con irregolare occhiatura, si presenta compatta.",
-            "Il formaggio si caratterizza per il sapore sapido, seppur dolce, tendente al piccante dopo prolungata stagionatura. Come dire che viene consumato sia in tavola che in cucina. VINO CONSIGLIATO: Montereale"
+            "Appena dorano, scolateli con la schiumarola, asciugateli sopra fogli assorbenti e servite. VINO CONSIGLIATO: Gambellara"
           ],
           "sections": []
         }
@@ -10325,9 +10320,9 @@
       "sourcePage": 79,
       "sourcePageEnd": 79,
       "sourceMarkdownLine": 10429,
-      "sourceMarkdownLineEnd": 10488,
+      "sourceMarkdownLineEnd": 10468,
       "sourceMarkdownContentLine": 10430,
-      "sourceMarkdownContentLineEnd": 10488,
+      "sourceMarkdownContentLineEnd": 10468,
       "sourceHeading": "Baccalà fritto Veneto",
       "sourceRegion": "Veneto",
       "region": "Veneto",
@@ -11311,10 +11306,7 @@
           "title": "Trascrizione",
           "type": "text",
           "items": [
-            "Prodotti caseari ricercati quelli di Tornareccio, in provincia di Chieti. Con pasta di provola che racchiude un pezzo di burro. VINO CONSIGLIATO: Trebbiano d’Abruzz",
-            "Calabria",
-            "Formaggi prodotti con latte vaccino, a pasta dura, cruda e filante come il caciocavallo; a forma di pera, legati a coppia nel collo. Al centro racchiudono una palla di fiore di burro. Si gustano soprattutto spalmati sopra fette di pane, dopo averli liberati della pelle, e salati.",
-            "VINO CONSIGLIATO: Greco di Bianco"
+            "Prodotti caseari ricercati quelli di Tornareccio, in provincia di Chieti. Con pasta di provola che racchiude un pezzo di burro. VINO CONSIGLIATO: Trebbiano d’Abruzz"
           ],
           "sections": []
         }
@@ -11324,9 +11316,9 @@
       "sourcePage": 86,
       "sourcePageEnd": 86,
       "sourceMarkdownLine": 11556,
-      "sourceMarkdownLineEnd": 11574,
+      "sourceMarkdownLineEnd": 11562,
       "sourceMarkdownContentLine": 11557,
-      "sourceMarkdownContentLineEnd": 11574,
+      "sourceMarkdownContentLineEnd": 11562,
       "sourceHeading": "Burrini Abruzzo-Molise",
       "sourceRegion": "Abruzzo-Molise",
       "region": "Abruzzo-Molise",
@@ -11488,10 +11480,7 @@
             "Dopo aver tagliato a fettine il caciocavallo, friggetele in padella, nell’olio caldissimo (dove già ha rosolato l’aglio, che poi avete tolto) profumate di origano e irrorate con l’aceto. Servitele caldissime.",
             "Varianti i",
             "Le fettine di caciocavallo si cuociono nel forno, ricoperte da filetti di acciughe, profumate di origano. VINO CONSIGLIATO: Ema bianco",
-            "89 Umbria",
-            "Rinomata la produzione che si fa nel territorio di Cascia.",
-            "Di solo latte vaccino, a pasta molle; ha forma cilindrica piccola e si consuma fresco, così da gustarne la dolcezza e l’intrigante retrogusto amarotico.",
-            "VINO CONSIGLIATO: Cervaro della Sala"
+            "89"
           ],
           "sections": []
         }
@@ -11501,16 +11490,14 @@
       "sourcePage": 87,
       "sourcePageEnd": 87,
       "sourceMarkdownLine": 11623,
-      "sourceMarkdownLineEnd": 11657,
+      "sourceMarkdownLineEnd": 11645,
       "sourceMarkdownContentLine": 11624,
-      "sourceMarkdownContentLineEnd": 11657,
+      "sourceMarkdownContentLineEnd": 11645,
       "sourceHeading": "Caciocavallo all’argintera Sicilia",
       "sourceRegion": "Sicilia",
       "region": "Sicilia",
       "regionSource": "recipe-heading",
-      "geographicReferences": [
-        "Rinomata la produzione che si fa nel territorio di Cascia."
-      ],
+      "geographicReferences": [],
       "detection": "inline-region",
       "sourceLayout": "heading-before-body"
     },
@@ -11634,12 +11621,7 @@
           "items": [
             "Prodotto caseario a latte misto, vaccino e ovino. Rinomate le produzioni di Nepi e di Riano, sulle pendici del monte Soratte.",
             "A Rocca Priora, caciotte, sempre più rare, di sola pecora. A Leonessa, di latte misto. VINO CONSIGLIATO: Passerina del Frusinate",
-            "90",
-            "Marche",
-            "Prodotto con latte di pecora, a volte misto con latte vaccino; è formaggio fresco, a pasta morbida, colorato con un pizzico di zafferano diluito nel latte.",
-            "A forma cilindrica, con scalzo tondo, all’assaggio si presenta dolcemente delicato, scorrevole, burroso.",
-            "Rinomata la produzione del territorio di Urbino.",
-            "VINO CONSIGLIATO: Bianchello del Metauro"
+            "90"
           ],
           "sections": []
         }
@@ -11649,16 +11631,15 @@
       "sourcePage": 87,
       "sourcePageEnd": 88,
       "sourceMarkdownLine": 11707,
-      "sourceMarkdownLineEnd": 11736,
+      "sourceMarkdownLineEnd": 11720,
       "sourceMarkdownContentLine": 11708,
-      "sourceMarkdownContentLineEnd": 11736,
+      "sourceMarkdownContentLineEnd": 11720,
       "sourceHeading": "Caciotta Lazio",
       "sourceRegion": "Lazio",
       "region": "Lazio",
       "regionSource": "recipe-heading",
       "geographicReferences": [
-        "Prodotto caseario a latte misto, vaccino e ovino. Rinomate le produzioni di Nepi e di Riano, sulle pendici del monte Soratte.",
-        "Rinomata la produzione del territorio di Urbino."
+        "Prodotto caseario a latte misto, vaccino e ovino. Rinomate le produzioni di Nepi e di Riano, sulle pendici del monte Soratte."
       ],
       "detection": "inline-region",
       "sourceLayout": "heading-before-body"
@@ -11673,6 +11654,10 @@
           "title": "Trascrizione",
           "type": "text",
           "items": [
+            "Prodotto con latte di pecora, a volte misto con latte vaccino; è formaggio fresco, a pasta morbida, colorato con un pizzico di zafferano diluito nel latte.",
+            "A forma cilindrica, con scalzo tondo, all’assaggio si presenta dolcemente delicato, scorrevole, burroso.",
+            "Rinomata la produzione del territorio di Urbino.",
+            "VINO CONSIGLIATO: Bianchello del Metauro",
             "Umbria",
             "Piccolo formaggio prodotto in tutta la regione con latte sia vaccino che pecorino; da consumarsi fresco o stagionato.",
             "Rinomate le produzioni di Umbertide, Gubbio, Assisi e Norcia.",
@@ -11687,17 +11672,18 @@
       "sourcePageEnd": 88,
       "sourceMarkdownLine": 11737,
       "sourceMarkdownLineEnd": 11749,
-      "sourceMarkdownContentLine": 11738,
+      "sourceMarkdownContentLine": 11722,
       "sourceMarkdownContentLineEnd": 11749,
       "sourceHeading": "Caciotta",
       "sourceRegion": "Umbria",
       "region": "Umbria",
       "regionSource": "recipe-text",
       "geographicReferences": [
+        "Rinomata la produzione del territorio di Urbino.",
         "Rinomate le produzioni di Umbertide, Gubbio, Assisi e Norcia."
       ],
       "detection": "regional-index-title",
-      "sourceLayout": "heading-before-body"
+      "sourceLayout": "body-before-heading"
     },
     {
       "id": "ricette-regionali--antipasti-formaggi-e-salumi-caciotta-3",
@@ -12097,10 +12083,7 @@
             "sale",
             "Dopo averle nettate con cura, lessate le canocchie in acqua salata bollente. Trascorsi 3-4 minuti, toglietele; con le forbici asportate le sporgenze poi ritagliatele lungo i lati della coda, per liberarle di parte del carapace (guscio).",
             "Disponetele nel grande piatto da portata, quindi conditele con un filo di olio, pepe e succo di limone; per ultimo, a piacere, spolverizzate trito di aglio e prezzemolo.",
-            "VINO CONSIGLIATO: Verduzzo di Lison",
-            "Abruzzo-Molise",
-            "Dalla lombata del maiale si ottiene la lonza, rivestita nella budella suina. Questo insaccato si asciuga sotto il camino, al fumo della legna; poi, passerà alla stagionatura, in un locale asciutto e ventilato. Si consuma dopo mesi.",
-            "VINO CONSIGLIATO: Valle Peligna rosato"
+            "VINO CONSIGLIATO: Verduzzo di Lison"
           ],
           "sections": []
         }
@@ -12110,9 +12093,9 @@
       "sourcePage": 90,
       "sourcePageEnd": 90,
       "sourceMarkdownLine": 12084,
-      "sourceMarkdownLineEnd": 12125,
+      "sourceMarkdownLineEnd": 12114,
       "sourceMarkdownContentLine": 12085,
-      "sourceMarkdownContentLineEnd": 12125,
+      "sourceMarkdownContentLineEnd": 12114,
       "sourceHeading": "Canocie (canocchie) lessate Veneto",
       "sourceRegion": "Veneto",
       "region": "Veneto",
@@ -12244,11 +12227,7 @@
             "Una volta che avete disposto le capesante entro la teglia (ruola) da forno, sopra ogni capasanta adagiate il composto (ma non troppo), versate un cucchiaino di salsina di pomodoro, umettate con un filo di olio di oliva e passate in forno (caldo a 200°) per cucinarle pochi minuti.",
             "Servitele caldissime, accompagnate da comode forchettine.",
             "VINO CONSIGLIATO: Pinot bianco Aquileia",
-            "93",
-            "Calabria",
-            "È la parte muscolare del dorso del collo del maiale che poi viene salata e lasciata riposare per oltre 10 giorni; quindi, una volta tolto il sale frizionando le carni con vino rosso, si condiscono con abbondante polvere di pepe e di peperoncino.",
-            "S’arrotolano i pezzi così conciati e s’insaccano nel budello cieco o nella vescica, poi si addossano listarelle di canna, trattenute dalle maglie di corda molto strette e i capocollo si appendono per l’iniziale asciugatura; seguirà l’affumicatura (con legno di castagno) e la stagionatura.",
-            "VINO CONSIGLIATO: Cirò rosato"
+            "93"
           ],
           "sections": []
         }
@@ -12258,9 +12237,9 @@
       "sourcePage": 91,
       "sourcePageEnd": 91,
       "sourceMarkdownLine": 12191,
-      "sourceMarkdownLineEnd": 12247,
+      "sourceMarkdownLineEnd": 12228,
       "sourceMarkdownContentLine": 12192,
-      "sourceMarkdownContentLineEnd": 12247,
+      "sourceMarkdownContentLineEnd": 12228,
       "sourceHeading": "Capesante gratinate Friuli-Venezia Giulia",
       "sourceRegion": "Friuli-Venezia Giulia",
       "region": "Friuli-Venezia Giulia",
@@ -12458,12 +12437,7 @@
             "E molto importante che la legatura sia stretta e il passo dei segmenti di corda ravvicinato, per garantirne, durante la stagionatura, quella tipica e delicata saporosità.",
             "La coppa necessita di meritato riposo: silenzio, buio e fresco per almeno quattro mesi (meglio sei). Sc accompagnata da premurose attenzioni — ambiente a temperatura costante, fresco e ventilato —, saprà ripagare mostrandosi carica di colore rosso brillante, profumata e dolcissima.",
             "Eccellente nei mesi estivi, risulta migliore se tagliata a mano, a fette sottili.",
-            "Se la vostra coppa fosse eccessivamente stagionata potrete, la notte prima di utilizzarla, slegaria dagli spaghi e metterla a bagno in vino bianco, asciugandola prima dell’uso. VINO CONSIGLIATO: Montecarlo bianco",
-            "Umbria",
-            "Dal taglio del dorso del maiale si ricava il capocollo.",
-            "Una volta conciato con molto sale, pepe macinato e aglio pestato, lasciatelo riposare per almeno 15 giorni; lavatelo con vino bianco, arrotolatelo, poi incartatelo con un foglio di carta oleata, lasciando libere le due estremità.",
-            "Dopo circa una settimana, sfasciatelo, poi avvolgetelo nuovamente, ma con carta gialla (carta paglia), fermandolo definitivamente con spago fine, quindi appendetelo in un locale ben ventilato. Trascorsi circa 3 mesi sarà pronto per venir consumato.",
-            "VINO CONSIGLIATO: Montefalco bianco"
+            "Se la vostra coppa fosse eccessivamente stagionata potrete, la notte prima di utilizzarla, slegaria dagli spaghi e metterla a bagno in vino bianco, asciugandola prima dell’uso. VINO CONSIGLIATO: Montecarlo bianco"
           ],
           "sections": []
         }
@@ -12473,9 +12447,9 @@
       "sourcePage": 92,
       "sourcePageEnd": 92,
       "sourceMarkdownLine": 12328,
-      "sourceMarkdownLineEnd": 12388,
+      "sourceMarkdownLineEnd": 12367,
       "sourceMarkdownContentLine": 12329,
-      "sourceMarkdownContentLineEnd": 12388,
+      "sourceMarkdownContentLineEnd": 12367,
       "sourceHeading": "Capocollo (Coppa) Toscana",
       "sourceRegion": "Toscana",
       "region": "Toscana",
@@ -13475,12 +13449,7 @@
             "Antico piatto dei pastori; al posto del burro, in pianura, s’ impiegava lo strutto. Ingredienti: kg 1 di caciocavallo (o pecorino grasso) mezzo l di latte intero g 120 di burro 5 tuorli d’uovo g 20 di farina sale e pepe di mulinello fette di pane raffermo",
             "Dopo aver tagliato a dadini il formaggio mettetelo a bagno nel latte fin dalla sera precedente. Il giorno dopo, ammorbidite il burro, poi montatelo (sbattetelo con la frusta da pasticceri) insieme ai tuorli d’uovo ed alla farina.",
             "Ora, in un tegame ampio, a fiamma docile sciogliete il formaggio ed il latte insieme alla crema di uova; regolate di sale e pepe e seguitate a mescolare fino a rassodare il composto, che spalmate sulle fette di pane e servite, ancora caldo.",
-            "VINO CONSIGLIATO: Trebbiano d'Abruzzo",
-            "Calabria",
-            "Con carne magra macinata finemente (70%) e grasso duro (30%) s’ottiene un impasto docile, dove appare anche la cervella (a piacere) prelessata in acqua bollente, come pure piccole quantità di carne di manzo.",
-            "La concia tradizionale impiega sale marino fine, vino bianco secco e peperoncino rosso macinato (polverizzato). C'è chi preferisce il pepe al peperoncino.",
-            "L'insaccatura si fa in budelli di agnello (dopo averle ben lavate in acqua e sale), legata a rocchi piuttosto lunghi. La cervellata calabrese si consuma fresca o appassita.",
-            "VINO CONSIGLIATO: Verbicaro bianco"
+            "VINO CONSIGLIATO: Trebbiano d'Abruzzo"
           ],
           "sections": []
         }
@@ -13490,9 +13459,9 @@
       "sourcePage": 99,
       "sourcePageEnd": 99,
       "sourceMarkdownLine": 13352,
-      "sourceMarkdownLineEnd": 13401,
+      "sourceMarkdownLineEnd": 13381,
       "sourceMarkdownContentLine": 13353,
-      "sourceMarkdownContentLineEnd": 13401,
+      "sourceMarkdownContentLineEnd": 13381,
       "sourceHeading": "Cazzimperio (Cacioimperio)",
       "sourceRegion": "Abruzzo-Molise",
       "region": "Abruzzo-Molise",
@@ -13904,13 +13873,7 @@
             "sale",
             "Sul tagliere, versate la farina, apritela a cratere, quindi impastatela con il burro, l’olio, lo strutto, il lievito, poco sale e, se necessario, un goccio di acqua, fino ad ottenere un amalgama liscio e discretamente morbido. Copritelo e lasciatelo riposare per almeno un’ora. Riprendete l'impasto, lavoratelo ancora con le mani, quindi spianatelo con il matterello (circa 2 mi); con la speronella (rotella dentata) ritagliate tante strisce larghe 5 cm, quindi squadratele nell’altro verso; al centro di ogni riquadro mettete una scheggia di parmigiano (alcuni preferiscono il formag-",
             "gio grattugiato), ripiegate la sfoglia e saldate i lembi. Ora, così confezionate, le chizze tuffatele nello strutto bollente e friggetele fino a dorarle. Sgocciolate, asciugatele su fogli di carta paglia o assorbente, quindi servitele caldissime.",
-            "VINO CONSIGLIATO: Lambrusco Reggiano",
-            "Marche",
-            "Insaccato di media grossezza, entro il budello “gentile”,",
-            "Carne di salsiccia, passata tre volte nelle trafile della macchina, ogni volta a fori più fini; si concia con sale, pepe macinato e aglio tritato.",
-            "Una volta insaccato si appende ad asciugare al fumo del camino.",
-            "Solitamente si gusta fresco, spalmato sopra fette di pane (anche abbrustolite).",
-            "VINO CONSIGLIATO: Verdicchio di Matelica"
+            "VINO CONSIGLIATO: Lambrusco Reggiano"
           ],
           "sections": []
         }
@@ -13923,9 +13886,9 @@
       "sourcePage": 101,
       "sourcePageEnd": 102,
       "sourceMarkdownLine": 13691,
-      "sourceMarkdownLineEnd": 13766,
+      "sourceMarkdownLineEnd": 13748,
       "sourceMarkdownContentLine": 13692,
-      "sourceMarkdownContentLineEnd": 13766,
+      "sourceMarkdownContentLineEnd": 13748,
       "sourceHeading": "Chizze reggiane Emilia-Romagna",
       "sourceRegion": "Emilia-Romagna",
       "region": "Emilia-Romagna",
@@ -14521,10 +14484,7 @@
           "title": "Trascrizione",
           "type": "text",
           "items": [
-            "Treccia confezionata con pasta di fiordilatte, o mozzarella di latte vaccino. VINO CONSIGLIATO: Trebbiano d'Abruzzo",
-            "Marche",
-            "Una vera leccornia, prodotta macinando parti della spalla, della pancetta, del guanciale e delle cotenne; da conciare con sale fine, pepe nero, pepe garofanato, noce moscata e cannella. Si consuma lessato, tagliato a fette; anche fredde.",
-            "VINO CONSIGLIATO: Bianco dei Colli maceratesi"
+            "Treccia confezionata con pasta di fiordilatte, o mozzarella di latte vaccino. VINO CONSIGLIATO: Trebbiano d'Abruzzo"
           ],
           "sections": []
         }
@@ -14534,9 +14494,9 @@
       "sourcePage": 106,
       "sourcePageEnd": 106,
       "sourceMarkdownLine": 14340,
-      "sourceMarkdownLineEnd": 14357,
+      "sourceMarkdownLineEnd": 14345,
       "sourceMarkdownContentLine": 14341,
-      "sourceMarkdownContentLineEnd": 14357,
+      "sourceMarkdownContentLineEnd": 14345,
       "sourceHeading": "Cornuti Abruzzo",
       "sourceRegion": "Abruzzo",
       "region": "Abruzzo",
@@ -18438,11 +18398,7 @@
             "Lessate le verdure poi tagliatele come descritto nella ricetta precedente.",
             "A queste unite il tonno sbriciolato, e condite con sale e olio,",
             "Al centro del piatto da portata mettete il composto arrotondato come una cupola, rivestite la superficie di maionese, decorate con fette di uova sode alternate a mezze olive, a ventagli di cetriolini e a pezzetti di acciughe arrotolate e conficcate; qua e là punteggiate con capperi.",
-            "VINO CONSIGLIATO: Rosato di Torgiano",
-            "Calabria",
-            "Latte cagliato messo ad asciugare sopra stuoie di giunco (da cui il nome), oppure felci (allora si dice felciata), senza sale. Attenzione perché seppur carica di siero lo perde facilmente.",
-            "Si trova sempre più raramente, in quanto sopravvive come produzione familiare,",
-            "VINO CONSIGLIATO: Bianco di San Vito di Luzzi"
+            "VINO CONSIGLIATO: Rosato di Torgiano"
           ],
           "sections": []
         }
@@ -18452,16 +18408,14 @@
       "sourcePage": 134,
       "sourcePageEnd": 134,
       "sourceMarkdownLine": 18303,
-      "sourceMarkdownLineEnd": 18358,
+      "sourceMarkdownLineEnd": 18345,
       "sourceMarkdownContentLine": 18304,
-      "sourceMarkdownContentLineEnd": 18358,
+      "sourceMarkdownContentLineEnd": 18345,
       "sourceHeading": "Giardiniera di tonno Umbria",
       "sourceRegion": "Umbria",
       "region": "Umbria",
       "regionSource": "recipe-heading",
-      "geographicReferences": [
-        "Si trova sempre più raramente, in quanto sopravvive come produzione familiare,"
-      ],
+      "geographicReferences": [],
       "detection": "inline-region",
       "sourceLayout": "heading-before-body"
     },
@@ -18475,6 +18429,9 @@
           "title": "Trascrizione",
           "type": "text",
           "items": [
+            "Latte cagliato messo ad asciugare sopra stuoie di giunco (da cui il nome), oppure felci (allora si dice felciata), senza sale. Attenzione perché seppur carica di siero lo perde facilmente.",
+            "Si trova sempre più raramente, in quanto sopravvive come produzione familiare,",
+            "VINO CONSIGLIATO: Bianco di San Vito di Luzzi",
             "Marche",
             "Prodotto con solo latte vaccino, cagliato e rappreso, ma non salato, messo ad asciugare in cestini di giunco. Rinomata la produzione di Muccia.",
             "VINO CONSIGLIATO: Falerio"
@@ -18488,17 +18445,18 @@
       "sourcePageEnd": 134,
       "sourceMarkdownLine": 18359,
       "sourceMarkdownLineEnd": 18369,
-      "sourceMarkdownContentLine": 18360,
+      "sourceMarkdownContentLine": 18347,
       "sourceMarkdownContentLineEnd": 18369,
       "sourceHeading": "Giuncata",
       "sourceRegion": "Marche",
       "region": "Marche",
       "regionSource": "recipe-text",
       "geographicReferences": [
+        "Si trova sempre più raramente, in quanto sopravvive come produzione familiare,",
         "Prodotto con solo latte vaccino, cagliato e rappreso, ma non salato, messo ad asciugare in cestini di giunco. Rinomata la produzione di Muccia."
       ],
       "detection": "regional-index-title",
-      "sourceLayout": "heading-before-body"
+      "sourceLayout": "body-before-heading"
     },
     {
       "id": "ricette-regionali--antipasti-formaggi-e-salumi-giuncata-2",
@@ -20264,16 +20222,7 @@
             "Ingredienti: kg 1 di sarde mezzo bicchiere di aceto buono g 80 di pangrattato 2 spicchi di aglio tritati finemente un cucchiaio di prezzemolo tritato g 120 di formaggio pecorino (preferibilmente dolce),",
             "grattugiato mezzo dl di olio di oliva 2 foglie di alloro, sminuzzate sale e pepe di mulinello",
             "Dopo aver nettato le sarde liberandole delle teste, apritele, togliete la lisca centrale (conservando le code), poi adagiatele in una ciotola, bagnate con l’aceto, e fatele marinare per almeno un’ora. Ora, in una ciotola impastate il ripieno, mescolando pangrattato e formaggio insieme al trito di aglio e prezzemolo, versate un filo di olio e lavorate.",
-            "Tolte le sarde dal bagno d’aceto, sgocciolatele, farcitele con il composto, poi arrotolatele su se stesse; disponetele in una teglia (o pirofila), profumate con frammenti di foglia di alloro, umettate con pochissimo olio, quindi passate in forno (già caldo a 180°) per circa 20 minuti. Servitele calde, appena sfornate. VINO CONSIGLIATO: Grecanico Contessa Entellina",
-            "Valle d'Aosta",
-            "Specialità di Saint-Rhémy-en-Bosses.",
-            "Particolare la sua lavorazione, con la coscia posteriore del maiale innanzitutto rifilata e messa ad insaporire con sale grosso e particolari aromi, quali alloro, timo, ginepro, rosmarino, salvia e aglio, tritati insieme.",
-            "Così, per circa venti giorni, i prosciutti vengono frizionati (massaggiati) con questo trito e lasciati riposare ricoperti degli aromi, mentre così facendo si provoca la fuoriuscita di sangue e siero.",
-            "La pera, dopo questa salagione, si pulisce, si asciuga e si pone a stagionare, in locali asciutti e ventilati.",
-            "L’osso, testa del femore, ed altre parti delicate, perché ricche di muscoli, vengono ricoperte da pepe nero in polvere, per eliminare il pericolo di nocive ossidazioni.",
-            "La stagionatura si svolge lassù, nei fienili più alti degli alpeggi, e dura dai 18 ai 24 mesi.",
-            "Lo jambon de Bosses è una rarità gastronomica, oggi mero appannaggio dei ristoranti più attenti e qualificati.",
-            "VINO CONSIGLIATO: Petite Arvine"
+            "Tolte le sarde dal bagno d’aceto, sgocciolatele, farcitele con il composto, poi arrotolatele su se stesse; disponetele in una teglia (o pirofila), profumate con frammenti di foglia di alloro, umettate con pochissimo olio, quindi passate in forno (già caldo a 180°) per circa 20 minuti. Servitele calde, appena sfornate. VINO CONSIGLIATO: Grecanico Contessa Entellina"
           ],
           "sections": []
         }
@@ -20283,17 +20232,14 @@
       "sourcePage": 145,
       "sourcePageEnd": 146,
       "sourceMarkdownLine": 20017,
-      "sourceMarkdownLineEnd": 20087,
+      "sourceMarkdownLineEnd": 20053,
       "sourceMarkdownContentLine": 20018,
-      "sourceMarkdownContentLineEnd": 20087,
+      "sourceMarkdownContentLineEnd": 20053,
       "sourceHeading": "Involtini di sarde Sicilia",
       "sourceRegion": "Sicilia",
       "region": "Sicilia",
       "regionSource": "recipe-heading",
-      "geographicReferences": [
-        "Valle d'Aosta",
-        "La stagionatura si svolge lassù, nei fienili più alti degli alpeggi, e dura dai 18 ai 24 mesi."
-      ],
+      "geographicReferences": [],
       "detection": "inline-region",
       "sourceLayout": "heading-before-body"
     },
@@ -20603,11 +20549,7 @@
             "una costa di sedano",
             "Sistemate la lingua in acqua fredda, lasciandovela per circa 5 ore e cambiando l’acqua completamente ogni ora. Togliete poi i grumi di grasso esterno aggregati intorno alla radice e asciugatela. Passatela sulla fiamma, in modo che la pelle superficiale si gonfi e togliete la prima pelle. Lavate ancora e asciugate la lingua e strofinatela con un pugno di sale fino finché ne abbia assorbito una buona parte. Strofinatela poi con un cucchiaio di salnitro, facendolo penetrare bene. Massaggiate con altro sale fino e create uno strato di sale sul fondo di una ciotola di coccio (mai di plastica, né di metallo), adagiatevela sul fianco e cospargete ancora di sale; copritela con una tavoletta o con un piccolo tagliere e ponetevi sopra un peso. Lasciate riposare la lingua in luogo fresco, ma non in frigorifero per tre giorni in estate e quattro in inverno. Fate bollire in un pentolino un bicchiere d’acqua, uno di vino rosso e tutte le spezie, Fate raffreddare il liquido e versatelo sulla lingua. Rimettete la tavoletta o il tagliere con il peso e lasciate la lingua in questa marinata, per tre giorni o quattro nella stagione calda e cinque nella stagione fredda, rivoltandola",
             "ogni giorno. Trascorso questo tempo, estraetela dalla salamoia e lasciatela a bagno in acqua fredda per 3 o 4 ore, affinché perda l’eccesso di sale. Cuocetela quindi in acqua bollente e non salata per 3 ore con il sedano e la carota. Potete servirla calda o fredda, accompagnata da una salsa (verde, al peperone ecc.), da contorni (purè, spinaci al burro ecc.) o da una fresca insalatina. Si conserva fino a 2 settimane.",
-            "VINO CONSIGLIATO: Greco di Ghemme",
-            "Marche",
-            "Rifilati 1 due lombi del maiale, si rivestono di sale grosso e si fanno asciugare per circa 2 giorni. Ora, lavati nell” acqua calda, poi nel vino bianco, vanno asciugati con un canovaccio e lasciati alla ventilazione di un’intera notte.",
-            "L'indomani, si insaccano nel budello grosso vaccino (o del toro), aromatizzandoli con spicchi di aglio schiacciati, inseriti nella carne. Dopo averli battuti (frollati) con il matterello, si ungono di olio, per poi rivestirli di sale e pepe macinato; così ricoperte le lonze s’appendono per la stagionatura (durerà almeno due mesi), poi si consumano.",
-            "VINO CONSIGLIATO: Roncaglia dei Colli Pesaresi"
+            "VINO CONSIGLIATO: Greco di Ghemme"
           ],
           "sections": []
         }
@@ -20620,9 +20562,9 @@
       "sourcePage": 148,
       "sourcePageEnd": 148,
       "sourceMarkdownLine": 20338,
-      "sourceMarkdownLineEnd": 20443,
+      "sourceMarkdownLineEnd": 20422,
       "sourceMarkdownContentLine": 20339,
-      "sourceMarkdownContentLineEnd": 20443,
+      "sourceMarkdownContentLineEnd": 20422,
       "sourceHeading": "Lingua salmistrata Piemonte",
       "sourceRegion": "Piemonte",
       "region": "Piemonte",
@@ -21007,13 +20949,7 @@
             "Il mascarpone è una crema densa ricavata dalla panna del latte, appena inacidita con acido citrico o tartarico (oggi, con fermenti lattici). Tale formaggio, il più grasso che si produca, va consumato freschissimo.",
             "Già dopo quattro ore dall'ultima fase della lavorazione è pronto per il consumo; così si presenta a pasta bianca, con sapore leggermente acido. Se conservato in locale fresco (o in frigo) sopravvive senza alterarsi per almeno 10 giorni.",
             "Solitamente si gusta da solo, spalmato su fette di pane o gallette; oppure spolverizzato con cacao in polvere o cioccolata fondente grattugiata; infine, condito o profumato con liquori, a piacere.",
-            "VINO CONSIGLIATO: Bonarda",
-            "Marche",
-            "Insaccato assai noto nella produzione di Fabriano.",
-            "Nell’impasto partecipano carni magre e grasse di maiale, insieme a polmone e coratella, macinate. Per ogni 10 kg di carne si impiega una coratella.",
-            "La concia vuole sale fine e pepe macinato, poi il mazzafegato viene insaccato in budella naturale e lasciato asciugare all’azione odorosa di fumo di legna.",
-            "Dopo qualche mese di appassimento si gusta a fette.",
-            "VINO CONSIGLIATO: Rosso Conero, giovane"
+            "VINO CONSIGLIATO: Bonarda"
           ],
           "sections": []
         }
@@ -21023,16 +20959,15 @@
       "sourcePage": 150,
       "sourcePageEnd": 150,
       "sourceMarkdownLine": 20687,
-      "sourceMarkdownLineEnd": 20735,
+      "sourceMarkdownLineEnd": 20715,
       "sourceMarkdownContentLine": 20688,
-      "sourceMarkdownContentLineEnd": 20735,
+      "sourceMarkdownContentLineEnd": 20715,
       "sourceHeading": "Mascarpone Lombardia",
       "sourceRegion": "Lombardia",
       "region": "Lombardia",
       "regionSource": "recipe-heading",
       "geographicReferences": [
-        "Ieri la produzione era prerogativa del Lodigiano; oggi il mascarpone si produce in tutte le regioni del Nord, nei mesi più freddi.",
-        "Insaccato assai noto nella produzione di Fabriano."
+        "Ieri la produzione era prerogativa del Lodigiano; oggi il mascarpone si produce in tutte le regioni del Nord, nei mesi più freddi."
       ],
       "detection": "inline-region",
       "sourceLayout": "heading-before-body"
@@ -24083,11 +24018,7 @@
           "title": "Trascrizione",
           "type": "text",
           "items": [
-            "Ovvero l’Asiago stravecchio, di almeno 18 mesi di stagionatura. VINO CONSIGLIATO: Cabernet dei Colli Berici",
-            "Calabria",
-            "Formaggio di solo latte caprino, semicotto. Ha pasta ricca di minuscola occhiatura.",
-            "Se ne produce un tipo con grani di pepe nero interi. La crosta, dopo media stagionatura, si colora di rosa.",
-            "VINO CONSIGLIATO: Savuto superiore"
+            "Ovvero l’Asiago stravecchio, di almeno 18 mesi di stagionatura. VINO CONSIGLIATO: Cabernet dei Colli Berici"
           ],
           "sections": []
         }
@@ -24097,9 +24028,9 @@
       "sourcePage": 170,
       "sourcePageEnd": 170,
       "sourceMarkdownLine": 23516,
-      "sourceMarkdownLineEnd": 23532,
+      "sourceMarkdownLineEnd": 23521,
       "sourceMarkdownContentLine": 23517,
-      "sourceMarkdownContentLineEnd": 23532,
+      "sourceMarkdownContentLineEnd": 23521,
       "sourceHeading": "Pecorino di Asiago Veneto",
       "sourceRegion": "Veneto",
       "region": "Veneto",
@@ -26220,13 +26151,7 @@
             "Nella nostra regione il prosciutto crudo è ingrediente fondamentale di tante pietanze, ma costituisce anche un ottimo antipasto da solo o in compagnia di fette di melone o di fichi freschi: un connubio davvero eccellente in estate.",
             "Con il prosciutto si può preparare una sorta di rotolo che, tagliato a fette, diventa un ottimo antipasto: per confezionarlo si stendono delle fette sottili su carta oleata, vegetale o pellicola; si spalmano con formaggio squacquerone amalgamato a un po’ di mascarpone e parmigiano reggiano, si copre di rucola tritata grossolanamente, si arrotola ben stretto e si lascia indurire in frigorifero. Prima di servirlo, lo si taglia a fette, come un salamino.",
             "Un'altra ottima idea: formate con il prosciutto uno strato, coprite di maionese, scaglie di parmigiano reggiano fresco o gruviera a fette sottilissime e lamelle di tartufo bianco, ricoprite con un altro sottile strato di maionese e, per terminare, uno di fette di prosciutto. Fate raffreddare in frigorifero, tagliate a quadretti e servite con pane caldo: è eccellente.",
-            "VINO CONSIGLIATO: Riesling Italico dei Colli Bolognesi",
-            "Marche",
-            "Assai ricercato per la sapidità della carne, si ottiene da cosce di maiali magroni. All'aspetto, ricorda la pera.",
-            "Si concia con sale grosso, durante un periodo che varia dai 30 ai 40 giorni; ogni 5 giorni il sale va cambiato.",
-            "Dopo la necessaria spazzolatura, si lava con aceto buono, si risciacqua con vino rosso e poi si asciuga con canovacci,",
-            "Ora, una volta ricoperto di pepe nero macinato, passa a leggera affumicatura, poi va appeso definitivamente in appositi locali arieggiati, per la maturazione (stagionatura) finale.",
-            "VINO CONSIGLIATO: Sangiovese giovane"
+            "VINO CONSIGLIATO: Riesling Italico dei Colli Bolognesi"
           ],
           "sections": []
         }
@@ -26236,9 +26161,9 @@
       "sourcePage": 185,
       "sourcePageEnd": 186,
       "sourceMarkdownLine": 25599,
-      "sourceMarkdownLineEnd": 25781,
+      "sourceMarkdownLineEnd": 25759,
       "sourceMarkdownContentLine": 25600,
-      "sourceMarkdownContentLineEnd": 25781,
+      "sourceMarkdownContentLineEnd": 25759,
       "sourceHeading": "Prosciutto crudo Emilia-Romagna",
       "sourceRegion": "Emilia-Romagna",
       "region": "Emilia-Romagna",
@@ -26328,10 +26253,7 @@
           "items": [
             "Dalle cosce posteriori del cinghiale si ricava il prosciutto; confezionato conservandone tutto lo stinco, completo dello zampetto, e caratteristico per le setole della coscia mantenute in bella vista.",
             "La carne viene salata e pepata molto meno dei prosciutti normali (già di natura assai saporita). Si lascia stagionare a lungo, anche più di un anno, e si consuma tra le più sapide e gustose rarità toscane: il prezzo di un prosciutto di cinghiale parla chiaro.",
-            "VINO CONSIGLIATO: Bianco di Pitigliano",
-            "Umbria",
-            "Rinomata la produzione della Val Nerina, con esemplari a forma di violoncello, caratteristici per il sapore intenso, gustoso, pieno, dovuto alla salatura.",
-            "Ideale contrappunto allo sciapo del pane. VINO CONSIGLIATO: Bianco di Bettona"
+            "VINO CONSIGLIATO: Bianco di Pitigliano"
           ],
           "sections": []
         }
@@ -26341,16 +26263,14 @@
       "sourcePage": 186,
       "sourcePageEnd": 186,
       "sourceMarkdownLine": 25797,
-      "sourceMarkdownLineEnd": 25823,
+      "sourceMarkdownLineEnd": 25813,
       "sourceMarkdownContentLine": 25798,
-      "sourceMarkdownContentLineEnd": 25823,
+      "sourceMarkdownContentLineEnd": 25813,
       "sourceHeading": "Prosciutto di cinghiale Toscana",
       "sourceRegion": "Toscana",
       "region": "Toscana",
       "regionSource": "recipe-heading",
-      "geographicReferences": [
-        "Rinomata la produzione della Val Nerina, con esemplari a forma di violoncello, caratteristici per il sapore intenso, gustoso, pieno, dovuto alla salatura."
-      ],
+      "geographicReferences": [],
       "detection": "inline-region",
       "sourceLayout": "heading-before-body"
     },
@@ -26601,12 +26521,7 @@
             "Dal latte vaccino intero si ricava questo formaggio stracchino, a pasta cotta o cruda (dolce e morbido il primo, cremoso e delicato il secondo).",
             "ll quartirolo è maturo già dopo una settimana; si presenta a forma quadrata (con lati di circa 20 cm e scalzo di 6 cm), del peso di circa 2 kg. Dopo un mese di stagionatura si dice maturo.",
             "La crosta è tanto sottile da risultare quasi inesistente, di colore rosa (con l’invecchiamento assume riflessi verdognoli). La pasta è bianca avorio, con disordinate fessurazioni, friabile; il tempo la trasforma, compattandola, vivacizzandone gli aromi e il retrogusto acido. La produzione ottenuta con il latte estivo ha pasta più compatta e dura; con il latte invernale è più molle. Gli intenditori preferiscono il quartirolo autunnale.",
-            "VINO CONSIGLIATO: Valgella",
-            "Umbria",
-            "«Gruncata» prodotta di solo latte vaccino, a pasta molle, appena asciugata; tenera seppur burrosa, di colore bianco sporco, dal sapore tenue, elegante, dolce.",
-            "Si usa venderlo e servirlo su foglie di felce, da cui il nome felciata.",
-            "Sono note anche le produzioni di Toscana e Marche.",
-            "VINO CONSIGLIATO: Fontesegale rosso"
+            "VINO CONSIGLIATO: Valgella"
           ],
           "sections": []
         }
@@ -26616,16 +26531,15 @@
       "sourcePage": 188,
       "sourcePageEnd": 188,
       "sourceMarkdownLine": 26044,
-      "sourceMarkdownLineEnd": 26085,
+      "sourceMarkdownLineEnd": 26070,
       "sourceMarkdownContentLine": 26045,
-      "sourceMarkdownContentLineEnd": 26085,
+      "sourceMarkdownContentLineEnd": 26070,
       "sourceHeading": "Quartirolo (Taleggio quartirolo)",
       "sourceRegion": "Lombardia",
       "region": "Lombardia",
       "regionSource": "recipe-text",
       "geographicReferences": [
-        "La crosta è tanto sottile da risultare quasi inesistente, di colore rosa (con l’invecchiamento assume riflessi verdognoli). La pasta è bianca avorio, con disordinate fessurazioni, friabile; il tempo la trasforma, compattandola, vivacizzandone gli aromi e il retrogusto acido. La produzione ottenuta con il latte estivo ha pasta più compatta e dura; con il latte invernale è più molle. Gli intenditori preferiscono il quartirolo autunnale.",
-        "Sono note anche le produzioni di Toscana e Marche."
+        "La crosta è tanto sottile da risultare quasi inesistente, di colore rosa (con l’invecchiamento assume riflessi verdognoli). La pasta è bianca avorio, con disordinate fessurazioni, friabile; il tempo la trasforma, compattandola, vivacizzandone gli aromi e il retrogusto acido. La produzione ottenuta con il latte estivo ha pasta più compatta e dura; con il latte invernale è più molle. Gli intenditori preferiscono il quartirolo autunnale."
       ],
       "detection": "regional-index-title",
       "sourceLayout": "heading-before-body"
@@ -27117,11 +27031,7 @@
           "items": [
             "Insaccato di carni magre di suino e di equino macinate con grasso duro di maiale; conciato con sale, pepe spezie miste, vino rosso e succo di aglio, a piacere.",
             "Passa in budelle naturali, stagiona qualche mese poi è pronto per il consumo.",
-            "VINO CONSIGLIATO: Prosecco di Valdobbiadene",
-            "Marche",
-            "Insaccato di carne magra tratta dalla lombata e dalla coscia dei suini neri magroni.",
-            "La concia prevede sale fine ed abbondante pepe intero e macinato.",
-            "Al gusto si presenta piacevolmente saporito. VINO CONSIGLIATO: Bianco di Frontone"
+            "VINO CONSIGLIATO: Prosecco di Valdobbiadene"
           ],
           "sections": []
         }
@@ -27131,9 +27041,9 @@
       "sourcePage": 191,
       "sourcePageEnd": 191,
       "sourceMarkdownLine": 26423,
-      "sourceMarkdownLineEnd": 26447,
+      "sourceMarkdownLineEnd": 26435,
       "sourceMarkdownContentLine": 26424,
-      "sourceMarkdownContentLineEnd": 26447,
+      "sourceMarkdownContentLineEnd": 26435,
       "sourceHeading": "Salame bellunese Veneto",
       "sourceRegion": "Veneto",
       "region": "Veneto",
@@ -27224,12 +27134,7 @@
           "items": [
             "Insaccato tradizionale, con carni magre di cavallo e grasso suino della pancetta.",
             "La grana è media, conciata usualmente con sale, salnitro e pepe, ma si trovano in commercio salami odorosi di spezie e vino rosso. Dopo una stagionatura che varia dai 2 ai 5 mesi, si consuma.",
-            "VINO CONSIGLIATO: Merlot",
-            "Marche",
-            "Insaccato tradizionale, che impiega solo carne tratta dalle cosce dei maiali; questa viene tritata “in punta di coltello”, poi impastata con lardelli tagliati a dadini e conciata con sale fine e pepe.",
-            "A piacere, aggiungono spicchi di aglio schiacciati, lasciati macerare nel vino bianco.",
-            "Dopo la confezione in budelle naturali (bovine o suine), passa a moderato invecchiamento (un paio di mesi), prima del consumo.",
-            "VINO CONSIGLIATO: Bianchello del Metauro"
+            "VINO CONSIGLIATO: Merlot"
           ],
           "sections": []
         }
@@ -27239,9 +27144,9 @@
       "sourcePage": 191,
       "sourcePageEnd": 191,
       "sourceMarkdownLine": 26481,
-      "sourceMarkdownLineEnd": 26511,
+      "sourceMarkdownLineEnd": 26493,
       "sourceMarkdownContentLine": 26482,
-      "sourceMarkdownContentLineEnd": 26511,
+      "sourceMarkdownContentLineEnd": 26493,
       "sourceHeading": "Salame di cavallo Veneto",
       "sourceRegion": "Veneto",
       "region": "Veneto",
@@ -27371,13 +27276,7 @@
             "Un classico dell’arte norcina nazionale; preparato con carne magra (ideale quella della spalla) ed altrettanta di manzo, ripulita dei nervi. La si trita insieme ad una percentuale di lardo o grasso duro nella macchina con applicato lo stampo a fori quadrati. Il tutto si concia con sale fine, salnitro, pepe macinato e poco vino appena aromatizzato con l’aglio; impastando con le dita aperte per conservarne la consistenza granitica.",
             "Questo salame si insacca in budelle tratte dall’intestino crasso del maiale, pelate e sdoppiate; della lunghezza di circa 40-50 cm.",
             "I salami più sottili (filzette) si legano con anelli semplici di spago, quelli grossi (cresponi) con anelli incrociati longitudinalmente. Dopo la prima asciugatura nella apposita camera stufa, si rassodano a contatto con l’aria naturale, tiepida e ventilata; quindi si lasciano stagionare per circa 4 mesi, prima del consumo.",
-            "VINO CONSIGLIATO: Quistello bianco",
-            "Umbria",
-            "Insaccato dall’impasto assai magro, a macinatura di media grossezza.",
-            "Si concia con sale fine, pepe intero e macinato, leggero sentore di aglio (precedentemente macerato nel vino bianco).",
-            "Viene confezionato in budelle naturali, con nodi alle estremità, due briglie e un’asola centrale.",
-            "Si gusta, affettato, dopo una stagionatura di almeno due mesi.",
-            "VINO CONSIGLIATO: Greco di Todi"
+            "VINO CONSIGLIATO: Quistello bianco"
           ],
           "sections": []
         }
@@ -27387,9 +27286,9 @@
       "sourcePage": 192,
       "sourcePageEnd": 192,
       "sourceMarkdownLine": 26567,
-      "sourceMarkdownLineEnd": 26612,
+      "sourceMarkdownLineEnd": 26594,
       "sourceMarkdownContentLine": 26568,
-      "sourceMarkdownContentLineEnd": 26612,
+      "sourceMarkdownContentLineEnd": 26594,
       "sourceHeading": "Salame di Milano Lombardia",
       "sourceRegion": "Lombardia",
       "region": "Lombardia",
@@ -27909,11 +27808,7 @@
           "type": "text",
           "items": [
             "Dicesi così il fontal vecchio di tre mesi almeno, passato in salamoia; il sapore evidenzia l'acidità saporosa della pasta.",
-            "VINO CONSIGLIATO: Pinot nero",
-            "Calabria",
-            "Una specialità particolare, lavorata (macinata) come si suol dire “in punta di coltello”, cioè tritando carni e lardo a mano, con il coltello appunto. L’amalgama si concia con sale marino fine, semi di finocchio e peperoncino rosso, piccante, in polvere.",
-            "Dopo averla insaccata in budelle di maiale, si asciuga e si lascia appassire per almeno un mese,",
-            "VINO CONSIGLIATO: Esaro rosato"
+            "VINO CONSIGLIATO: Pinot nero"
           ],
           "sections": []
         }
@@ -27923,9 +27818,9 @@
       "sourcePage": 194,
       "sourcePageEnd": 195,
       "sourceMarkdownLine": 26946,
-      "sourceMarkdownLineEnd": 26972,
+      "sourceMarkdownLineEnd": 26957,
       "sourceMarkdownContentLine": 26947,
-      "sourceMarkdownContentLineEnd": 26972,
+      "sourceMarkdownContentLineEnd": 26957,
       "sourceHeading": "Salmistrà Trentino-Alto Adige",
       "sourceRegion": "Trentino-Alto Adige",
       "region": "Trentino-Alto Adige",
@@ -27981,12 +27876,7 @@
             "Secondo il gusto, se ne ricava della dolce (concia di sale, pepe macinato, semi di finocchio e aromi vari) e della piccante (con aggiunta di peperoncino).",
             "Passa nei budelli naturali, di grossezza media, poi viene legato (piegato a U) ai due capi con il medesimo tratto di spago.",
             "Dopo leggera affumicatura, stagiona un paio di mesi, prima del consumo.",
-            "VINO CONSIGLIATO: Ravello rosato",
-            "Marche",
-            "Insaccato di carne mista di maiale, magra e grassa, macinata a grana media; si concia con 27 g di sale fine e 7 g di pepe in polvere ogni kg di pasta. In certe famiglie amano aggiungere qualche spicchio di aglio, pestato nel mortaio.",
-            "La salsiccia si insacca in budelle naturali, poi si appende per l’asciugatura e l’appassimento.",
-            "La conservano, più a lungo, nell’olio.",
-            "VINO CONSIGLIATO: Bianchello del Metauro"
+            "VINO CONSIGLIATO: Ravello rosato"
           ],
           "sections": []
         }
@@ -27996,9 +27886,9 @@
       "sourcePage": 195,
       "sourcePageEnd": 195,
       "sourceMarkdownLine": 26975,
-      "sourceMarkdownLineEnd": 27010,
+      "sourceMarkdownLineEnd": 26993,
       "sourceMarkdownContentLine": 26976,
-      "sourceMarkdownContentLineEnd": 27010,
+      "sourceMarkdownContentLineEnd": 26993,
       "sourceHeading": "Salsiccia Campania",
       "sourceRegion": "Campania",
       "region": "Campania",
@@ -28086,12 +27976,7 @@
           "items": [
             "Specialità di Monte San Biagio, in provincia di Latina. E una normale salsiccia, conciata con sale, pepe macinato e peperoncino piccante, a piacere.",
             "Viene affumicata per alcuni giorni, poi appassita, prima del consumo.",
-            "VINO CONSIGLIATO: Bianco di Velletri",
-            "Umbria",
-            "Insaccato di carni magre e grasse, tratte dai prosciutti e dalle spalle, per ogni 2 kg di carne va una concia di g 60 di sale fine, un cucchiaio raso di pepe macinato e mezzo spicchio di aglio tritato.",
-            "Dopo aver impastato a dovere, insaccate l’amalgama nel budello naturale, poi fermate i rocchi con spago fine, annodato ogni 5 centimetri circa.",
-            "Si stagiona almeno un mese in un locale ventilato, poi si consuma.",
-            "VINO CONSIGLIATO: Panicale"
+            "VINO CONSIGLIATO: Bianco di Velletri"
           ],
           "sections": []
         }
@@ -28101,9 +27986,9 @@
       "sourcePage": 195,
       "sourcePageEnd": 195,
       "sourceMarkdownLine": 27030,
-      "sourceMarkdownLineEnd": 27059,
+      "sourceMarkdownLineEnd": 27041,
       "sourceMarkdownContentLine": 27031,
-      "sourceMarkdownContentLineEnd": 27059,
+      "sourceMarkdownContentLineEnd": 27041,
       "sourceHeading": "Salsiccia affumicata Lazio",
       "sourceRegion": "Lazio",
       "region": "Lazio",
@@ -28165,11 +28050,7 @@
             "g 40 di pepe macinato",
             "2 bicchieri di vino bianco (ideale il Bianchello del Metauro)",
             "Dopo aver macinato assieme le carni, impastatele con la concia, poi insaccate la salsiccia in budelle di maiale, foratele per far fuoriuscire eventuale aria rimasta all’interno, quindi appendetela e lasciatela asciugare. Si conserva sott’olio.",
-            "VINO CONSIGLIATO: Bianchello del Metauro",
-            "Calabria",
-            "Insaccato di fegato di maiale e poco lardo (grasso duro), tritato “in punta di coltello”, conciato con sale marino fine, spicchi di aglio pestato nel mortaio, insieme a peperoncino rosso piccante.",
-            "Dopo l’asciugatura e l’appassimento, si consuma tagliata a fette.",
-            "VINO CONSIGLIATO: Locride rosato"
+            "VINO CONSIGLIATO: Bianchello del Metauro"
           ],
           "sections": []
         }
@@ -28179,9 +28060,9 @@
       "sourcePage": 195,
       "sourcePageEnd": 195,
       "sourceMarkdownLine": 27062,
-      "sourceMarkdownLineEnd": 27098,
+      "sourceMarkdownLineEnd": 27085,
       "sourceMarkdownContentLine": 27063,
-      "sourceMarkdownContentLineEnd": 27098,
+      "sourceMarkdownContentLineEnd": 27085,
       "sourceHeading": "Salsiccia di cinghiale Marche",
       "sourceRegion": "Marche",
       "region": "Marche",
@@ -29031,12 +28912,7 @@
             "sale",
             "olio di oliva, per friggere",
             "In una ciotola ampia, sbattete le uova con un pizzico di sale. Nel frattempo si scalda l’olio in padella. Dopo aver infarinato le fette di scamorza, bagnatele nell’uovo sbattuto, rivestitele di pangrattato, poi tuffatele nell’olio, per friggerle. Asciugatele sopra fogli di carta assorbente e servitele caldissime.",
-            "VINO CONSIGLIATO: Taurasi",
-            "Abruzzo-Molise",
-            "Formaggio pecorino prodotto nell’omonima località, da latte intero.",
-            "La forma si presenta cilindrica, con crosta verniciata di nero che racchiude la pasta di colore giallo intenso. Prodotto semistagionato, molle, burroso, con retrogusto affumicato.",
-            "Si consuma prevalentemente in tavola.",
-            "VINO CONSIGLIATO: Montepulciano d'Abruzzo"
+            "VINO CONSIGLIATO: Taurasi"
           ],
           "sections": []
         }
@@ -29046,9 +28922,9 @@
       "sourcePage": 200,
       "sourcePageEnd": 200,
       "sourceMarkdownLine": 27748,
-      "sourceMarkdownLineEnd": 27785,
+      "sourceMarkdownLineEnd": 27771,
       "sourceMarkdownContentLine": 27749,
-      "sourceMarkdownContentLineEnd": 27785,
+      "sourceMarkdownContentLineEnd": 27771,
       "sourceHeading": "Scamorza fritta Campania",
       "sourceRegion": "Campania",
       "region": "Campania",
@@ -29959,12 +29835,7 @@
             "La coscia del maiale viene aperta, disossata, stesa sotto dei pesi, salata, conciata con erbe e spezie, quindi affumicata.",
             "La concia varia, secondo le usanze; ma presenziano certamente, seppur in quantitativi variabili, sale, salnitro, pepe, alloro, bacche di ginepro e spicchi di aglio.",
             "La marinatura dura circa 3 settimane, quando il liquido si raccoglie e si versa ancora sopra la carne. Poi toccherà all’affumicatura — poca cosa al giorno -- a freddo come si suol dire, cioè con il fumo sprigionato dai camini, senza cambio di temperatura.",
-            "VINO CONSIGLIATO: Traminer",
-            "Calabria",
-            "È un insaccato di carne di maiale mediamente magra (75%) e grasso duro, tagliato a dadini (25%).",
-            "La concia è piuttosto semplice, con sale marino fine e peperoncino pestato nel mortaio.",
-            "Dopo aver racchiuso l’impasto nel budello di maiale, si lascia sotto peso per alcuni giorni, poi si appende per la prolungata stagionatura (circa 3 mesi).",
-            "VINO CONSIGLIATO: Bianco di Valdamato"
+            "VINO CONSIGLIATO: Traminer"
           ],
           "sections": []
         }
@@ -29974,9 +29845,9 @@
       "sourcePage": 206,
       "sourcePageEnd": 206,
       "sourceMarkdownLine": 28562,
-      "sourceMarkdownLineEnd": 28600,
+      "sourceMarkdownLineEnd": 28583,
       "sourceMarkdownContentLine": 28563,
-      "sourceMarkdownContentLineEnd": 28600,
+      "sourceMarkdownContentLineEnd": 28583,
       "sourceHeading": "Speck Trentino-Alto Adige",
       "sourceRegion": "Trentino-Alto Adige",
       "region": "Trentino-Alto Adige",
@@ -133691,12 +133562,7 @@
             "Ora, praticate alcuni tagli sul dorso e sui lati del pesce, nei quali infilate pezzetti di acciughe, poi sdraiate l’orata in una teglia da forno, irroratela di olio, regolate di sale e pepe e mettete in forno.",
             "Appena è cotta, disponetela sul piatto da portata; nel fondo di cottura aggiungete la Vernaccia, rimettete in forno per addensare; adesso versate il composto sopra il pesce, proprio un attimo prima di servirlo.",
             "Varianti",
-            "Una buona ricetta consiglia di aprire l’orata e di farcirla con i filetti di acciuga (circa 4) e listarelle di lardo (g 50). VINO CONSIGLIATO: Bianco di Collinas",
-            "Calabria",
-            "Non è altro che la bottarga di tonno, preparata con grande maestria a Pizzo Calabro.",
-            "Si consuma, grattugiata, per condire piatti di pasta; oppure adagiata sopra fettine di pane imburrato, decorata con un capperino.",
-            "Meglio ancora, affettata e condita con ottimo olio di oliva e succo di limone.",
-            "VINO CONSIGLIATO: Verbicaro bianco"
+            "Una buona ricetta consiglia di aprire l’orata e di farcirla con i filetti di acciuga (circa 4) e listarelle di lardo (g 50). VINO CONSIGLIATO: Bianco di Collinas"
           ],
           "sections": []
         }
@@ -133706,9 +133572,9 @@
       "sourcePage": 1070,
       "sourcePageEnd": 1071,
       "sourceMarkdownLine": 140450,
-      "sourceMarkdownLineEnd": 140512,
+      "sourceMarkdownLineEnd": 140498,
       "sourceMarkdownContentLine": 140451,
-      "sourceMarkdownContentLineEnd": 140512,
+      "sourceMarkdownContentLineEnd": 140498,
       "sourceHeading": "Orata alle acciughe",
       "sourceRegion": "Sardegna",
       "region": "Sardegna",
@@ -133740,6 +133606,10 @@
         }
       ],
       "notes": [
+        "Non è altro che la bottarga di tonno, preparata con grande maestria a Pizzo Calabro.",
+        "Si consuma, grattugiata, per condire piatti di pasta; oppure adagiata sopra fettine di pane imburrato, decorata con un capperino.",
+        "Meglio ancora, affettata e condita con ottimo olio di oliva e succo di limone.",
+        "VINO CONSIGLIATO: Verbicaro bianco",
         "Pagelli in porchetta Morche"
       ],
       "sourceId": "ricette-regionali",
@@ -133747,15 +133617,15 @@
       "sourcePageEnd": 1071,
       "sourceMarkdownLine": 140513,
       "sourceMarkdownLineEnd": 140538,
-      "sourceMarkdownContentLine": 140514,
+      "sourceMarkdownContentLine": 140500,
       "sourceMarkdownContentLineEnd": 140538,
       "sourceHeading": "Ovotarica",
       "sourceRegion": "Calabria",
       "region": "Calabria",
-      "regionSource": "alphabetical-index",
+      "regionSource": "recipe-text",
       "geographicReferences": [],
       "detection": "regional-index-title",
-      "sourceLayout": "heading-before-body"
+      "sourceLayout": "body-before-heading"
     },
     {
       "id": "ricette-regionali--secondi-piatti-pesci-palombo-con-i-piselli",
@@ -145457,19 +145327,7 @@
             "Una volta lavate e sgocciolate nello scolapasta, passatele nella farina, poi nell’uovo sbattuto, per finire in padella, a friggere nell’olio bollente.",
             "Servitele calde, appena dorate, leggermente asciugate con fogli di carta assorbente, salate e accompagnate da spicchi di limone, a disposizione dei commensali.",
             "VINO CONSIGLIATO: Bianco di Capena",
-            "Molteche al vino bianco Friuli-Venezia Giulia",
-            "Le moleche sono granchi maschi, che in primavera e in autunno cambiano il guscio; così risulta morbido e commestibile: da cui il nome.",
-            "Ingredienti per 6 persone:",
-            "kg 1,5 di moleche vive",
-            "5 uova",
-            "farina",
-            "g 60 di burro",
-            "2 cucchiai di prezzemolo tritato un dl di vino bianco secco",
-            "sale e pepe di mulinello",
-            "Dopo aver lavato le moleche in acqua corrente, ponetele in una ciotola capiente, sgusciatevi sopra le uova, mettete un coperchio (con un peso perché non escano) e lasciatele almeno una notte; queste assimileranno l’uovo, morendo.",
-            "L’indomani, passatele nella farina, poi adagiatele nella padella (dove già sfrigola il burro) e fatele rosolare, mescolandole; unite il prezzemolo, versate il vino bianco, regolate di sale e pepe e terminate la cottura.",
-            "Servitele caldissime.",
-            "VINO CONSIGLIATO: Chardonnay"
+            "Molteche al vino bianco"
           ],
           "sections": []
         }
@@ -145479,9 +145337,9 @@
       "sourcePage": 1149,
       "sourcePageEnd": 1150,
       "sourceMarkdownLine": 152167,
-      "sourceMarkdownLineEnd": 152239,
+      "sourceMarkdownLineEnd": 152197,
       "sourceMarkdownContentLine": 152169,
-      "sourceMarkdownContentLineEnd": 152239,
+      "sourceMarkdownContentLineEnd": 152197,
       "sourceHeading": "Mazzancolie (gamberi imperiali) fritte",
       "sourceRegion": "Lazio",
       "region": "Lazio",
@@ -145501,6 +145359,17 @@
           "type": "text",
           "items": [
             "Ingredienti per 6 persone:",
+            "kg 1,5 di moleche vive",
+            "5 uova",
+            "farina",
+            "g 60 di burro",
+            "2 cucchiai di prezzemolo tritato un dl di vino bianco secco",
+            "sale e pepe di mulinello",
+            "Dopo aver lavato le moleche in acqua corrente, ponetele in una ciotola capiente, sgusciatevi sopra le uova, mettete un coperchio (con un peso perché non escano) e lasciatele almeno una notte; queste assimileranno l’uovo, morendo.",
+            "L’indomani, passatele nella farina, poi adagiatele nella padella (dove già sfrigola il burro) e fatele rosolare, mescolandole; unite il prezzemolo, versate il vino bianco, regolate di sale e pepe e terminate la cottura.",
+            "Servitele caldissime.",
+            "VINO CONSIGLIATO: Chardonnay",
+            "Ingredienti per 6 persone:",
             "kg 2 di moleche, ben lavate e con le zampe tagliate 3 uova sbattute i",
             "g 50 di grana padano grattugiato",
             "sale",
@@ -145515,13 +145384,15 @@
           "sections": []
         }
       ],
-      "notes": [],
+      "notes": [
+        "Le moleche sono granchi maschi, che in primavera e in autunno cambiano il guscio; così risulta morbido e commestibile: da cui il nome."
+      ],
       "sourceId": "ricette-regionali",
       "sourcePage": 1150,
       "sourcePageEnd": 1150,
       "sourceMarkdownLine": 152240,
       "sourceMarkdownLineEnd": 152270,
-      "sourceMarkdownContentLine": 152241,
+      "sourceMarkdownContentLine": 152199,
       "sourceMarkdownContentLineEnd": 152270,
       "sourceHeading": "Moleche fritte",
       "sourceRegion": "Veneto",
@@ -145529,7 +145400,7 @@
       "regionSource": "recipe-text",
       "geographicReferences": [],
       "detection": "regional-index-title",
-      "sourceLayout": "heading-before-body"
+      "sourceLayout": "body-before-heading"
     },
     {
       "id": "ricette-regionali--secondi-piatti-crostacei-frutti-di-mare-molluschi-rane-e-lumache-moscardini-polipetti-lessati",
