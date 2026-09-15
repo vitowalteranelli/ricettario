@@ -75,6 +75,13 @@
     .admin-recipe-workspace { display:grid; grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr); gap:1rem; align-items:start; }
     .admin-recipe-browser { min-width:0; }
     .reader-toolbar { position:sticky; top:.5rem; z-index:2; display:grid; grid-template-columns:minmax(0,1fr) 220px 260px; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:var(--overlay); box-shadow:0 5px 18px var(--shadow-strong); }
+    .reader-search-modes { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:var(--surface-soft); }
+    .reader-search-modes-copy { display:grid; gap:.1rem; min-width:0; }
+    .reader-search-modes-copy strong { color:var(--ink); }
+    .reader-search-modes-copy span { color:var(--muted); font-size:.85rem; }
+    .reader-search-mode-buttons { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .reader-search-mode-button { white-space:nowrap; }
+    .reader-search-mode-button[aria-pressed="true"] { background:var(--accent); color:#fff; box-shadow:0 4px 12px var(--accent-shadow); }
     .ingredient-search-panel { display:grid; gap:.75rem; margin:1rem 0; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
     .ingredient-search-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
     .ingredient-search-header h2,.ingredient-search-header p { margin:0; }
@@ -203,6 +210,9 @@
       main { width:min(100% - 1rem,1120px); margin-top:1rem; }
       .grid,.reader-toolbar,.admin-recipe-toolbar,.admin-recipe-workspace,.section-editor-grid,.recipe-publish-bar,.admin-source-toolbar,.source-publish-bar { grid-template-columns:1fr; }
       .reader-toolbar { position:static; }
+      .reader-search-modes { align-items:stretch; flex-direction:column; }
+      .reader-search-mode-buttons { display:grid; grid-template-columns:1fr 1fr; }
+      .reader-search-mode-button { width:100%; }
       .reader-layout.has-selection { grid-template-columns:1fr; }
       .reader-layout.has-selection .recipe-results-column { display:none; }
       .recipe-detail-content { border:0; padding:0; }
@@ -275,7 +285,17 @@
       </div>
       <article class="card">
         <p id="content-status" class="status" role="status" aria-live="polite">Caricamento…</p>
-        <section id="ingredient-search-panel" class="ingredient-search-panel" aria-labelledby="ingredient-search-title">
+        <nav class="reader-search-modes" aria-label="Tipo di ricerca">
+          <div class="reader-search-modes-copy">
+            <strong>Come vuoi cercare?</strong>
+            <span id="reader-search-mode-description">Cerca per nome, ingrediente o parola chiave.</span>
+          </div>
+          <div class="reader-search-mode-buttons">
+            <button id="manual-search-mode-button" class="reader-search-mode-button secondary" type="button" aria-pressed="true">Cerca nel ricettario</button>
+            <button id="ingredient-search-mode-button" class="reader-search-mode-button secondary" type="button" aria-pressed="false">Cerca con ingredienti</button>
+          </div>
+        </nav>
+        <section id="ingredient-search-panel" class="ingredient-search-panel" hidden aria-labelledby="ingredient-search-title">
           <div class="ingredient-search-header">
             <div>
               <h2 id="ingredient-search-title">Cosa posso cucinare?</h2>
@@ -309,6 +329,12 @@
               <button id="find-ingredient-recipes-button" type="button" disabled>Trova ricette</button>
             </div>
           </div>
+          <article id="ingredient-recipe-detail" class="recipe-detail" hidden aria-labelledby="ingredient-recipe-detail-title">
+            <div class="recipe-detail-toolbar">
+              <button id="back-to-ingredient-results-button" class="secondary" type="button">← Torna ai risultati ingredienti</button>
+            </div>
+            <div id="ingredient-recipe-detail-content" class="recipe-detail-content"></div>
+          </article>
           <div id="ingredient-results" class="ingredient-results" hidden>
             <div class="ingredient-results-header">
               <h3>Ricette possibili</h3>
@@ -331,40 +357,42 @@
           </div>
           <p id="ingredient-ai-status" class="status" role="status" aria-live="polite"></p>
         </section>
-        <div class="reader-toolbar">
-          <label for="search-input">Cerca ricette, ingredienti o parole chiave
-            <span class="search-input-wrap">
-              <input id="search-input" type="search" placeholder="es. pomodoro basilico…" autocomplete="off" aria-describedby="search-help">
-              <button id="clear-search-button" class="search-clear" type="button" aria-label="Cancella ricerca" title="Cancella ricerca" hidden>×</button>
-            </span>
-          </label>
-          <label for="category-filter">Categoria
-            <select id="category-filter">
-              <option value="">Tutte</option>
-            </select>
-          </label>
-          <label for="source-filter">Fonte
-            <select id="source-filter">
-              <option value="">Tutte le fonti</option>
-            </select>
-          </label>
-          <p id="search-help" class="search-help">Cerca tutte le parole, anche parziali da 3 caratteri; usa le virgolette per una frase esatta, ad esempio <span aria-hidden="true">“</span>pasta sfoglia<span aria-hidden="true">”</span>.</p>
-        </div>
-        <div id="reader-layout" class="reader-layout">
-          <section id="recipe-results-column" class="recipe-results-column" aria-labelledby="recipe-results-title">
-            <div class="reader-section-heading">
-              <h2 id="recipe-results-title">Risultati</h2>
-              <p id="recipe-count" class="recipe-count"></p>
-            </div>
-            <div id="recipe-list" class="recipe-list"></div>
-            <p id="no-results" class="status" hidden>Nessuna ricetta trovata. Prova a rimuovere una parola o a usare un termine più generico.</p>
-          </section>
-          <article id="recipe-detail" class="recipe-detail" hidden aria-labelledby="recipe-detail-title">
-            <div class="recipe-detail-toolbar">
-              <button id="back-to-results-button" class="secondary" type="button">← Torna ai risultati</button>
-            </div>
-            <div id="recipe-detail-content"></div>
-          </article>
+        <div id="manual-search-view">
+          <div class="reader-toolbar">
+            <label for="search-input">Cerca ricette, ingredienti o parole chiave
+              <span class="search-input-wrap">
+                <input id="search-input" type="search" placeholder="es. pomodoro basilico…" autocomplete="off" aria-describedby="search-help">
+                <button id="clear-search-button" class="search-clear" type="button" aria-label="Cancella ricerca" title="Cancella ricerca" hidden>×</button>
+              </span>
+            </label>
+            <label for="category-filter">Categoria
+              <select id="category-filter">
+                <option value="">Tutte</option>
+              </select>
+            </label>
+            <label for="source-filter">Fonte
+              <select id="source-filter">
+                <option value="">Tutte le fonti</option>
+              </select>
+            </label>
+            <p id="search-help" class="search-help">Cerca tutte le parole, anche parziali da 3 caratteri; usa le virgolette per una frase esatta, ad esempio <span aria-hidden="true">“</span>pasta sfoglia<span aria-hidden="true">”</span>.</p>
+          </div>
+          <div id="reader-layout" class="reader-layout">
+            <section id="recipe-results-column" class="recipe-results-column" aria-labelledby="recipe-results-title">
+              <div class="reader-section-heading">
+                <h2 id="recipe-results-title">Risultati</h2>
+                <p id="recipe-count" class="recipe-count"></p>
+              </div>
+              <div id="recipe-list" class="recipe-list"></div>
+              <p id="no-results" class="status" hidden>Nessuna ricetta trovata. Prova a rimuovere una parola o a usare un termine più generico.</p>
+            </section>
+            <article id="recipe-detail" class="recipe-detail" hidden aria-labelledby="recipe-detail-title">
+              <div class="recipe-detail-toolbar">
+                <button id="back-to-results-button" class="secondary" type="button">← Torna ai risultati</button>
+              </div>
+              <div id="recipe-detail-content"></div>
+            </article>
+          </div>
         </div>
       </article>
     </section>
@@ -604,6 +632,8 @@
     let sourceEditingId = null;
     let catalogDirty = false;
     let selectedRecipeId = null;
+    let selectedIngredientRecipeId = null;
+    let readerSearchMode = 'manual';
     let editingRecipeId = null;
     let session = { role: null, token: null, llmKey: null };
     let ingredientFiles = [];
@@ -1303,6 +1333,7 @@
     function invalidateIngredientResults() {
       ingredientSearchResults = [];
       $('#ingredient-results').hidden = true;
+      closeIngredientRecipeDetail({ focus: false });
     }
 
     function renderIngredientInventory() {
@@ -1482,6 +1513,7 @@
     }
 
     function renderIngredientRecipeResults() {
+      closeIngredientRecipeDetail({ focus: false });
       const container = $('#ingredient-recipe-list');
       container.replaceChildren();
       ingredientSearchResults.forEach((entry) => {
@@ -1523,6 +1555,24 @@
       setStatus($('#ingredient-ai-status'), ingredientSearchResults.length
         ? `Trovate ${ingredientSearchResults.length} ricette compatibili.`
         : 'Nessuna ricetta compatibile con gli ingredienti indicati.');
+    }
+
+    function showIngredientRecipeDetail(recipe) {
+      selectedIngredientRecipeId = recipe.id;
+      const detail = $('#ingredient-recipe-detail');
+      const content = $('#ingredient-recipe-detail-content');
+      content.replaceChildren();
+      renderRecipeDetail(recipe, content, 'ingredient-recipe-detail-title');
+      detail.hidden = false;
+      $('#ingredient-results').hidden = true;
+      detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function closeIngredientRecipeDetail({ focus = true } = {}) {
+      selectedIngredientRecipeId = null;
+      $('#ingredient-recipe-detail').hidden = true;
+      $('#ingredient-recipe-detail-content').replaceChildren();
+      if (focus) $('#find-ingredient-recipes-button').focus();
     }
 
     async function unlockIngredientAi(password) {
@@ -1777,7 +1827,7 @@
       if (media) parent.appendChild(createRecipeMediaFigure(recipe, media));
     }
 
-    function renderRecipeDetail(recipe, parent) {
+    function renderRecipeDetail(recipe, parent, titleId = 'recipe-detail-title') {
       const card = document.createElement('article');
       card.className = 'recipe-card';
 
@@ -1789,7 +1839,7 @@
       card.appendChild(category);
 
       const title = document.createElement('h2');
-      title.id = 'recipe-detail-title';
+      title.id = titleId;
       title.textContent = recipe.title;
       card.appendChild(title);
 
@@ -1915,6 +1965,32 @@
       $('#recipe-detail').hidden = true;
       $('#recipe-detail-content').replaceChildren();
       if (focus) $('#search-input').focus();
+    }
+
+    function setReaderSearchMode(mode, { focus = false } = {}) {
+      const nextMode = mode === 'ingredients' ? 'ingredients' : 'manual';
+      const ingredientsActive = nextMode === 'ingredients';
+      const changed = readerSearchMode !== nextMode;
+      readerSearchMode = nextMode;
+      $('#ingredient-search-panel').hidden = !ingredientsActive;
+      $('#manual-search-view').hidden = ingredientsActive;
+      $('#manual-search-mode-button').setAttribute('aria-pressed', String(!ingredientsActive));
+      $('#ingredient-search-mode-button').setAttribute('aria-pressed', String(ingredientsActive));
+      $('#reader-search-mode-description').textContent = ingredientsActive
+        ? 'Fotografa ciò che hai e trova ricette compatibili.'
+        : 'Cerca per nome, ingrediente o parola chiave.';
+      if (changed) {
+        if (ingredientsActive) closeRecipeDetail({ focus: false });
+        else {
+          closeIngredientRecipeDetail({ focus: false });
+          if (ingredientSearchResults.length) $('#ingredient-results').hidden = false;
+        }
+      }
+      if (focus) {
+        const target = ingredientsActive ? $('#ingredient-search-panel') : $('#search-input');
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!ingredientsActive) $('#search-input').focus();
+      }
     }
 
     function scheduleRecipeSearch() {
@@ -2415,15 +2491,17 @@
     function showReaderView() {
       if (!session.role) return;
       applyReaderDatasets();
+      setReaderSearchMode(readerSearchMode, { focus: false });
       adminView.hidden = true;
       readerView.hidden = false;
       updatePageTitle('reader');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      $('#search-input').focus();
+      (readerSearchMode === 'ingredients' ? $('#ingredient-photo-input') : $('#search-input')).focus();
     }
 
     function logout() {
       clearIngredientSearch();
+      readerSearchMode = 'manual';
       aiModel = AI_DEFAULT_MODEL;
       aiModels = [];
       $('#recipe-model-picker').hidden = true;
@@ -2546,6 +2624,8 @@
     applyTheme(storedTheme(), { persist: false });
     $('#show-reader-button').addEventListener('click', showReaderView);
     $('#show-admin-button').addEventListener('click', showAdminView);
+    $('#manual-search-mode-button').addEventListener('click', () => setReaderSearchMode('manual', { focus: true }));
+    $('#ingredient-search-mode-button').addEventListener('click', () => setReaderSearchMode('ingredients', { focus: true }));
     $('#search-input').addEventListener('input', scheduleRecipeSearch);
     $('#category-filter').addEventListener('change', renderRecipes);
     $('#clear-search-button').addEventListener('click', () => {
@@ -2562,6 +2642,11 @@
       if (recipe) showRecipeDetail(recipe);
     });
     $('#back-to-results-button').addEventListener('click', () => closeRecipeDetail());
+    $('#back-to-ingredient-results-button').addEventListener('click', () => {
+      closeIngredientRecipeDetail({ focus: false });
+      $('#ingredient-results').hidden = false;
+      $('#ingredient-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
     $('#ingredient-photo-input').addEventListener('change', () => {
       const input = $('#ingredient-photo-input');
       try {
@@ -2693,7 +2778,7 @@
       const result = event.target.closest('.ingredient-recipe-result');
       if (!result) return;
       const recipe = recipeDataset.find((item) => item.id === result.dataset.recipeId);
-      if (recipe) showRecipeDetail(recipe);
+      if (recipe) showIngredientRecipeDetail(recipe);
     });
 
     $('#admin-reauth-form').addEventListener('submit', async (event) => {
