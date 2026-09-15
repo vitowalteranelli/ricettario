@@ -337,7 +337,7 @@ async function searchWeb(query) {
 function buildSearchQueries(recipe) {
   const title = clean(recipe.title);
   if (!title) return [];
-  const region = clean(recipe.sourceRegion);
+  const region = clean(recipe.sourceRegion || recipe.region);
   const queries = [region ? `${title} ${region} ricetta` : `${title} ricetta`];
   if (region) queries.push(`${title} ricetta`);
   const aliasTitle = title.replace(/\b[\p{L}]+\b/gu, (token) => searchAliases.get(token.toLocaleLowerCase('it-IT')) || token);

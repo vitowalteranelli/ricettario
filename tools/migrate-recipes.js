@@ -96,6 +96,9 @@ function parseRecipes(markdown) {
           subcategory: '',
           sections: [],
           notes: [],
+          region: null,
+          regionSource: null,
+          geographicReferences: [],
           legacyMarkdown: ''
         };
         subcategory = '';
@@ -113,6 +116,9 @@ function parseRecipes(markdown) {
         subcategory,
         sections: [],
         notes: [],
+        region: null,
+        regionSource: null,
+        geographicReferences: [],
         legacyMarkdown: ''
       };
       return;

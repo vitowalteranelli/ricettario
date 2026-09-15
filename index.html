@@ -108,6 +108,7 @@
     .recipe-card h3 { color:var(--accent); margin:.2rem 0 .25rem; }
     .recipe-category { color:var(--muted); font-size:.78rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
     .recipe-subcategory { color:var(--muted); font-size:.9rem; margin:0 0 1rem; }
+    .recipe-geography { margin:.35rem 0 1rem; color:var(--olive); font-size:.9rem; font-weight:700; }
     .recipe-note { padding:.75rem 1rem; border-left:3px solid var(--accent); background:var(--accent-soft); white-space:pre-wrap; }
     .recipe-section { margin-top:1rem; }
     .recipe-section h4 { margin:0 0 .45rem; font-size:1rem; }
@@ -368,9 +369,15 @@
                 <label for="recipe-tags">Tag separati da virgole
                   <input id="recipe-tags" placeholder="es. manzo, sous-vide">
                 </label>
+                <label for="recipe-region">Regione (se dichiarata nella fonte)
+                  <input id="recipe-region" placeholder="es. Puglia">
+                </label>
               </div>
               <label for="recipe-notes">Note (una per riga)
                 <textarea id="recipe-notes" rows="3" placeholder="Note introduttive o avvertenze…"></textarea>
+              </label>
+              <label for="recipe-geographic-references">Riferimenti geografici precisi (uno per riga)
+                <textarea id="recipe-geographic-references" rows="3" placeholder="es. provincia di Bari, Altamura…"></textarea>
               </label>
               <div>
                 <h4>Sezioni</h4>
@@ -865,6 +872,8 @@
           subcategory: String(source.subcategory || '').trim(),
           tags: stringArray(source.tags),
           notes: stringArray(source.notes),
+          region: source.region === null ? null : (String(source.region || '').trim() || null),
+          geographicReferences: stringArray(source.geographicReferences),
           sections
         },
         warnings: [...new Set(warnings)],
@@ -1135,6 +1144,17 @@
         card.appendChild(subcategory);
       }
 
+      if (recipe.region || (recipe.geographicReferences || []).length) {
+        const geography = document.createElement('p');
+        geography.className = 'recipe-geography';
+        if (recipe.region) geography.appendChild(document.createTextNode(`Regione: ${recipe.region}`));
+        if ((recipe.geographicReferences || []).length) {
+          if (recipe.region) geography.appendChild(document.createTextNode(' · '));
+          geography.appendChild(document.createTextNode(`Riferimenti: ${recipe.geographicReferences.join(' · ')}`));
+        }
+        card.appendChild(geography);
+      }
+
       (recipe.notes || []).forEach((note) => {
         const paragraph = document.createElement('p');
         paragraph.className = 'recipe-note';
@@ -1256,6 +1276,7 @@
     function defaultRecipe() {
       return {
         id: '', sourceId: '', title: '', category: '', subcategory: '', tags: [], notes: [],
+        region: null, geographicReferences: [],
         sections: [
           { title: 'Ingredienti', type: 'text', items: [], sections: [] },
           { title: 'Procedimento', type: 'ordered', items: [], sections: [] }
@@ -1554,6 +1575,8 @@
       $('#recipe-subcategory').value = draft.subcategory || '';
       $('#recipe-tags').value = (draft.tags || []).join(', ');
       $('#recipe-notes').value = (draft.notes || []).join('\n');
+      $('#recipe-region').value = draft.region || '';
+      $('#recipe-geographic-references').value = (draft.geographicReferences || []).join('\n');
       const sections = $('#section-editor-list');
       sections.replaceChildren();
       (draft.sections || []).forEach((section) => sections.appendChild(createSectionEditor(section)));
@@ -2027,6 +2050,10 @@
           subcategory: $('#recipe-subcategory').value.trim(),
           tags: $('#recipe-tags').value.split(',').map((tag) => tag.trim()).filter(Boolean),
           notes: $('#recipe-notes').value.split(/\r?\n/).map((note) => note.trim()).filter(Boolean),
+          region: $('#recipe-region').value.trim() || null,
+          sourceRegion: existing?.sourceRegion || ($('#recipe-region').value.trim() || null),
+          regionSource: existing?.regionSource || null,
+          geographicReferences: $('#recipe-geographic-references').value.split(/\r?\n/).map((reference) => reference.trim()).filter(Boolean),
           sections
         };
         if (existing) {

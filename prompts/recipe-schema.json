@@ -3,13 +3,15 @@
   "title": "Recipe draft",
   "type": "object",
   "additionalProperties": false,
-  "required": ["title", "category", "subcategory", "tags", "notes", "sections", "warnings", "uncertainFields"],
+  "required": ["title", "category", "subcategory", "tags", "notes", "region", "geographicReferences", "sections", "warnings", "uncertainFields"],
   "properties": {
     "title": { "type": "string" },
     "category": { "type": "string" },
     "subcategory": { "type": "string" },
     "tags": { "type": "array", "items": { "type": "string" } },
     "notes": { "type": "array", "items": { "type": "string" } },
+    "region": { "type": ["string", "null"] },
+    "geographicReferences": { "type": "array", "items": { "type": "string" } },
     "sections": {
       "type": "array",
       "items": { "$ref": "#/$defs/section" }

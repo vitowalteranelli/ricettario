@@ -20,6 +20,10 @@ Regole obbligatorie:
   sezione `ordered`, quando questa distinzione è riconoscibile.
 - Conserva note, varianti, consigli e annotazioni manoscritte in `notes` o in
   sezioni `text`, senza confonderle con gli ingredienti.
+- Compila `region` solo se la regione è esplicitamente leggibile nella fonte;
+  altrimenti usa `null`. Riporta in `geographicReferences` eventuali città,
+  province, zone o altri riferimenti geografici esplicitamente leggibili,
+  mantenendo il testo della fonte.
 - Se una parola, quantità o unità è illeggibile, usa una stringa vuota solo per
   quel valore e descrivi il problema in `warnings` e `uncertainFields`.
 - Restituisci comunque una bozza anche se titolo, categoria o sezioni sono
