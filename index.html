@@ -1111,13 +1111,25 @@
 
     const ingredientStopWords = new Set([
       'al', 'alla', 'alle', 'allo', 'agli', 'ai', 'a', 'con', 'da', 'de', 'del', 'della', 'delle', 'di', 'e',
-      'il', 'la', 'le', 'lo', 'gli', 'i', 'in', 'nel', 'nella', 'nei', 'per', 'su', 'un', 'una', 'uno', 'del',
+      'il', 'la', 'le', 'lo', 'gli', 'i', 'in', 'nel', 'nella', 'nei', 'nello', 'negli', 'sul', 'sulla', 'sullo',
+      'sui', 'sugli', 'sulle', 'per', 'su', 'un', 'una', 'uno', 'del',
       'ingrediente', 'ingredienti', 'procedimento', 'preparazione',
-      'circa', 'poco', 'poca', 'pochi', 'poche', 'quanto', 'qb', 'q', 'parte', 'parti', 'volta', 'volte',
+      'circa', 'poco', 'poca', 'pochi', 'poche', 'troppo', 'troppa', 'troppi', 'troppe', 'quanto', 'qb', 'q', 'parte', 'parti', 'volta', 'volte',
+      'non', 'senza', 'solo', 'sola', 'soli', 'sole', 'eventuale', 'eventuali', 'eventualmente',
+      'necessario', 'necessaria', 'necessari', 'necessarie', 'basta', 'basti', 'serve', 'servire',
+      'prima', 'dopo', 'poi', 'quindi', 'come', 'quando', 'mentre', 'che', 'se', 'anche', 'fino', 'finche',
+      'dal', 'dalla', 'dalle', 'dallo', 'dai', 'dagli', 'dei', 'degli', 'dell', 'sopra', 'sotto', 'entro', 'tra', 'fra',
+      'sua', 'suo', 'sue', 'suoi', 'loro', 'questa', 'questo', 'queste', 'questi', 'quella', 'quello', 'quelle', 'quelli',
+      'persona', 'persone', 'mezzo', 'mezza', 'mezzi', 'mezze', 'pari', 'mulinello', 'mlinello', 'piccante', 'piccanti',
+      'stagionato', 'stagionata', 'stagionati', 'stagionate', 'grattugiato', 'grattugiata', 'grattugiati', 'grattugiate',
+      'marino', 'marina', 'marini', 'marine', 'sodo', 'soda', 'sodi', 'sode', 'extra', 'vergine', 'vergini', 'piacere', 'consigliato',
+      'tagliato', 'tagliata', 'tagliati', 'tagliate', 'salato', 'salata', 'salati', 'salate', 'pestato', 'pestata', 'pestati', 'pestate',
+      'privato', 'privata', 'privati', 'private', 'nettato', 'nettata', 'nettati', 'nettate', 'sottilmente', 'bagno', 'moscata',
+      'meglio', 'nocciola', 'nocciole', 'latteria', 'latieria', 'friggere', 'friggera',
       'fresco', 'fresca', 'freschi', 'fresche', 'secco', 'secca', 'secchi', 'secche', 'buono', 'buona', 'buoni', 'buone',
       'forte', 'forti', 'grande', 'grandi', 'piccolo', 'piccola', 'piccoli', 'piccole', 'intero', 'intera', 'interi', 'intere',
       'bianco', 'bianca', 'bianchi', 'bianche', 'nero', 'nera', 'neri', 'nere', 'rosso', 'rossa', 'rossi', 'rosse', 'verde', 'verdi',
-      'giallo', 'gialla', 'gialli', 'gialle', 'caldo', 'calda', 'caldi', 'calde', 'freddo', 'fredda', 'freddi', 'fredde', 'tritato', 'tritata',
+      'giallo', 'gialla', 'gialli', 'gialle', 'caldo', 'calda', 'caldi', 'calde', 'freddo', 'fredda', 'freddi', 'fredde', 'trattato', 'trattata', 'trattati', 'trattate', 'tritato', 'tritata',
       'tritati', 'tritate', 'macinato', 'macinata', 'macinati', 'macinate', 'pelato', 'pelata', 'pelati',
       'pelate', 'sottile', 'sottili', 'grosso', 'grossa', 'grossi', 'grosse', 'maturi', 'mature', 'maturo', 'matura',
       'cucchiaio', 'cucchiai', 'cucchiaino', 'cucchiaini', 'bicchiere', 'bicchieri', 'mestolo', 'mestoli',
@@ -1128,14 +1140,23 @@
       'centilitro', 'centilitri', 'numero', 'numeri'
     ]);
 
+    const ingredientProcedureStartPattern = /^(?:dopo|ora|innanzitutto|in una|in un|a parte|nel frattempo|nel|nella|nello|nelle|nei|sul|sulla|sullo|sui|sugli|sulle|quando|appena|mett|vers|lav|tagli|prepar|cuoc|frig|scol|serv|impast|stend|dispon|cond|lasci|unite|aggiung|togli|fate|pass|pon|sistem|ricav|spolver|port|mescol|sbucc|pul|mond|batt|arrost|less|sbollent|marin|pest|incorpor|disoss|sfilett|sciogl|fond|mont|sovrap|rivest|copr|irror|strizz|asciug|trit|sminuzz|frantum|ripon|riprend|trascor|attend|otten|cal|stemper|riemp|form|arrot|divid|spacc|sgusc|ripul|frulla|manteca|sbriciol|amalgam|pesta|mescola|impastat|cuocete|versate)\b/i;
+
+    function isIngredientProcedureStart(value) {
+      return ingredientProcedureStartPattern.test(String(value || '').trim());
+    }
+
     const ingredientTokenAliases = new Map([
-      ['aceti', 'aceto'], ['acciughe', 'acciuga'], ['agrumi', 'agrume'], ['aromi', 'aroma'], ['asparagi', 'asparago'],
+      ['aceti', 'aceto'], ['acqa', 'acqua'], ['acciughe', 'acciuga'], ['agrumi', 'agrume'], ['aromi', 'aroma'], ['arina', 'farina'], ['asparagi', 'asparago'],
       ['carciofi', 'carciofo'], ['carote', 'carota'], ['castagne', 'castagna'], ['ceci', 'cece'], ['cipolle', 'cipolla'],
       ['cozze', 'cozza'], ['fagioli', 'fagiolo'], ['fave', 'fava'], ['foglie', 'foglia'], ['funghi', 'fungo'],
       ['gamberi', 'gambero'], ['melanzane', 'melanzana'], ['noci', 'noce'], ['olive', 'oliva'], ['patate', 'patata'],
       ['peperoni', 'peperone'], ['piselli', 'pisello'], ['pomodori', 'pomodoro'], ['rane', 'rana'], ['sarde', 'sarda'],
       ['scalogni', 'scalogno'], ['scampi', 'scampo'], ['seppie', 'seppia'], ['spezie', 'spezia'], ['spinaci', 'spinacio'],
-      ['tagliatelle', 'tagliatella'], ['uova', 'uovo'], ['vongole', 'vongola'], ['zucchine', 'zucchina']
+      ['tagliatelle', 'tagliatella'], ['uova', 'uovo'], ['ova', 'uovo'], ['vongole', 'vongola'], ['zucchine', 'zucchina'],
+      ['brro', 'burro'], ['ccchiao', 'cucchiaio'], ['ccchiaio', 'cucchiaio'], ['grattgiato', 'grattugiato'],
+      ['grattgiata', 'grattugiata'], ['oglie', 'foglia'], ['qindi', 'quindi'], ['scco', 'secco'], ['vergina', 'vergine'], ['zcchero', 'zucchero'],
+      ['limona', 'limone'], ['limoni', 'limone'], ['maiala', 'maiale'], ['proscitto', 'prosciutto'], ['strtto', 'strutto'], ['friggera', 'friggere'], ['latieria', 'latteria']
     ]);
 
     function clamp(value, minimum, maximum) {
@@ -1406,7 +1427,22 @@
       function collectClearSections(sections) {
         for (const section of sections || []) {
           const heading = normalizeSearchText(section.title);
-          if (heading.includes('ingredient') && !heading.includes('procedimento')) clearItems.push(...(section.items || []));
+          if (heading.includes('ingredient')) {
+            const sectionItems = [];
+            for (const item of section.items || []) {
+              const value = String(item || '').trim();
+              if (!value) continue;
+              if (/^ingredienti\b/i.test(value)) {
+                const inlineValue = value.replace(/^ingredienti\s*:?\s*/i, '').trim();
+                if (inlineValue && !/:\s*$/.test(inlineValue)) sectionItems.push(inlineValue);
+                continue;
+              }
+              if (/^vino consigliato\s*:/i.test(value)) break;
+              if (sectionItems.length && isIngredientProcedureStart(value)) break;
+              if (!/:\s*$/.test(value)) sectionItems.push(value);
+            }
+            clearItems.push(...sectionItems);
+          }
           collectClearSections(section.sections);
         }
       }
@@ -1436,7 +1472,7 @@
         let value = items[index].trim();
         if (index === inlineIngredients) value = value.slice(value.search(/\bingredienti\s*:/i) + value.match(/\bingredienti\s*:/i)[0].length).trim();
         if (!value || /^vino consigliato\s*:/i.test(value)) break;
-        if (index > first && /^(?:dopo|ora|innanzitutto|in una|in un|a parte|nel frattempo|quando|appena|mett|vers|lav|tagli|prepar|cuoc|frig|scol|serv|impast|stend|dispon|cond|lasci|unite|aggiung|togli|fate|pass|pon|sistem|ricav|spolver|port|mescol|sbucc|pul|mond|batt|arrost|less|sbollent|marin|pest|incorpor|disoss|sfilett|sciogl|fond|mont|sovrap|rivest|copr|irror|strizz|asciug|trit|sminuzz|frantum|ripon|riprend|trascor|attend|otten|cal|stemper|riemp|form|arrot|divid|spacc|sgusc)/i.test(value)) break;
+        if (index > first && isIngredientProcedureStart(value)) break;
         if (!/:\s*$/.test(value)) result.push(value);
       }
       return result;
