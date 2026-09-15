@@ -51,6 +51,25 @@ la chiamata: usa una chiave Gemini separata, con quota e limiti di spesa ridotti
 Il prompt e lo schema non sono segreti e possono essere modificati e pubblicati
 indipendentemente dal codice.
 
+## Ricerca per ingredienti fotografati
+
+Nel lettore, **Cosa posso cucinare?** permette di aggiungere fino a sei foto di
+frigo, dispensa o piano di lavoro, anche in più passaggi. Gemini riconosce solo
+gli alimenti realmente visibili e restituisce quantità e confidenza quando sono
+leggibili; non completa automaticamente spezie o ingredienti non fotografati.
+Prima della ricerca l’elenco è sempre modificabile: controlla, correggi o
+aggiungi gli ingredienti riconosciuti.
+
+La prima analisi richiede la password Admin se la chiave AI non è già presente
+nella sessione. Se l’utente è già entrato come Admin e ha riattivato le funzioni
+Admin, non viene richiesta una seconda volta. La chiave e le fotografie restano
+solo nella memoria della scheda e non vengono salvate nel dataset o nel browser.
+
+Il ranking delle ricette è locale: considera la percentuale di ingredienti
+coperti e dà più peso agli ingredienti rari nel dataset. Le corrispondenze sono
+indicative; l’elenco mostra anche gli ingredienti eventualmente mancanti e non
+modifica mai le ricette.
+
 ## Sostituire il PAT passo per passo
 
 La sostituzione del PAT rigenera il payload cifrato e non richiede modifiche a
@@ -103,6 +122,8 @@ Poi apri `http://localhost:8000/index.html` e verifica:
 - gestione password lettori continua a funzionare;
 - con una configurazione AI valida, foto e PDF compilano una bozza ricetta;
 - una bozza AI mostra gli eventuali warning e richiede revisione manuale;
+- la ricerca per ingredienti permette di aggiungere più foto, richiede lo
+  sblocco Admin al primo uso, mostra l’elenco riconosciuto e ordina le ricette;
 - dopo logout il contenuto scompare.
 
 Per i lettori, dopo il primo accesso la sessione viene ricordata solo nella scheda

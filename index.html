@@ -75,6 +75,33 @@
     .admin-recipe-workspace { display:grid; grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr); gap:1rem; align-items:start; }
     .admin-recipe-browser { min-width:0; }
     .reader-toolbar { position:sticky; top:.5rem; z-index:2; display:grid; grid-template-columns:minmax(0,1fr) 220px 260px; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:var(--overlay); box-shadow:0 5px 18px var(--shadow-strong); }
+    .ingredient-search-panel { display:grid; gap:.75rem; margin:1rem 0; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
+    .ingredient-search-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
+    .ingredient-search-header h2,.ingredient-search-header p { margin:0; }
+    .ingredient-search-header p { max-width:48rem; color:var(--muted); font-size:.9rem; }
+    .ingredient-search-panel input[type="file"] { padding:.55rem; }
+    .ingredient-file-list { margin:0; color:var(--muted); font-size:.85rem; }
+    .ingredient-ai-unlock { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:end; padding:.75rem; border:1px solid var(--warning-line); border-radius:9px; background:var(--warning-bg); }
+    .ingredient-ai-unlock p { grid-column:1 / -1; margin:0; color:var(--muted); font-size:.88rem; }
+    .ingredient-inventory { display:grid; gap:.65rem; padding-top:.35rem; border-top:1px solid var(--line); }
+    .ingredient-inventory-header { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .ingredient-inventory-header h3,.ingredient-inventory-header p { margin:0; }
+    .ingredient-inventory-header p { color:var(--muted); font-size:.85rem; }
+    .ingredient-list { display:grid; gap:.5rem; }
+    .ingredient-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(7rem,.35fr) auto; gap:.55rem; align-items:end; }
+    .ingredient-row label { min-width:0; }
+    .ingredient-row small { align-self:center; color:var(--muted); font-size:.75rem; }
+    .ingredient-row button { padding:.45rem .65rem; }
+    .ingredient-results { display:grid; gap:.65rem; padding-top:.75rem; border-top:1px solid var(--line); }
+    .ingredient-results-header { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .ingredient-results-header h3,.ingredient-results-header p { margin:0; }
+    .ingredient-results-header p { color:var(--muted); font-size:.85rem; }
+    .ingredient-recipe-list { display:grid; gap:.55rem; }
+    .ingredient-recipe-result { display:grid; gap:.2rem; width:100%; padding:.85rem 1rem; border:1px solid var(--line); border-radius:10px; background:var(--card); color:var(--ink); text-align:left; }
+    .ingredient-recipe-result:hover { border-color:var(--accent); box-shadow:0 4px 14px var(--shadow-strong); }
+    .ingredient-recipe-result-title { font-weight:800; }
+    .ingredient-recipe-result-meta,.ingredient-recipe-result-missing { color:var(--muted); font-size:.82rem; }
+    .ingredient-recipe-result-missing { color:var(--danger); }
     .search-input-wrap { position:relative; display:block; }
     .search-input-wrap input { padding-right:2.75rem; }
     .search-clear { position:absolute; top:50%; right:.35rem; width:2rem; height:2rem; padding:0; transform:translateY(-50%); border-radius:50%; background:transparent !important; color:var(--muted) !important; font-size:1.25rem; line-height:1; }
@@ -96,6 +123,9 @@
     .recipe-detail-toolbar { display:flex; justify-content:flex-start; margin-bottom:.75rem; }
     .recipe-detail-content { border:1px solid var(--line); border-radius:12px; padding:clamp(1rem,2vw,1.5rem); background:var(--card); }
     .recipe-detail-content .recipe-card { border:0; padding:0; }
+    @media (min-width:761px) {
+      .reader-layout.has-selection .recipe-detail { position:sticky; top:5.75rem; max-height:calc(100vh - 6.25rem); overflow-y:auto; scrollbar-gutter:stable; }
+    }
     .recipe-media { position:relative; aspect-ratio:16/8; overflow:hidden; margin:0 0 1.35rem; border-radius:16px; background:var(--media-bg); box-shadow:0 8px 24px var(--shadow-strong); }
     .recipe-media::after { position:absolute; inset:35% 0 0; background:linear-gradient(180deg,transparent,#17212bb8); content:""; pointer-events:none; }
     .recipe-media img { display:block; width:100%; height:100%; object-fit:cover; }
@@ -178,6 +208,8 @@
       .recipe-publish-bar { position:static; padding:0; border:0; background:transparent; box-shadow:none; }
       .admin-reauth-form { grid-template-columns:1fr; }
       .reader-row { grid-template-columns:1fr; align-items:stretch; }
+      .ingredient-search-header,.ingredient-inventory-header,.ingredient-results-header { align-items:flex-start; flex-direction:column; }
+      .ingredient-ai-unlock,.ingredient-row { grid-template-columns:1fr; align-items:stretch; }
       .topbar { align-items:flex-start; flex-direction:column; }
       .source-row { grid-template-columns:1fr; }
       .login-card { margin:2rem 0 0; }
@@ -239,6 +271,50 @@
       </div>
       <article class="card">
         <p id="content-status" class="status" role="status" aria-live="polite">Caricamento…</p>
+        <section id="ingredient-search-panel" class="ingredient-search-panel" aria-labelledby="ingredient-search-title">
+          <div class="ingredient-search-header">
+            <div>
+              <h2 id="ingredient-search-title">Cosa posso cucinare?</h2>
+              <p>Fotografa frigo, dispensa o più gruppi di ingredienti. L’AI riconosce solo ciò che vede; poi il ricettario ordina localmente le ricette per copertura e pertinenza.</p>
+            </div>
+            <span id="ingredient-ai-badge" class="badge">Analisi protetta</span>
+          </div>
+          <label for="ingredient-photo-input">Foto degli ingredienti (puoi aggiungerne più di una)
+            <input id="ingredient-photo-input" type="file" accept="image/*" capture="environment" multiple>
+          </label>
+          <p id="ingredient-photo-list" class="ingredient-file-list">Puoi aggiungere fino a 6 foto.</p>
+          <div class="actions">
+            <button id="ingredient-analyze-button" type="button" disabled>Analizza ingredienti</button>
+            <button id="ingredient-clear-button" class="secondary" type="button" disabled>Azzera</button>
+          </div>
+          <form id="ingredient-ai-unlock" class="ingredient-ai-unlock" hidden>
+            <p>Per la prima analisi inserisci la password Admin. La chiave AI verrà usata solo nella memoria di questa scheda.</p>
+            <label for="ingredient-ai-password">Password Admin
+              <input id="ingredient-ai-password" type="password" autocomplete="current-password" required>
+            </label>
+            <button id="ingredient-ai-unlock-button" type="submit">Sblocca analisi</button>
+          </form>
+          <div id="ingredient-inventory" class="ingredient-inventory" hidden>
+            <div class="ingredient-inventory-header">
+              <h3>Ingredienti riconosciuti</h3>
+              <p>Controllali: puoi correggere, eliminare o aggiungere voci prima della ricerca.</p>
+            </div>
+            <div id="ingredient-list" class="ingredient-list"></div>
+            <div class="actions">
+              <button id="add-ingredient-button" class="secondary" type="button">Aggiungi ingrediente</button>
+              <button id="find-ingredient-recipes-button" type="button" disabled>Trova ricette</button>
+            </div>
+          </div>
+          <div id="ingredient-results" class="ingredient-results" hidden>
+            <div class="ingredient-results-header">
+              <h3>Ricette possibili</h3>
+              <p id="ingredient-results-count"></p>
+            </div>
+            <div id="ingredient-recipe-list" class="ingredient-recipe-list"></div>
+            <p id="ingredient-no-results" class="status" hidden>Nessuna ricetta ha ingredienti riconosciuti sufficienti. Prova ad aggiungere o correggere una voce.</p>
+          </div>
+          <p id="ingredient-ai-status" class="status" role="status" aria-live="polite"></p>
+        </section>
         <div class="reader-toolbar">
           <label for="search-input">Cerca ricette, ingredienti o parole chiave
             <span class="search-input-wrap">
@@ -466,8 +542,13 @@
     const RECIPE_MEDIA_PATH = 'datasets/recipe-media.json';
     const AI_PROMPT_PATH = 'prompts/recipe-extraction.md';
     const AI_SCHEMA_PATH = 'prompts/recipe-schema.json';
+    const AI_INGREDIENT_PROMPT_PATH = 'prompts/ingredient-detection.md';
+    const AI_INGREDIENT_SCHEMA_PATH = 'prompts/ingredient-detection-schema.json';
     const AI_DEFAULT_MODEL = 'gemini-flash-latest';
     const AI_MAX_FILE_BYTES = 20 * 1024 * 1024;
+    const AI_MAX_INGREDIENT_IMAGES = 6;
+    const AI_MAX_INGREDIENT_FILE_BYTES = 12 * 1024 * 1024;
+    const AI_MAX_INGREDIENT_TOTAL_BYTES = 40 * 1024 * 1024;
     const SESSION_ROLE_KEY = 'ricettario-session-role-v2';
     const READER_SESSION_KEY = 'ricettario-reader-session-v1';
     const THEME_STORAGE_KEY = 'ricettario-theme-v1';
@@ -494,6 +575,10 @@
     let selectedRecipeId = null;
     let editingRecipeId = null;
     let session = { role: null, token: null, llmKey: null };
+    let ingredientFiles = [];
+    let detectedIngredients = [];
+    let ingredientSearchResults = [];
+    let ingredientFrequency = null;
 
     const $ = (selector) => document.querySelector(selector);
     const loginView = $('#login-view');
@@ -933,6 +1018,400 @@
       const warnings = [...draft.warnings, ...draft.uncertainFields.map((field) => `Verifica: ${field}`)];
       setStatus($('#recipe-editor-status'), warnings.length ? `Bozza importata. Controlla: ${warnings.join(' · ')}` : 'Bozza importata. Controlla il form prima di salvare.', warnings.length ? '' : 'ok');
       setStatus($('#ai-status'), `Analisi completata: ${file.name}.`, 'ok');
+    }
+
+    const ingredientStopWords = new Set([
+      'al', 'alla', 'alle', 'allo', 'agli', 'ai', 'a', 'con', 'da', 'de', 'del', 'della', 'delle', 'di', 'e',
+      'il', 'la', 'le', 'lo', 'gli', 'i', 'in', 'nel', 'nella', 'nei', 'per', 'su', 'un', 'una', 'uno', 'del',
+      'ingrediente', 'ingredienti', 'procedimento', 'preparazione',
+      'circa', 'poco', 'poca', 'pochi', 'poche', 'quanto', 'qb', 'q', 'parte', 'parti', 'volta', 'volte',
+      'fresco', 'fresca', 'freschi', 'fresche', 'secco', 'secca', 'secchi', 'secche', 'buono', 'buona', 'buoni', 'buone',
+      'forte', 'forti', 'grande', 'grandi', 'piccolo', 'piccola', 'piccoli', 'piccole', 'intero', 'intera', 'interi', 'intere',
+      'bianco', 'bianca', 'bianchi', 'bianche', 'nero', 'nera', 'neri', 'nere', 'rosso', 'rossa', 'rossi', 'rosse', 'verde', 'verdi',
+      'giallo', 'gialla', 'gialli', 'gialle', 'caldo', 'calda', 'caldi', 'calde', 'freddo', 'fredda', 'freddi', 'fredde', 'tritato', 'tritata',
+      'tritati', 'tritate', 'macinato', 'macinata', 'macinati', 'macinate', 'pelato', 'pelata', 'pelati',
+      'pelate', 'sottile', 'sottili', 'grosso', 'grossa', 'grossi', 'grosse', 'maturi', 'mature', 'maturo', 'matura',
+      'cucchiaio', 'cucchiai', 'cucchiaino', 'cucchiaini', 'bicchiere', 'bicchieri', 'mestolo', 'mestoli',
+      'fetta', 'fette', 'spicchio', 'spicchi', 'rametto', 'rametti', 'foglia', 'foglie', 'pugno', 'pugni',
+      'mazzetto', 'mazzetti', 'ciuffo', 'ciuffi', 'gambo', 'gambi', 'pezzo', 'pezzi', 'pizzico', 'pizzichi',
+      'bustina', 'bustine', 'busta', 'buste', 'barattolo', 'barattoli', 'scatola', 'scatole', 'litro', 'litri',
+      'grammo', 'grammi', 'chilogrammo', 'chilogrammi', 'millilitro', 'millilitri', 'decilitro', 'decilitri',
+      'centilitro', 'centilitri', 'numero', 'numeri'
+    ]);
+
+    const ingredientTokenAliases = new Map([
+      ['aceti', 'aceto'], ['acciughe', 'acciuga'], ['agrumi', 'agrume'], ['aromi', 'aroma'], ['asparagi', 'asparago'],
+      ['carciofi', 'carciofo'], ['carote', 'carota'], ['castagne', 'castagna'], ['ceci', 'cece'], ['cipolle', 'cipolla'],
+      ['cozze', 'cozza'], ['fagioli', 'fagiolo'], ['fave', 'fava'], ['foglie', 'foglia'], ['funghi', 'fungo'],
+      ['gamberi', 'gambero'], ['melanzane', 'melanzana'], ['noci', 'noce'], ['olive', 'oliva'], ['patate', 'patata'],
+      ['peperoni', 'peperone'], ['piselli', 'pisello'], ['pomodori', 'pomodoro'], ['rane', 'rana'], ['sarde', 'sarda'],
+      ['scalogni', 'scalogno'], ['scampi', 'scampo'], ['seppie', 'seppia'], ['spezie', 'spezia'], ['spinaci', 'spinacio'],
+      ['tagliatelle', 'tagliatella'], ['uova', 'uovo'], ['vongole', 'vongola'], ['zucchine', 'zucchina']
+    ]);
+
+    function clamp(value, minimum, maximum) {
+      return Math.min(maximum, Math.max(minimum, value));
+    }
+
+    function normalizeIngredientToken(value) {
+      const token = normalizeSearchText(value).replace(/[^a-z0-9]/g, '');
+      if (!token) return '';
+      if (ingredientTokenAliases.has(token)) return ingredientTokenAliases.get(token);
+      if (token.length > 5 && token.endsWith('i')) return `${token.slice(0, -1)}o`;
+      if (token.length > 5 && token.endsWith('e')) return `${token.slice(0, -1)}a`;
+      return token;
+    }
+
+    function ingredientTerms(value) {
+      return [...new Set(normalizeSearchText(value)
+        .split(' ')
+        .filter((token) => token.length >= 3 && !ingredientStopWords.has(token) && !/^\d+$/.test(token))
+        .map(normalizeIngredientToken)
+        .filter((token) => token.length >= 3 && !ingredientStopWords.has(token)))];
+    }
+
+    function normalizeIngredientName(value) {
+      return ingredientTerms(value).join(' ').trim();
+    }
+
+    function normalizeIngredientDetection(data) {
+      const warnings = stringArray(data?.warnings);
+      const uncertainFields = stringArray(data?.uncertainFields);
+      const byName = new Map();
+      for (const [index, item] of (Array.isArray(data?.ingredients) ? data.ingredients : []).entries()) {
+        if (!item || typeof item !== 'object') {
+          warnings.push(`Voce ingrediente ${index + 1} non valida.`);
+          continue;
+        }
+        const name = String(item.name || '').trim();
+        const canonicalName = String(item.canonicalName || name).trim();
+        const key = normalizeIngredientName(canonicalName || name);
+        if (!key) {
+          warnings.push(`Voce ingrediente ${index + 1} senza nome utilizzabile.`);
+          continue;
+        }
+        const normalized = {
+          name: name || canonicalName,
+          canonicalName: canonicalName || name,
+          quantity: String(item.quantity || '').trim(),
+          confidence: clamp(Number.isFinite(Number(item.confidence)) ? Number(item.confidence) : 0, 0, 1),
+          evidence: String(item.evidence || '').trim()
+        };
+        const previous = byName.get(key);
+        if (!previous || normalized.confidence > previous.confidence) byName.set(key, normalized);
+      }
+      if (!byName.size) warnings.push('Nessun ingrediente riconoscibile nelle immagini.');
+      return {
+        ingredients: [...byName.values()],
+        warnings: [...new Set(warnings)],
+        uncertainFields: [...new Set(uncertainFields)]
+      };
+    }
+
+    async function loadAiIngredientAssets() {
+      const version = encodeURIComponent(String(appConfig.version || Date.now()));
+      const [promptResponse, schemaResponse] = await Promise.all([
+        fetch(`${AI_INGREDIENT_PROMPT_PATH}?v=${version}`, { cache: 'no-store' }),
+        fetch(`${AI_INGREDIENT_SCHEMA_PATH}?v=${version}`, { cache: 'no-store' })
+      ]);
+      if (!promptResponse.ok || !schemaResponse.ok) throw new Error('Prompt o schema per gli ingredienti non disponibili.');
+      return { prompt: await promptResponse.text(), schema: await schemaResponse.json() };
+    }
+
+    function updateIngredientSearchControls() {
+      const input = $('#ingredient-photo-input');
+      const analyzeButton = $('#ingredient-analyze-button');
+      const clearButton = $('#ingredient-clear-button');
+      const findButton = $('#find-ingredient-recipes-button');
+      if (!input || !analyzeButton) return;
+      const configured = Boolean(session.role && appConfig?.ai?.provider === 'gemini' && appConfig.ai.crypto);
+      input.disabled = !configured;
+      analyzeButton.disabled = !configured || !ingredientFiles.length;
+      clearButton.disabled = !ingredientFiles.length && !detectedIngredients.length;
+      findButton.disabled = !detectedIngredients.some((ingredient) => normalizeIngredientName(ingredient.canonicalName || ingredient.name));
+      $('#ingredient-ai-badge').textContent = session.llmKey ? 'Analisi sbloccata' : configured ? 'Richiede Admin' : 'AI non configurata';
+    }
+
+    function renderIngredientFiles() {
+      const label = $('#ingredient-photo-list');
+      if (!ingredientFiles.length) {
+        label.textContent = 'Puoi aggiungere fino a 6 foto.';
+        return;
+      }
+      label.textContent = ingredientFiles.map((file) => `${file.name} (${Math.ceil(file.size / 1024)} KB)`).join(' · ');
+    }
+
+    function invalidateIngredientResults() {
+      ingredientSearchResults = [];
+      $('#ingredient-results').hidden = true;
+    }
+
+    function renderIngredientInventory() {
+      const inventory = $('#ingredient-inventory');
+      const list = $('#ingredient-list');
+      list.replaceChildren();
+      inventory.hidden = !detectedIngredients.length;
+      detectedIngredients.forEach((ingredient, index) => {
+        const row = document.createElement('div');
+        row.className = 'ingredient-row';
+
+        const nameLabel = document.createElement('label');
+        nameLabel.textContent = 'Ingrediente';
+        const nameInput = document.createElement('input');
+        nameInput.className = 'ingredient-name';
+        nameInput.value = ingredient.canonicalName || ingredient.name || '';
+        nameInput.placeholder = 'es. pomodoro';
+        nameLabel.appendChild(nameInput);
+        row.appendChild(nameLabel);
+
+        const quantityLabel = document.createElement('label');
+        quantityLabel.textContent = 'Quantità visibile';
+        const quantityInput = document.createElement('input');
+        quantityInput.className = 'ingredient-quantity';
+        quantityInput.value = ingredient.quantity || '';
+        quantityInput.placeholder = 'facoltativa';
+        quantityLabel.appendChild(quantityInput);
+        row.appendChild(quantityLabel);
+
+        const actions = document.createElement('div');
+        const confidence = document.createElement('small');
+        confidence.textContent = `${Math.round((ingredient.confidence || 0) * 100)}% affidabilità`;
+        actions.appendChild(confidence);
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'danger';
+        remove.textContent = 'Rimuovi';
+        remove.addEventListener('click', () => {
+          invalidateIngredientResults();
+          detectedIngredients.splice(index, 1);
+          renderIngredientInventory();
+          updateIngredientSearchControls();
+        });
+        actions.appendChild(remove);
+        row.appendChild(actions);
+        list.appendChild(row);
+      });
+      updateIngredientSearchControls();
+    }
+
+    function readIngredientInventory() {
+      return [...$('#ingredient-list').querySelectorAll('.ingredient-row')].map((row, index) => ({
+        ...(detectedIngredients[index] || {}),
+        name: row.querySelector('.ingredient-name').value.trim(),
+        canonicalName: row.querySelector('.ingredient-name').value.trim(),
+        quantity: row.querySelector('.ingredient-quantity').value.trim(),
+        confidence: detectedIngredients[index]?.confidence || 1
+      })).filter((ingredient) => normalizeIngredientName(ingredient.canonicalName));
+    }
+
+    function addManualIngredient() {
+      invalidateIngredientResults();
+      detectedIngredients.push({ name: '', canonicalName: '', quantity: '', confidence: 1, evidence: 'Inserito manualmente.' });
+      renderIngredientInventory();
+      $('#ingredient-list .ingredient-row:last-child .ingredient-name')?.focus();
+    }
+
+    function recipeIngredientItems(recipe) {
+      const clearItems = [];
+      function collectClearSections(sections) {
+        for (const section of sections || []) {
+          const heading = normalizeSearchText(section.title);
+          if (heading.includes('ingredient') && !heading.includes('procedimento')) clearItems.push(...(section.items || []));
+          collectClearSections(section.sections);
+        }
+      }
+      collectClearSections(recipe.sections);
+      if (clearItems.length) return clearItems.filter((item) => !/:\s*$/.test(item.trim()));
+
+      const items = [];
+      function collectItems(sections) {
+        for (const section of sections || []) {
+          items.push(...(section.items || []));
+          collectItems(section.sections);
+        }
+      }
+      collectItems(recipe.sections);
+      const inlineIngredients = items.findIndex((item) => {
+        const marker = item.match(/\bingredienti\s*:/i);
+        return marker && item.slice(marker.index + marker[0].length).trim();
+      });
+      const start = inlineIngredients >= 0
+        ? inlineIngredients
+        : items.findIndex((item) => /^ingredienti\b/i.test(item.trim()) || /^(?:kg|g|mg|l|dl|cl|ml|n[.]?|una?|uno|due|tre|quattro|sale|pepe|olio|acqua|burro|farina|semola|zucchero)\b/i.test(item.trim()));
+      if (start < 0) return [];
+
+      const result = [];
+      const first = start > 0 && /^per\b/i.test(items[start - 1].trim()) ? start - 1 : start;
+      for (let index = first; index < items.length && result.length < 24; index += 1) {
+        let value = items[index].trim();
+        if (index === inlineIngredients) value = value.slice(value.search(/\bingredienti\s*:/i) + value.match(/\bingredienti\s*:/i)[0].length).trim();
+        if (!value || /^vino consigliato\s*:/i.test(value)) break;
+        if (index > first && /^(?:dopo|ora|innanzitutto|in una|in un|a parte|nel frattempo|quando|appena|mett|vers|lav|tagli|prepar|cuoc|frig|scol|serv|impast|stend|dispon|cond|lasci|unite|aggiung|togli|fate|pass|pon|sistem|ricav|spolver|port|mescol|sbucc|pul|mond|batt|arrost|less|sbollent|marin|pest|incorpor|disoss|sfilett|sciogl|fond|mont|sovrap|rivest|copr|irror|strizz|asciug|trit|sminuzz|frantum|ripon|riprend|trascor|attend|otten|cal|stemper|riemp|form|arrot|divid|spacc|sgusc)/i.test(value)) break;
+        if (!/:\s*$/.test(value)) result.push(value);
+      }
+      return result;
+    }
+
+    function buildIngredientFrequency() {
+      if (ingredientFrequency) return ingredientFrequency;
+      ingredientFrequency = new Map();
+      for (const recipe of recipeDataset) {
+        const terms = new Set(ingredientTerms(recipeIngredientItems(recipe).join(' ')));
+        for (const term of terms) ingredientFrequency.set(term, (ingredientFrequency.get(term) || 0) + 1);
+      }
+      return ingredientFrequency;
+    }
+
+    function ingredientRarity(term) {
+      const frequency = buildIngredientFrequency().get(term) || 0;
+      return 1 + Math.log((recipeDataset.length + 1) / (frequency + 1));
+    }
+
+    function rankRecipesByIngredients(inventory) {
+      const inventoryTerms = new Map();
+      for (const ingredient of inventory) {
+        const confidence = clamp(Number(ingredient.confidence) || 1, 0, 1);
+        for (const term of ingredientTerms(ingredient.canonicalName || ingredient.name)) {
+          inventoryTerms.set(term, Math.max(inventoryTerms.get(term) || 0, confidence));
+        }
+      }
+      const matchesTerm = (term) => [...inventoryTerms.keys()].some((available) => available === term);
+      return recipeDataset.map((recipe, index) => {
+        const required = [...new Set(ingredientTerms(recipeIngredientItems(recipe).join(' ')))];
+        if (!required.length) return null;
+        const matched = required.filter(matchesTerm);
+        if (!matched.length) return null;
+        const missing = required.filter((term) => !matchesTerm(term)).sort((left, right) => ingredientRarity(right) - ingredientRarity(left));
+        const totalRarity = required.reduce((total, term) => total + ingredientRarity(term), 0);
+        const matchedRarity = matched.reduce((total, term) => total + ingredientRarity(term), 0);
+        const coverage = matched.length / required.length;
+        const rareCoverage = matchedRarity / totalRarity;
+        const confidence = matched.reduce((total, term) => total + (inventoryTerms.get(term) || 0), 0) / matched.length;
+        const countFactor = 1 - Math.exp(-matched.length / 3);
+        return {
+          recipe,
+          index,
+          score: .55 * coverage + .25 * rareCoverage + .1 * confidence + .1 * countFactor,
+          coverage,
+          rareCoverage,
+          matchedCount: matched.length,
+          requiredCount: required.length,
+          missing: missing.slice(0, 5)
+        };
+      }).filter(Boolean)
+        .sort((left, right) => right.score - left.score || right.coverage - left.coverage || right.matchedCount - left.matchedCount || left.index - right.index);
+    }
+
+    function renderIngredientRecipeResults() {
+      const container = $('#ingredient-recipe-list');
+      container.replaceChildren();
+      ingredientSearchResults.forEach((entry) => {
+        const result = document.createElement('button');
+        result.type = 'button';
+        result.className = 'ingredient-recipe-result';
+        result.dataset.recipeId = entry.recipe.id;
+
+        const meta = document.createElement('span');
+        meta.className = 'ingredient-recipe-result-meta';
+        meta.textContent = `${Math.round(entry.score * 100)}% pertinenza · ${Math.round(entry.coverage * 100)}% coperti · ${entry.matchedCount}/${entry.requiredCount} ingredienti${sourceCatalog.length > 1 ? ` · ${sourceLabel(entry.recipe.sourceId)}` : ''}`;
+        result.appendChild(meta);
+
+        const title = document.createElement('span');
+        title.className = 'ingredient-recipe-result-title';
+        title.textContent = entry.recipe.title;
+        result.appendChild(title);
+
+        if (entry.missing.length) {
+          const missing = document.createElement('span');
+          missing.className = 'ingredient-recipe-result-missing';
+          missing.textContent = `Mancano forse: ${entry.missing.join(', ')}`;
+          result.appendChild(missing);
+        }
+        container.appendChild(result);
+      });
+      $('#ingredient-results').hidden = false;
+      $('#ingredient-results-count').textContent = ingredientSearchResults.length
+        ? `${ingredientSearchResults.length} risultati ordinati per copertura e rarità`
+        : '';
+      $('#ingredient-no-results').hidden = ingredientSearchResults.length > 0;
+    }
+
+    function findIngredientRecipes() {
+      detectedIngredients = readIngredientInventory();
+      ingredientSearchResults = rankRecipesByIngredients(detectedIngredients).slice(0, 50);
+      renderIngredientInventory();
+      renderIngredientRecipeResults();
+      setStatus($('#ingredient-ai-status'), ingredientSearchResults.length
+        ? `Trovate ${ingredientSearchResults.length} ricette compatibili.`
+        : 'Nessuna ricetta compatibile con gli ingredienti indicati.');
+    }
+
+    async function unlockIngredientAi(password) {
+      if (session.llmKey) return;
+      if (!appConfig?.ai?.crypto) throw new Error('API key Gemini non configurata.');
+      try {
+        session.llmKey = (await decryptSecret(password, appConfig.ai.crypto)).trim();
+      } catch {
+        throw new Error('Password Admin errata oppure API key AI non decifrabile.');
+      }
+      if (!session.llmKey) throw new Error('API key AI vuota.');
+      updateAiImportControls();
+      updateIngredientSearchControls();
+    }
+
+    async function analyzeIngredientPhotos() {
+      if (!ingredientFiles.length) throw new Error('Seleziona almeno una foto.');
+      if (!session.llmKey || appConfig?.ai?.provider !== 'gemini') throw new Error('Sblocca prima l’analisi con la password Admin.');
+      const { prompt, schema } = await loadAiIngredientAssets();
+      const imageParts = await Promise.all(ingredientFiles.map(async (file) => ({
+        inlineData: { mimeType: file.type || 'image/jpeg', data: bytesToBase64(new Uint8Array(await file.arrayBuffer())) }
+      })));
+      const model = AI_DEFAULT_MODEL;
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+      const request = {
+        contents: [{ parts: [
+          { text: `${prompt}\n\nSchema JSON obbligatorio:\n${JSON.stringify(schema, null, 2)}\n\nRestituisci esclusivamente un oggetto JSON valido.` },
+          ...imageParts
+        ] }],
+        generationConfig: { responseMimeType: 'application/json', temperature: 0, maxOutputTokens: 4096 }
+      };
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': session.llmKey },
+        body: JSON.stringify(request)
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error?.message || `Gemini API: HTTP ${response.status}`);
+      const modelText = (result.candidates?.[0]?.content?.parts || []).map((part) => part.text || '').join('');
+      const detection = normalizeIngredientDetection(parseModelJson(modelText));
+      detectedIngredients = detection.ingredients;
+      ingredientSearchResults = [];
+      renderIngredientInventory();
+      $('#ingredient-results').hidden = true;
+      const messages = [...detection.warnings, ...detection.uncertainFields.map((field) => `Verifica: ${field}`)];
+      setStatus($('#ingredient-ai-status'), messages.length
+        ? `Analisi completata con avvertenze: ${messages.join(' · ')}`
+        : `Riconosciuti ${detectedIngredients.length} ingredienti. Controllali prima della ricerca.`, messages.length ? '' : 'ok');
+    }
+
+    function clearIngredientSearch() {
+      ingredientFiles = [];
+      detectedIngredients = [];
+      invalidateIngredientResults();
+      ingredientFrequency = null;
+      $('#ingredient-photo-input').value = '';
+      $('#ingredient-ai-unlock').hidden = true;
+      $('#ingredient-ai-password').value = '';
+      $('#ingredient-results').hidden = true;
+      renderIngredientFiles();
+      renderIngredientInventory();
+      setStatus($('#ingredient-ai-status'), '');
+      updateIngredientSearchControls();
+    }
+
+    function requestIngredientAiUnlock() {
+      $('#ingredient-ai-unlock').hidden = false;
+      $('#ingredient-ai-password').focus();
     }
 
     function normalizeSearch(value) {
@@ -1587,6 +2066,7 @@
 
     function applyReaderDatasets() {
       recipeDataset = flattenSourceDatasets();
+      ingredientFrequency = null;
       recipeDatasetSource = '';
       recipeDatasetSourceId = '';
       populateAllSourceSelectors();
@@ -1692,6 +2172,7 @@
         switchAdminPanel('recipes');
       }
       updateAiImportControls();
+      updateIngredientSearchControls();
     }
 
     async function reactivateAdminSecrets(password) {
@@ -1722,6 +2203,8 @@
       await loadAdminSourceCatalog();
       rememberSessionRole('admin');
       $('#admin-session-notice').hidden = true;
+      updateAiImportControls();
+      updateIngredientSearchControls();
       setStatus($('#admin-reauth-status'), 'Funzioni Admin riattivate fino al prossimo refresh.', 'ok');
     }
 
@@ -1757,6 +2240,7 @@
     }
 
     function logout() {
+      clearIngredientSearch();
       session = { role: null, token: null, llmKey: null };
       updatePageTitle();
       clearSessionRole();
@@ -1790,6 +2274,7 @@
       $('#recipe-source-file').value = '';
       $('#recipe-source-name').textContent = '';
       setStatus($('#ai-status'), '');
+      updateIngredientSearchControls();
       $('#reader-password-list').replaceChildren();
       $('#admin-session-notice').hidden = true;
       $('#admin-reauth-password').value = '';
@@ -1890,6 +2375,84 @@
       if (recipe) showRecipeDetail(recipe);
     });
     $('#back-to-results-button').addEventListener('click', () => closeRecipeDetail());
+    $('#ingredient-photo-input').addEventListener('change', () => {
+      const input = $('#ingredient-photo-input');
+      try {
+        const selectedFiles = [...input.files];
+        const existingKeys = new Set(ingredientFiles.map((file) => `${file.name}:${file.size}:${file.lastModified}:${file.type}`));
+        const files = [...ingredientFiles, ...selectedFiles.filter((file) => {
+          const key = `${file.name}:${file.size}:${file.lastModified}:${file.type}`;
+          if (existingKeys.has(key)) return false;
+          existingKeys.add(key);
+          return true;
+        })];
+        if (files.length > AI_MAX_INGREDIENT_IMAGES) throw new Error(`Puoi selezionare al massimo ${AI_MAX_INGREDIENT_IMAGES} foto.`);
+        if (files.some((file) => !file.type.startsWith('image/'))) throw new Error('Sono accettate solo immagini.');
+        if (files.some((file) => file.size > AI_MAX_INGREDIENT_FILE_BYTES)) throw new Error('Ogni foto deve essere inferiore a 12 MB.');
+        const totalSize = files.reduce((total, file) => total + file.size, 0);
+        if (totalSize > AI_MAX_INGREDIENT_TOTAL_BYTES) throw new Error('Le foto selezionate superano complessivamente 40 MB.');
+        ingredientFiles = files;
+        invalidateIngredientResults();
+        renderIngredientFiles();
+        setStatus($('#ingredient-ai-status'), files.length ? 'Foto pronte per l’analisi.' : '');
+      } catch (error) {
+        input.value = '';
+        renderIngredientFiles();
+        setStatus($('#ingredient-ai-status'), error.message, 'error');
+      }
+      updateIngredientSearchControls();
+    });
+    $('#ingredient-analyze-button').addEventListener('click', async () => {
+      if (!session.llmKey) {
+        requestIngredientAiUnlock();
+        return;
+      }
+      const button = $('#ingredient-analyze-button');
+      button.disabled = true;
+      try {
+        setStatus($('#ingredient-ai-status'), 'Analisi delle foto in corso…');
+        await analyzeIngredientPhotos();
+      } catch (error) {
+        setStatus($('#ingredient-ai-status'), error.message, 'error');
+      } finally {
+        updateIngredientSearchControls();
+      }
+    });
+    $('#ingredient-ai-unlock').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const button = $('#ingredient-ai-unlock-button');
+      button.disabled = true;
+      setStatus($('#ingredient-ai-status'), 'Sblocco dell’analisi AI…');
+      try {
+        await unlockIngredientAi($('#ingredient-ai-password').value);
+        $('#ingredient-ai-password').value = '';
+        $('#ingredient-ai-unlock').hidden = true;
+        if (ingredientFiles.length) {
+          setStatus($('#ingredient-ai-status'), 'Analisi delle foto in corso…');
+          await analyzeIngredientPhotos();
+        } else {
+          setStatus($('#ingredient-ai-status'), 'Analisi AI sbloccata per questa scheda.', 'ok');
+        }
+      } catch (error) {
+        session.llmKey = null;
+        updateAiImportControls();
+        updateIngredientSearchControls();
+        setStatus($('#ingredient-ai-status'), error.message, 'error');
+      } finally {
+        $('#ingredient-ai-password').value = '';
+        button.disabled = false;
+      }
+    });
+    $('#ingredient-clear-button').addEventListener('click', clearIngredientSearch);
+    $('#add-ingredient-button').addEventListener('click', addManualIngredient);
+    $('#ingredient-list').addEventListener('input', invalidateIngredientResults);
+    $('#find-ingredient-recipes-button').addEventListener('click', findIngredientRecipes);
+    $('#ingredient-recipe-list').addEventListener('click', (event) => {
+      const result = event.target.closest('.ingredient-recipe-result');
+      if (!result) return;
+      const recipe = recipeDataset.find((item) => item.id === result.dataset.recipeId);
+      if (recipe) showRecipeDetail(recipe);
+    });
 
     $('#admin-reauth-form').addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -2207,6 +2770,7 @@
         setStatus($('#admin-reauth-status'), 'Token rimossi dalla memoria dopo il refresh o la chiusura della pagina.');
         updateAiImportControls();
       }
+      updateIngredientSearchControls();
     });
 
     (async function init() {

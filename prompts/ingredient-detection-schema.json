@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ingredient inventory from photographs",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ingredients", "warnings", "uncertainFields"],
+  "properties": {
+    "ingredients": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "canonicalName", "quantity", "confidence", "evidence"],
+        "properties": {
+          "name": { "type": "string" },
+          "canonicalName": { "type": "string" },
+          "quantity": { "type": "string" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "uncertainFields": { "type": "array", "items": { "type": "string" } }
+  }
+}
