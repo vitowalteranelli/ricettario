@@ -88,6 +88,15 @@
     .ingredient-search-header p { max-width:48rem; color:var(--muted); font-size:.9rem; }
     .ingredient-search-panel input[type="file"] { padding:.55rem; }
     .ingredient-file-list { margin:0; color:var(--muted); font-size:.85rem; }
+    .vlm-file-input { position:absolute; width:1px; height:1px; overflow:hidden; opacity:0; pointer-events:none; }
+    .vlm-file-actions { display:flex; flex-wrap:wrap; gap:.55rem; }
+    .vlm-camera-dialog { width:min(94vw,720px); padding:0; border:1px solid var(--line); border-radius:16px; background:var(--card); color:var(--ink); box-shadow:0 18px 60px #0005; }
+    .vlm-camera-dialog::backdrop { background:#0008; }
+    .vlm-camera-content { display:grid; gap:.75rem; padding:1rem; }
+    .vlm-camera-header { display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+    .vlm-camera-header h2,.vlm-camera-content p { margin:0; }
+    .vlm-camera-preview { display:block; width:100%; max-height:65vh; border-radius:12px; background:#111; object-fit:contain; }
+    .vlm-camera-status { min-height:1.5em; color:var(--muted); font-size:.85rem; }
     .ingredient-ai-unlock { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:end; padding:.75rem; border:1px solid var(--warning-line); border-radius:9px; background:var(--warning-bg); }
     .ingredient-ai-unlock p { grid-column:1 / -1; margin:0; color:var(--muted); font-size:.88rem; }
     .ingredient-model-picker { display:grid; gap:.65rem; padding:.75rem; border:1px solid var(--warning-line); border-radius:9px; background:var(--warning-bg); }
@@ -310,9 +319,17 @@
             </div>
             <span id="ingredient-ai-badge" class="badge">Analisi protetta</span>
           </div>
-          <label for="ingredient-photo-input">Foto degli ingredienti (puoi aggiungerne più di una)
-            <input id="ingredient-photo-input" type="file" accept="image/*" multiple>
-          </label>
+          <div>
+            <strong>Foto degli ingredienti</strong>
+            <p class="hint">Puoi usare la galleria, scattare più foto o caricare file immagine.</p>
+          </div>
+          <div class="vlm-file-actions">
+            <button id="ingredient-gallery-button" class="secondary" type="button">Galleria foto multiple</button>
+            <button id="ingredient-camera-button" type="button">Scatta foto</button>
+            <button id="ingredient-file-button" class="secondary" type="button">Carica file immagini</button>
+          </div>
+          <input id="ingredient-photo-input" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Seleziona più foto dalla galleria">
+          <input id="ingredient-file-input" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Carica più file immagine">
           <p id="ingredient-photo-list" class="ingredient-file-list">Puoi aggiungere fino a 6 foto.</p>
           <div class="actions">
             <button id="ingredient-analyze-button" type="button" disabled>Analizza ingredienti</button>
@@ -461,11 +478,22 @@
             <label for="recipe-import-source">Fonte di destinazione
               <select id="recipe-import-source" required></select>
             </label>
-            <label for="recipe-source-file">Immagine o documento
-              <input id="recipe-source-file" type="file" accept="image/*,application/pdf" disabled>
-            </label>
+            <div>
+              <strong>Immagini o documenti</strong>
+              <p class="hint">Puoi selezionare più immagini o PDF dalla galleria e dai file, oppure scattare più foto.</p>
+            </div>
+            <div class="vlm-file-actions">
+              <button id="recipe-gallery-button" class="secondary" type="button" disabled>Galleria foto multiple</button>
+              <button id="recipe-camera-button" type="button" disabled>Scatta foto</button>
+              <button id="recipe-file-button" class="secondary" type="button" disabled>Carica file immagini</button>
+              <button id="recipe-pdf-button" class="secondary" type="button" disabled>Carica PDF multipli</button>
+            </div>
+            <input id="recipe-source-file" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Seleziona più foto dalla galleria" disabled>
+            <input id="recipe-file-input" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Carica più file immagine" disabled>
+            <input id="recipe-pdf-input" class="vlm-file-input" type="file" accept="application/pdf,.pdf" multiple aria-label="Carica più file PDF" disabled>
             <div class="actions">
               <button id="extract-recipe-button" class="secondary" type="button" disabled>Analizza e compila</button>
+              <button id="recipe-clear-files-button" class="secondary" type="button" disabled>Azzera file</button>
               <span id="recipe-source-name" class="hint"></span>
             </div>
             <p id="ai-status" class="status" role="status" aria-live="polite"></p>
@@ -602,6 +630,24 @@
     </section>
   </main>
 
+  <dialog id="vlm-camera-dialog" class="vlm-camera-dialog" aria-labelledby="vlm-camera-title">
+    <div class="vlm-camera-content">
+      <div class="vlm-camera-header">
+        <h2 id="vlm-camera-title">Scatta foto</h2>
+        <button id="vlm-camera-close-button" class="secondary" type="button">Chiudi</button>
+      </div>
+      <video id="vlm-camera-preview" class="vlm-camera-preview" autoplay playsinline></video>
+      <p>Scatta una foto alla volta; puoi continuare finché hai completato il gruppo.</p>
+      <div class="actions">
+        <button id="vlm-camera-capture-button" type="button">Scatta foto</button>
+        <button id="vlm-camera-done-button" class="secondary" type="button">Fine</button>
+      </div>
+      <p id="vlm-camera-count" class="vlm-camera-status"></p>
+      <p id="vlm-camera-status" class="vlm-camera-status" role="status" aria-live="polite"></p>
+      <canvas id="vlm-camera-canvas" hidden></canvas>
+    </div>
+  </dialog>
+
   <script>
     'use strict';
 
@@ -622,6 +668,8 @@
     const AI_MAX_INGREDIENT_IMAGES = 6;
     const AI_MAX_INGREDIENT_FILE_BYTES = 12 * 1024 * 1024;
     const AI_MAX_INGREDIENT_TOTAL_BYTES = 40 * 1024 * 1024;
+    const AI_MAX_RECIPE_FILES = 6;
+    const AI_MAX_RECIPE_TOTAL_BYTES = 80 * 1024 * 1024;
     const SESSION_ROLE_KEY = 'ricettario-session-role-v2';
     const READER_SESSION_KEY = 'ricettario-reader-session-v1';
     const THEME_STORAGE_KEY = 'ricettario-theme-v1';
@@ -651,6 +699,7 @@
     let editingRecipeId = null;
     let session = { role: null, token: null, llmKey: null };
     let ingredientFiles = [];
+    let recipeImportFiles = [];
     let detectedIngredients = [];
     let ingredientSearchResults = [];
     let ingredientSelectedCategories = new Set();
@@ -658,6 +707,8 @@
     let aiModel = AI_DEFAULT_MODEL;
     let aiModels = [];
     let aiModelLoadPromise = null;
+    let cameraStream = null;
+    let cameraTarget = '';
 
     const $ = (selector) => document.querySelector(selector);
     const loginView = $('#login-view');
@@ -985,11 +1036,12 @@
     }
 
     function updateAiImportControls() {
-      const fileInput = $('#recipe-source-file');
       const extractButton = $('#extract-recipe-button');
       const configured = session.role === 'admin' && Boolean(session.llmKey) && appConfig?.ai?.provider === 'gemini';
-      fileInput.disabled = !configured;
-      extractButton.disabled = !configured || !fileInput.files.length || !$('#recipe-import-source').value;
+      ['#recipe-source-file', '#recipe-file-input', '#recipe-pdf-input'].forEach((selector) => { $(selector).disabled = !configured; });
+      ['#recipe-gallery-button', '#recipe-camera-button', '#recipe-file-button', '#recipe-pdf-button'].forEach((selector) => { $(selector).disabled = !configured; });
+      extractButton.disabled = !configured || !recipeImportFiles.length || !$('#recipe-import-source').value;
+      $('#recipe-clear-files-button').disabled = !configured || !recipeImportFiles.length;
       if (!configured) setStatus($('#ai-status'), 'Importazione AI non configurata. Rigenera config.json con una API key Gemini.');
     }
 
@@ -1079,6 +1131,35 @@
       return result;
     }
 
+    function fileKey(file) {
+      return `${file.name}:${file.size}:${file.lastModified}:${file.type}`;
+    }
+
+    function isPdfFile(file) {
+      return String(file?.type || '').toLowerCase() === 'application/pdf' || /\.pdf$/i.test(file?.name || '');
+    }
+
+    function isImageFile(file) {
+      return String(file?.type || '').toLowerCase().startsWith('image/') || /\.(?:avif|gif|heic|heif|jpeg|jpg|png|webp)$/i.test(file?.name || '');
+    }
+
+    function fileMimeType(file) {
+      if (isPdfFile(file)) return 'application/pdf';
+      if (file?.type) return file.type;
+      const extension = String(file?.name || '').toLowerCase().split('.').pop();
+      return ({ avif:'image/avif', gif:'image/gif', heic:'image/heic', heif:'image/heif', jpeg:'image/jpeg', jpg:'image/jpeg', png:'image/png', webp:'image/webp' }[extension] || 'image/jpeg');
+    }
+
+    function uniqueFiles(existing, selected) {
+      const seen = new Set(existing.map(fileKey));
+      return [...existing, ...selected.filter((file) => {
+        const key = fileKey(file);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })];
+    }
+
     async function loadAiExtractionAssets() {
       const version = encodeURIComponent(String(appConfig.version || Date.now()));
       const [promptResponse, schemaResponse] = await Promise.all([
@@ -1089,23 +1170,26 @@
       return { prompt: await promptResponse.text(), schema: await schemaResponse.json() };
     }
 
-    async function extractRecipeFromFile(file) {
-      if (!file) throw new Error('Seleziona una foto o un PDF.');
-      const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
-      if (!isPdf && !file.type.startsWith('image/')) throw new Error('Sono accettati solo immagini e PDF.');
-      if (file.size > AI_MAX_FILE_BYTES) throw new Error('Il file supera il limite di 20 MB.');
+    async function extractRecipeFromFiles(files) {
+      if (!files.length) throw new Error('Seleziona almeno un’immagine o un PDF.');
+      if (files.some((file) => !isImageFile(file) && !isPdfFile(file))) throw new Error('Sono accettati solo immagini e PDF.');
+      if (files.length > AI_MAX_RECIPE_FILES) throw new Error(`Puoi selezionare al massimo ${AI_MAX_RECIPE_FILES} file.`);
+      if (files.some((file) => file.size > AI_MAX_FILE_BYTES)) throw new Error('Ogni file deve essere inferiore a 20 MB.');
+      const totalSize = files.reduce((total, file) => total + file.size, 0);
+      if (totalSize > AI_MAX_RECIPE_TOTAL_BYTES) throw new Error('I file selezionati superano complessivamente 80 MB.');
       if (!session.llmKey || appConfig?.ai?.provider !== 'gemini') throw new Error('Importazione AI non configurata.');
       const sourceId = $('#recipe-import-source').value;
       if (!sourceById(sourceId)) throw new Error('Seleziona una fonte di destinazione.');
 
       const { prompt, schema } = await loadAiExtractionAssets();
-      const mimeType = isPdf ? 'application/pdf' : file.type;
-      const data = bytesToBase64(new Uint8Array(await file.arrayBuffer()));
+      const fileParts = await Promise.all(files.map(async (file) => ({
+        inlineData: { mimeType: fileMimeType(file), data: bytesToBase64(new Uint8Array(await file.arrayBuffer())) }
+      })));
       const model = aiModel || AI_DEFAULT_MODEL;
       const request = {
         contents: [{ parts: [
           { text: `${prompt}\n\nSchema JSON obbligatorio:\n${JSON.stringify(schema, null, 2)}\n\nRestituisci esclusivamente un oggetto JSON valido.` },
-          { inlineData: { mimeType, data } }
+          ...fileParts
         ] }],
         generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 8192 }
       };
@@ -1123,7 +1207,7 @@
       setStatus($('#recipe-model-status'), '');
       const warnings = [...draft.warnings, ...draft.uncertainFields.map((field) => `Verifica: ${field}`)];
       setStatus($('#recipe-editor-status'), warnings.length ? `Bozza importata. Controlla: ${warnings.join(' · ')}` : 'Bozza importata. Controlla il form prima di salvare.', warnings.length ? '' : 'ok');
-      setStatus($('#ai-status'), `Analisi completata: ${file.name}.`, 'ok');
+      setStatus($('#ai-status'), `Analisi completata: ${files.length} file.`, 'ok');
     }
 
     const ingredientStopWords = new Set([
@@ -1353,6 +1437,8 @@
       if (!input || !analyzeButton) return;
       const configured = Boolean(session.role && appConfig?.ai?.provider === 'gemini' && appConfig.ai.crypto);
       input.disabled = !configured;
+      $('#ingredient-file-input').disabled = !configured;
+      ['#ingredient-gallery-button', '#ingredient-camera-button', '#ingredient-file-button'].forEach((selector) => { $(selector).disabled = !configured; });
       analyzeButton.disabled = !configured || !ingredientFiles.length;
       clearButton.disabled = !ingredientFiles.length && !detectedIngredients.length;
       findButton.disabled = !detectedIngredients.some((ingredient) => normalizeIngredientName(ingredient.canonicalName || ingredient.name));
@@ -1366,6 +1452,104 @@
         return;
       }
       label.textContent = ingredientFiles.map((file) => `${file.name} (${Math.ceil(file.size / 1024)} KB)`).join(' · ');
+    }
+
+    function renderRecipeImportFiles() {
+      const label = $('#recipe-source-name');
+      if (!recipeImportFiles.length) {
+        label.textContent = '';
+        return;
+      }
+      label.textContent = `${recipeImportFiles.length} file: ${recipeImportFiles.map((file) => `${file.name} (${Math.ceil(file.size / 1024)} KB)`).join(' · ')}`;
+    }
+
+    function appendIngredientFiles(selectedFiles) {
+      const files = uniqueFiles(ingredientFiles, [...selectedFiles]);
+      if (files.length > AI_MAX_INGREDIENT_IMAGES) throw new Error(`Puoi selezionare al massimo ${AI_MAX_INGREDIENT_IMAGES} foto.`);
+      if (files.some((file) => !isImageFile(file))) throw new Error('Sono accettate solo immagini.');
+      if (files.some((file) => file.size > AI_MAX_INGREDIENT_FILE_BYTES)) throw new Error('Ogni foto deve essere inferiore a 12 MB.');
+      const totalSize = files.reduce((total, file) => total + file.size, 0);
+      if (totalSize > AI_MAX_INGREDIENT_TOTAL_BYTES) throw new Error('Le foto selezionate superano complessivamente 40 MB.');
+      ingredientFiles = files;
+      invalidateIngredientResults();
+      renderIngredientFiles();
+      updateIngredientSearchControls();
+    }
+
+    function appendRecipeFiles(selectedFiles) {
+      const files = uniqueFiles(recipeImportFiles, [...selectedFiles]);
+      if (files.length > AI_MAX_RECIPE_FILES) throw new Error(`Puoi selezionare al massimo ${AI_MAX_RECIPE_FILES} file.`);
+      if (files.some((file) => !isImageFile(file) && !isPdfFile(file))) throw new Error('Sono accettati solo immagini e PDF.');
+      if (files.some((file) => file.size > AI_MAX_FILE_BYTES)) throw new Error('Ogni file deve essere inferiore a 20 MB.');
+      const totalSize = files.reduce((total, file) => total + file.size, 0);
+      if (totalSize > AI_MAX_RECIPE_TOTAL_BYTES) throw new Error('I file selezionati superano complessivamente 80 MB.');
+      recipeImportFiles = files;
+      renderRecipeImportFiles();
+      updateAiImportControls();
+    }
+
+    function cameraFiles() {
+      return cameraTarget === 'ingredients' ? ingredientFiles : recipeImportFiles;
+    }
+
+    function renderCameraCount() {
+      const count = cameraFiles().length;
+      const limit = cameraTarget === 'ingredients' ? AI_MAX_INGREDIENT_IMAGES : AI_MAX_RECIPE_FILES;
+      $('#vlm-camera-count').textContent = `${count} di ${limit} foto/file selezionati.`;
+      $('#vlm-camera-capture-button').disabled = count >= limit;
+    }
+
+    function stopVlmCamera() {
+      cameraStream?.getTracks().forEach((track) => track.stop());
+      cameraStream = null;
+      $('#vlm-camera-preview').srcObject = null;
+      cameraTarget = '';
+      $('#vlm-camera-count').textContent = '';
+      $('#vlm-camera-status').textContent = '';
+    }
+
+    function closeVlmCamera() {
+      const dialog = $('#vlm-camera-dialog');
+      stopVlmCamera();
+      if (dialog.open) dialog.close();
+    }
+
+    async function openVlmCamera(target) {
+      const dialog = $('#vlm-camera-dialog');
+      if (!dialog?.showModal || !navigator.mediaDevices?.getUserMedia) {
+        setStatus(target === 'ingredients' ? $('#ingredient-ai-status') : $('#ai-status'), 'La fotocamera non è disponibile in questo browser. Usa Galleria o Carica file.', 'error');
+        return;
+      }
+      cameraTarget = target;
+      $('#vlm-camera-title').textContent = target === 'ingredients' ? 'Scatta foto degli ingredienti' : 'Scatta foto della ricetta';
+      $('#vlm-camera-status').textContent = 'Richiesta accesso alla fotocamera…';
+      renderCameraCount();
+      dialog.showModal();
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+        $('#vlm-camera-preview').srcObject = cameraStream;
+        await $('#vlm-camera-preview').play();
+        $('#vlm-camera-status').textContent = 'Inquadra e premi “Scatta foto”. Puoi ripetere l’operazione.';
+      } catch (error) {
+        closeVlmCamera();
+        setStatus(target === 'ingredients' ? $('#ingredient-ai-status') : $('#ai-status'), `Impossibile accedere alla fotocamera: ${error.message || 'permesso negato'}. Usa Galleria o Carica file.`, 'error');
+      }
+    }
+
+    async function captureVlmPhoto() {
+      const video = $('#vlm-camera-preview');
+      if (!cameraStream || !video.videoWidth || !video.videoHeight) throw new Error('La fotocamera non è ancora pronta.');
+      const canvas = $('#vlm-camera-canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', .9));
+      if (!blob) throw new Error('Impossibile acquisire la foto.');
+      const file = new File([blob], `ricettario-foto-${Date.now()}.jpg`, { type: 'image/jpeg', lastModified: Date.now() });
+      if (cameraTarget === 'ingredients') appendIngredientFiles([file]);
+      else appendRecipeFiles([file]);
+      renderCameraCount();
+      $('#vlm-camera-status').textContent = 'Foto acquisita. Puoi scattarne un’altra oppure premere “Fine”.';
     }
 
     function invalidateIngredientResults() {
@@ -1652,7 +1836,7 @@
     function findIngredientRecipes() {
       detectedIngredients = readIngredientInventory();
       ingredientSelectedCategories = new Set();
-      ingredientSearchResults = rankRecipesByIngredients(detectedIngredients).slice(0, 50);
+      ingredientSearchResults = rankRecipesByIngredients(detectedIngredients).slice(0, 500);
       renderIngredientInventory();
       renderIngredientRecipeResults();
       setStatus($('#ingredient-ai-status'), ingredientSearchResults.length
@@ -1696,7 +1880,7 @@
       if (!session.llmKey || appConfig?.ai?.provider !== 'gemini') throw new Error('Sblocca prima l’analisi con la password Admin.');
       const { prompt, schema } = await loadAiIngredientAssets();
       const imageParts = await Promise.all(ingredientFiles.map(async (file) => ({
-        inlineData: { mimeType: file.type || 'image/jpeg', data: bytesToBase64(new Uint8Array(await file.arrayBuffer())) }
+        inlineData: { mimeType: fileMimeType(file), data: bytesToBase64(new Uint8Array(await file.arrayBuffer())) }
       })));
       const model = aiModel || AI_DEFAULT_MODEL;
       const request = {
@@ -1731,6 +1915,7 @@
       invalidateIngredientResults();
       ingredientFrequency = null;
       $('#ingredient-photo-input').value = '';
+      $('#ingredient-file-input').value = '';
       $('#ingredient-ai-unlock').hidden = true;
       $('#ingredient-ai-password').value = '';
       $('#ingredient-model-picker').hidden = true;
@@ -2641,8 +2826,12 @@
       closeRecipeDetail({ focus: false });
       $('#recipe-form').hidden = true;
       closeSourceEditor();
+      closeVlmCamera();
+      recipeImportFiles = [];
       $('#recipe-source-file').value = '';
-      $('#recipe-source-name').textContent = '';
+      $('#recipe-file-input').value = '';
+      $('#recipe-pdf-input').value = '';
+      renderRecipeImportFiles();
       setStatus($('#ai-status'), '');
       updateIngredientSearchControls();
       $('#reader-password-list').replaceChildren();
@@ -2754,33 +2943,23 @@
       $('#ingredient-results').hidden = false;
       $('#ingredient-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-    $('#ingredient-photo-input').addEventListener('change', () => {
-      const input = $('#ingredient-photo-input');
+    function handleIngredientFileSelection(input) {
       try {
-        const selectedFiles = [...input.files];
-        const existingKeys = new Set(ingredientFiles.map((file) => `${file.name}:${file.size}:${file.lastModified}:${file.type}`));
-        const files = [...ingredientFiles, ...selectedFiles.filter((file) => {
-          const key = `${file.name}:${file.size}:${file.lastModified}:${file.type}`;
-          if (existingKeys.has(key)) return false;
-          existingKeys.add(key);
-          return true;
-        })];
-        if (files.length > AI_MAX_INGREDIENT_IMAGES) throw new Error(`Puoi selezionare al massimo ${AI_MAX_INGREDIENT_IMAGES} foto.`);
-        if (files.some((file) => !file.type.startsWith('image/'))) throw new Error('Sono accettate solo immagini.');
-        if (files.some((file) => file.size > AI_MAX_INGREDIENT_FILE_BYTES)) throw new Error('Ogni foto deve essere inferiore a 12 MB.');
-        const totalSize = files.reduce((total, file) => total + file.size, 0);
-        if (totalSize > AI_MAX_INGREDIENT_TOTAL_BYTES) throw new Error('Le foto selezionate superano complessivamente 40 MB.');
-        ingredientFiles = files;
-        invalidateIngredientResults();
-        renderIngredientFiles();
-        setStatus($('#ingredient-ai-status'), files.length ? 'Foto pronte per l’analisi.' : '');
+        appendIngredientFiles(input.files);
+        input.value = '';
+        setStatus($('#ingredient-ai-status'), ingredientFiles.length ? 'Foto pronte per l’analisi.' : '');
       } catch (error) {
         input.value = '';
         renderIngredientFiles();
         setStatus($('#ingredient-ai-status'), error.message, 'error');
       }
-      updateIngredientSearchControls();
+    }
+    ['#ingredient-photo-input', '#ingredient-file-input'].forEach((selector) => {
+      $(selector).addEventListener('change', () => handleIngredientFileSelection($(selector)));
     });
+    $('#ingredient-gallery-button').addEventListener('click', () => $('#ingredient-photo-input').click());
+    $('#ingredient-file-button').addEventListener('click', () => $('#ingredient-file-input').click());
+    $('#ingredient-camera-button').addEventListener('click', () => { void openVlmCamera('ingredients'); });
     $('#ingredient-analyze-button').addEventListener('click', async () => {
       if (!session.llmKey) {
         requestIngredientAiUnlock();
@@ -2975,21 +3154,41 @@
       }
     });
 
-    $('#recipe-source-file').addEventListener('change', () => {
-      const file = $('#recipe-source-file').files[0];
-      $('#recipe-source-name').textContent = file ? `${file.name} (${Math.ceil(file.size / 1024)} KB)` : '';
+    function handleRecipeFileSelection(input) {
+      try {
+        appendRecipeFiles(input.files);
+        input.value = '';
+        if (recipeImportFiles.length) setStatus($('#ai-status'), `${recipeImportFiles.length} file pronti per l’analisi.`);
+      } catch (error) {
+        input.value = '';
+        renderRecipeImportFiles();
+        setStatus($('#ai-status'), error.message, 'error');
+      }
+    }
+    ['#recipe-source-file', '#recipe-file-input', '#recipe-pdf-input'].forEach((selector) => {
+      $(selector).addEventListener('change', () => handleRecipeFileSelection($(selector)));
+    });
+    $('#recipe-gallery-button').addEventListener('click', () => $('#recipe-source-file').click());
+    $('#recipe-file-button').addEventListener('click', () => $('#recipe-file-input').click());
+    $('#recipe-pdf-button').addEventListener('click', () => $('#recipe-pdf-input').click());
+    $('#recipe-camera-button').addEventListener('click', () => { void openVlmCamera('recipe'); });
+    $('#recipe-clear-files-button').addEventListener('click', () => {
+      recipeImportFiles = [];
+      $('#recipe-source-file').value = '';
+      $('#recipe-file-input').value = '';
+      $('#recipe-pdf-input').value = '';
+      renderRecipeImportFiles();
+      setStatus($('#ai-status'), 'Selezione file azzerata.');
       updateAiImportControls();
-      if (file) setStatus($('#ai-status'), 'File pronto per l’analisi.');
     });
     $('#recipe-import-source').addEventListener('change', updateAiImportControls);
 
     $('#extract-recipe-button').addEventListener('click', async () => {
-      const file = $('#recipe-source-file').files[0];
       const button = $('#extract-recipe-button');
       button.disabled = true;
       try {
-        setStatus($('#ai-status'), `Analisi di ${file?.name || 'file'} in corso…`);
-        await extractRecipeFromFile(file);
+        setStatus($('#ai-status'), `Analisi di ${recipeImportFiles.length} file in corso…`);
+        await extractRecipeFromFiles(recipeImportFiles);
       } catch (error) {
         if (error.modelRequest) void showAiModelPicker(error, RECIPE_MODEL_UI);
         setStatus($('#ai-status'), error.message, 'error');
@@ -2997,6 +3196,26 @@
         updateAiImportControls();
       }
     });
+
+    $('#vlm-camera-close-button').addEventListener('click', closeVlmCamera);
+    $('#vlm-camera-done-button').addEventListener('click', closeVlmCamera);
+    $('#vlm-camera-capture-button').addEventListener('click', async () => {
+      const button = $('#vlm-camera-capture-button');
+      button.disabled = true;
+      try {
+        await captureVlmPhoto();
+      } catch (error) {
+        $('#vlm-camera-status').textContent = error.message;
+        renderCameraCount();
+      } finally {
+        if (cameraStream) renderCameraCount();
+      }
+    });
+    $('#vlm-camera-dialog').addEventListener('cancel', (event) => {
+      event.preventDefault();
+      closeVlmCamera();
+    });
+    $('#vlm-camera-dialog').addEventListener('close', stopVlmCamera);
 
     $('#admin-recipe-list').addEventListener('click', (event) => {
       const button = event.target.closest('button[data-action]');

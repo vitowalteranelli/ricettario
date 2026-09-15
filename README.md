@@ -40,9 +40,11 @@ Usalo solo per contenuti che possono essere distribuiti pubblicamente.
 
 ## Importazione AI da foto o PDF
 
-Nel pannello Admin, dopo aver configurato una API key Gemini, scegli una foto o
-un PDF e premi **Analizza e compila**. `index.html` invia il file direttamente a
-Gemini, carica il prompt da `prompts/recipe-extraction.md`, usa
+Nel pannello Admin, dopo aver configurato una API key Gemini, puoi selezionare
+più foto dalla galleria, scattare più foto oppure caricare più file immagine;
+puoi anche caricare più PDF. Premi quindi **Analizza e compila**. `index.html`
+invia tutti gli allegati direttamente a Gemini, carica il prompt da
+`prompts/recipe-extraction.md`, usa
 `prompts/recipe-schema.json` per richiedere e controllare la struttura della
 risposta e apre una bozza nel form esistente. La ricetta
 non viene mai pubblicata senza revisione e salvataggio manuale.
@@ -56,7 +58,8 @@ indipendentemente dal codice.
 ## Ricerca per ingredienti fotografati
 
 Nel lettore, **Cosa posso cucinare?** permette di aggiungere fino a sei foto di
-frigo, dispensa o piano di lavoro, anche in più passaggi. Gemini riconosce solo
+frigo, dispensa o piano di lavoro scegliendole dalla galleria, scattandole una
+alla volta oppure caricandole come file immagine, anche in più passaggi. Gemini riconosce solo
 gli alimenti realmente visibili e restituisce quantità e confidenza quando sono
 leggibili; non completa automaticamente spezie o ingredienti non fotografati.
 Prima della ricerca l’elenco è sempre modificabile: controlla, correggi o
