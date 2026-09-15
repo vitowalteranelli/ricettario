@@ -125,6 +125,7 @@
     .recipe-detail-content .recipe-card { border:0; padding:0; }
     @media (min-width:761px) {
       .reader-layout.has-selection .recipe-detail { position:sticky; top:5.75rem; max-height:calc(100vh - 6.25rem); overflow-y:auto; scrollbar-gutter:stable; }
+      .reader-layout.has-selection .recipe-detail-toolbar { position:sticky; top:0; z-index:1; margin:-.25rem 0 .75rem; padding:.25rem 0 .75rem; background:var(--card); }
     }
     .recipe-media { position:relative; aspect-ratio:16/8; overflow:hidden; margin:0 0 1.35rem; border-radius:16px; background:var(--media-bg); box-shadow:0 8px 24px var(--shadow-strong); }
     .recipe-media::after { position:absolute; inset:35% 0 0; background:linear-gradient(180deg,transparent,#17212bb8); content:""; pointer-events:none; }
@@ -1715,6 +1716,7 @@
 
     function showRecipeDetail(recipe) {
       selectedRecipeId = recipe.id;
+      $('#recipe-detail').scrollTop = 0;
       const content = $('#recipe-detail-content');
       content.replaceChildren();
       renderRecipeDetail(recipe, content);
@@ -2424,19 +2426,27 @@
       button.disabled = true;
       setStatus($('#ingredient-ai-status'), 'Sblocco dell’analisi AI…');
       try {
-        await unlockIngredientAi($('#ingredient-ai-password').value);
+        try {
+          await unlockIngredientAi($('#ingredient-ai-password').value);
+        } catch (error) {
+          session.llmKey = null;
+          updateAiImportControls();
+          updateIngredientSearchControls();
+          throw error;
+        }
         $('#ingredient-ai-password').value = '';
         $('#ingredient-ai-unlock').hidden = true;
         if (ingredientFiles.length) {
           setStatus($('#ingredient-ai-status'), 'Analisi delle foto in corso…');
-          await analyzeIngredientPhotos();
+          try {
+            await analyzeIngredientPhotos();
+          } catch (error) {
+            setStatus($('#ingredient-ai-status'), `${error.message} Puoi riprovare senza reinserire la password.`, 'error');
+          }
         } else {
           setStatus($('#ingredient-ai-status'), 'Analisi AI sbloccata per questa scheda.', 'ok');
         }
       } catch (error) {
-        session.llmKey = null;
-        updateAiImportControls();
-        updateIngredientSearchControls();
         setStatus($('#ingredient-ai-status'), error.message, 'error');
       } finally {
         $('#ingredient-ai-password').value = '';
