@@ -329,7 +329,7 @@
             <button id="ingredient-file-button" class="secondary" type="button">Carica file immagini</button>
           </div>
           <input id="ingredient-photo-input" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Seleziona più foto dalla galleria">
-          <input id="ingredient-file-input" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Carica più file immagine">
+          <input id="ingredient-file-input" class="vlm-file-input" type="file" accept=".avif,.gif,.heic,.heif,.jpeg,.jpg,.png,.webp" multiple aria-label="Carica più file immagine">
           <p id="ingredient-photo-list" class="ingredient-file-list">Puoi aggiungere fino a 6 foto.</p>
           <div class="actions">
             <button id="ingredient-analyze-button" type="button" disabled>Analizza ingredienti</button>
@@ -496,7 +496,7 @@
               <button id="recipe-pdf-button" class="secondary" type="button" disabled>Carica PDF multipli</button>
             </div>
             <input id="recipe-source-file" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Seleziona più foto dalla galleria" disabled>
-            <input id="recipe-file-input" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Carica più file immagine" disabled>
+            <input id="recipe-file-input" class="vlm-file-input" type="file" accept=".avif,.gif,.heic,.heif,.jpeg,.jpg,.png,.webp" multiple aria-label="Carica più file immagine" disabled>
             <input id="recipe-pdf-input" class="vlm-file-input" type="file" accept="application/pdf,.pdf" multiple aria-label="Carica più file PDF" disabled>
             <div class="actions">
               <button id="extract-recipe-button" class="secondary" type="button" disabled>Analizza e compila</button>
@@ -647,6 +647,7 @@
       <p>Scatta una foto alla volta; puoi continuare finché hai completato il gruppo.</p>
       <div class="actions">
         <button id="vlm-camera-capture-button" type="button">Scatta foto</button>
+        <button id="vlm-camera-switch-button" class="secondary" type="button" hidden>Cambia fotocamera</button>
         <button id="vlm-camera-done-button" class="secondary" type="button">Fine</button>
       </div>
       <p id="vlm-camera-count" class="vlm-camera-status"></p>
@@ -717,6 +718,8 @@
     let aiModelLoadPromise = null;
     let cameraStream = null;
     let cameraTarget = '';
+    let cameraDevices = [];
+    let cameraDeviceIndex = 0;
 
     const $ = (selector) => document.querySelector(selector);
     const loginView = $('#login-view');
@@ -1512,14 +1515,68 @@
       cameraStream = null;
       $('#vlm-camera-preview').srcObject = null;
       cameraTarget = '';
+      cameraDevices = [];
+      cameraDeviceIndex = 0;
       $('#vlm-camera-count').textContent = '';
       $('#vlm-camera-status').textContent = '';
+      $('#vlm-camera-switch-button').hidden = true;
+      $('#vlm-camera-switch-button').disabled = true;
     }
 
     function closeVlmCamera() {
       const dialog = $('#vlm-camera-dialog');
       stopVlmCamera();
       if (dialog.open) dialog.close();
+    }
+
+    async function refreshVlmCameraDevices() {
+      if (!navigator.mediaDevices?.enumerateDevices) return;
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      cameraDevices = devices.filter((device) => device.kind === 'videoinput');
+      const activeDeviceId = cameraStream?.getVideoTracks()[0]?.getSettings?.().deviceId;
+      const activeIndex = cameraDevices.findIndex((device) => device.deviceId === activeDeviceId);
+      if (activeIndex >= 0) cameraDeviceIndex = activeIndex;
+      const switchButton = $('#vlm-camera-switch-button');
+      switchButton.hidden = cameraDevices.length < 2;
+      switchButton.disabled = cameraDevices.length < 2;
+    }
+
+    async function startVlmCamera(deviceId = '') {
+      cameraStream?.getTracks().forEach((track) => track.stop());
+      cameraStream = null;
+      const video = deviceId
+        ? { deviceId: { exact: deviceId } }
+        : { facingMode: { ideal: 'environment' } };
+      cameraStream = await navigator.mediaDevices.getUserMedia({ video, audio: false });
+      $('#vlm-camera-preview').srcObject = cameraStream;
+      await $('#vlm-camera-preview').play();
+      await refreshVlmCameraDevices();
+    }
+
+    async function switchVlmCamera() {
+      if (cameraDevices.length < 2) return;
+      const nextIndex = (cameraDeviceIndex + 1) % cameraDevices.length;
+      const nextDevice = cameraDevices[nextIndex];
+      const previousDeviceId = cameraStream?.getVideoTracks()[0]?.getSettings?.().deviceId || '';
+      const switchButton = $('#vlm-camera-switch-button');
+      switchButton.disabled = true;
+      $('#vlm-camera-status').textContent = 'Cambio fotocamera…';
+      try {
+        await startVlmCamera(nextDevice.deviceId);
+        cameraDeviceIndex = nextIndex;
+        $('#vlm-camera-status').textContent = 'Fotocamera cambiata. Inquadra e premi “Scatta foto”.';
+      } catch (error) {
+        try {
+          await startVlmCamera(previousDeviceId);
+          $('#vlm-camera-status').textContent = `Impossibile cambiare fotocamera: ${error.message || 'dispositivo non disponibile'}. È stata ripristinata quella precedente.`;
+        } catch {
+          const statusElement = cameraTarget === 'ingredients' ? $('#ingredient-ai-status') : $('#ai-status');
+          closeVlmCamera();
+          setStatus(statusElement, 'Impossibile cambiare fotocamera. Riavvia lo scatto oppure usa Galleria o Carica file.', 'error');
+        }
+      } finally {
+        switchButton.disabled = cameraDevices.length < 2;
+      }
     }
 
     async function openVlmCamera(target) {
@@ -1534,9 +1591,7 @@
       renderCameraCount();
       dialog.showModal();
       try {
-        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
-        $('#vlm-camera-preview').srcObject = cameraStream;
-        await $('#vlm-camera-preview').play();
+        await startVlmCamera();
         $('#vlm-camera-status').textContent = 'Inquadra e premi “Scatta foto”. Puoi ripetere l’operazione.';
       } catch (error) {
         closeVlmCamera();
@@ -2995,20 +3050,45 @@
       $('#ingredient-results').hidden = false;
       $('#ingredient-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-    function handleIngredientFileSelection(input) {
+    function handleIngredientFiles(selectedFiles, input = null) {
       try {
-        appendIngredientFiles(input.files);
-        input.value = '';
+        appendIngredientFiles(selectedFiles);
+        if (input) input.value = '';
         setStatus($('#ingredient-ai-status'), ingredientFiles.length ? 'Foto pronte per l’analisi.' : '');
       } catch (error) {
-        input.value = '';
+        if (input) input.value = '';
         renderIngredientFiles();
         setStatus($('#ingredient-ai-status'), error.message, 'error');
       }
     }
-    function openVlmFilePicker(selector) {
+    function handleIngredientFileSelection(input) {
+      handleIngredientFiles(input.files, input);
+    }
+    async function openVlmFilePicker(selector, onFiles = null, { systemFiles = false } = {}) {
       const input = $(selector);
       if (!input || input.disabled) return;
+      if (systemFiles && typeof window.showOpenFilePicker === 'function') {
+        const isPdf = selector === '#recipe-pdf-input';
+        try {
+          const handles = await window.showOpenFilePicker({
+            multiple: true,
+            excludeAcceptAllOption: true,
+            types: [{
+              description: isPdf ? 'Documenti PDF' : 'Immagini',
+              accept: isPdf
+                ? { 'application/pdf': ['.pdf'] }
+                : { 'image/*': ['.avif', '.gif', '.heic', '.heif', '.jpeg', '.jpg', '.png', '.webp'] }
+            }]
+          });
+          const files = await Promise.all(handles.map((handle) => handle.getFile()));
+          onFiles?.(files);
+          return;
+        } catch (error) {
+          if (error.name === 'AbortError') return;
+          setStatus(selector.startsWith('#ingredient-') ? $('#ingredient-ai-status') : $('#ai-status'), `Impossibile aprire il selettore file: ${error.message || 'operazione non riuscita'}.`, 'error');
+          return;
+        }
+      }
       if (typeof input.showPicker === 'function') {
         try {
           input.showPicker();
@@ -3022,8 +3102,8 @@
     ['#ingredient-photo-input', '#ingredient-file-input'].forEach((selector) => {
       $(selector).addEventListener('change', () => handleIngredientFileSelection($(selector)));
     });
-    $('#ingredient-gallery-button').addEventListener('click', () => openVlmFilePicker('#ingredient-photo-input'));
-    $('#ingredient-file-button').addEventListener('click', () => openVlmFilePicker('#ingredient-file-input'));
+    $('#ingredient-gallery-button').addEventListener('click', () => { void openVlmFilePicker('#ingredient-photo-input'); });
+    $('#ingredient-file-button').addEventListener('click', () => { void openVlmFilePicker('#ingredient-file-input', (files) => handleIngredientFiles(files), { systemFiles: true }); });
     $('#ingredient-camera-button').addEventListener('click', () => { void openVlmCamera('ingredients'); });
     $('#ingredient-analyze-button').addEventListener('click', async () => {
       if (!session.llmKey) {
@@ -3219,23 +3299,26 @@
       }
     });
 
-    function handleRecipeFileSelection(input) {
+    function handleRecipeFiles(selectedFiles, input = null) {
       try {
-        appendRecipeFiles(input.files);
-        input.value = '';
+        appendRecipeFiles(selectedFiles);
+        if (input) input.value = '';
         if (recipeImportFiles.length) setStatus($('#ai-status'), `${recipeImportFiles.length} file pronti per l’analisi.`);
       } catch (error) {
-        input.value = '';
+        if (input) input.value = '';
         renderRecipeImportFiles();
         setStatus($('#ai-status'), error.message, 'error');
       }
     }
+    function handleRecipeFileSelection(input) {
+      handleRecipeFiles(input.files, input);
+    }
     ['#recipe-source-file', '#recipe-file-input', '#recipe-pdf-input'].forEach((selector) => {
       $(selector).addEventListener('change', () => handleRecipeFileSelection($(selector)));
     });
-    $('#recipe-gallery-button').addEventListener('click', () => openVlmFilePicker('#recipe-source-file'));
-    $('#recipe-file-button').addEventListener('click', () => openVlmFilePicker('#recipe-file-input'));
-    $('#recipe-pdf-button').addEventListener('click', () => openVlmFilePicker('#recipe-pdf-input'));
+    $('#recipe-gallery-button').addEventListener('click', () => { void openVlmFilePicker('#recipe-source-file'); });
+    $('#recipe-file-button').addEventListener('click', () => { void openVlmFilePicker('#recipe-file-input', (files) => handleRecipeFiles(files), { systemFiles: true }); });
+    $('#recipe-pdf-button').addEventListener('click', () => { void openVlmFilePicker('#recipe-pdf-input', (files) => handleRecipeFiles(files), { systemFiles: true }); });
     $('#recipe-camera-button').addEventListener('click', () => { void openVlmCamera('recipe'); });
     $('#recipe-clear-files-button').addEventListener('click', () => {
       recipeImportFiles = [];
@@ -3264,6 +3347,7 @@
 
     $('#vlm-camera-close-button').addEventListener('click', closeVlmCamera);
     $('#vlm-camera-done-button').addEventListener('click', closeVlmCamera);
+    $('#vlm-camera-switch-button').addEventListener('click', () => { void switchVlmCamera(); });
     $('#vlm-camera-capture-button').addEventListener('click', async () => {
       const button = $('#vlm-camera-capture-button');
       button.disabled = true;
