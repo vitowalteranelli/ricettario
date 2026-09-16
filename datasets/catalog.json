@@ -15,10 +15,10 @@
     },
     {
       "id": "1080-recetas-cocina",
-      "label": "1080 recetas de cocina",
-      "path": "datasets/1080-recetas-cocina-es.json",
+      "label": "1080 recetas de cocina (ES / IT)",
+      "path": "datasets/1080-recetas-cocina-es-it.json",
       "author": "Simone Ortega",
-      "description": "Ricettario spagnolo in lingua originale, in attesa della traduzione italiana"
+      "description": "Ricettario bilingue spagnolo-italiano di Simone Ortega; testo originale e traduzione affiancati"
     }
   ]
 }

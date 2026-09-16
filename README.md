@@ -203,6 +203,14 @@ L’importazione della fonte regionale può essere rigenerata con:
 node tools/import-regional-recipes.js
 ```
 
+La fonte bilingue `1080 recetas de cocina` di Simone Ortega è nel singolo file
+`datasets/1080-recetas-cocina-es-it.json`. Ogni ricetta usa un titolo nel formato
+`spagnolo - italiano` e contiene due blocchi strutturati, `Español` e `Italiano`;
+gli a capo sono rappresentati dagli elementi dei paragrafi, non da sequenze
+letterali `\\n`. Le ricette restano in stato `review` finché la traduzione non
+viene verificata manualmente. Gli avvisi OCR e i riferimenti alle pagine sono
+conservati nei metadati delle singole ricette.
+
 Per correggere nuovamente la trascrizione prima dell’importazione:
 
 ```sh
