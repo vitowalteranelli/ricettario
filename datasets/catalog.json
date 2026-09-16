@@ -12,6 +12,13 @@
       "path": "datasets/ricette-regionali.json",
       "author": "Alessandro Molinari Pradelli",
       "description": "La cucina regionale italiana in oltre 5000 ricette"
+    },
+    {
+      "id": "1080-recetas-cocina",
+      "label": "1080 recetas de cocina",
+      "path": "datasets/1080-recetas-cocina-es.json",
+      "author": "Simone Ortega",
+      "description": "Ricettario spagnolo in lingua originale, in attesa della traduzione italiana"
     }
   ]
 }
