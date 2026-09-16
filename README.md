@@ -79,6 +79,9 @@ penalizzata in modo netto. Le ricette con più di quattro voci ingredienti e
 meno del 25% di copertura non vengono proposte. Le corrispondenze sono
 indicative; l’elenco mostra anche gli ingredienti eventualmente mancanti e non
 modifica mai le ricette.
+I risultati possono essere filtrati selezionando una o più categorie e una o
+più fonti; la ricerca testuale offre gli stessi filtri tramite i rispettivi
+selettori.
 
 Se una chiamata VLM fallisce, sia la ricerca ingredienti sia l’importazione da
 foto/PDF propongono un menu di modelli Gemini compatibili con

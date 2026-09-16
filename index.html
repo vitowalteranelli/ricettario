@@ -371,6 +371,13 @@
               </div>
               <div id="ingredient-category-options" class="ingredient-category-options"></div>
             </div>
+            <div id="ingredient-source-filter" class="ingredient-category-filter" hidden>
+              <div class="ingredient-category-filter-header">
+                <strong>Filtra per fonte</strong>
+                <span>Seleziona una o più fonti; nessuna selezione mostra tutte.</span>
+              </div>
+              <div id="ingredient-source-options" class="ingredient-category-options"></div>
+            </div>
             <div id="ingredient-recipe-list" class="ingredient-recipe-list"></div>
             <p id="ingredient-no-results" class="status" hidden>Nessuna ricetta ha ingredienti riconosciuti sufficienti. Prova ad aggiungere o correggere una voce.</p>
           </div>
@@ -703,6 +710,7 @@
     let detectedIngredients = [];
     let ingredientSearchResults = [];
     let ingredientSelectedCategories = new Set();
+    let ingredientSelectedSources = new Set();
     let ingredientFrequency = null;
     let aiModel = AI_DEFAULT_MODEL;
     let aiModels = [];
@@ -1555,6 +1563,7 @@
     function invalidateIngredientResults() {
       ingredientSearchResults = [];
       ingredientSelectedCategories = new Set();
+      ingredientSelectedSources = new Set();
       $('#ingredient-results').hidden = true;
       closeIngredientRecipeDetail({ focus: false });
     }
@@ -1791,14 +1800,56 @@
       });
     }
 
+    function renderIngredientSourceFilter() {
+      const filter = $('#ingredient-source-filter');
+      const options = $('#ingredient-source-options');
+      options.replaceChildren();
+      const counts = new Map();
+      ingredientSearchResults.forEach((entry) => {
+        const sourceId = entry.recipe.sourceId || '';
+        counts.set(sourceId, (counts.get(sourceId) || 0) + 1);
+      });
+      const sources = [...counts.entries()]
+        .map(([sourceId, count]) => [sourceId, sourceLabel(sourceId), count])
+        .sort((left, right) => right[2] - left[2] || left[1].localeCompare(right[1], 'it'));
+      if (!sources.length) {
+        filter.hidden = true;
+        return;
+      }
+      ingredientSelectedSources = new Set([...ingredientSelectedSources].filter((sourceId) => counts.has(sourceId)));
+      filter.hidden = false;
+      sources.forEach(([sourceId, labelText, count]) => {
+        const label = document.createElement('label');
+        label.className = 'ingredient-category-option';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = sourceId;
+        checkbox.checked = ingredientSelectedSources.has(sourceId);
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) ingredientSelectedSources.add(sourceId);
+          else ingredientSelectedSources.delete(sourceId);
+          renderIngredientRecipeResults();
+        });
+        label.appendChild(checkbox);
+        const text = document.createElement('span');
+        text.textContent = `${labelText} (${count})`;
+        label.appendChild(text);
+        options.appendChild(label);
+      });
+    }
+
     function visibleIngredientSearchResults() {
-      if (!ingredientSelectedCategories.size) return ingredientSearchResults;
-      return ingredientSearchResults.filter((entry) => ingredientSelectedCategories.has(ingredientResultCategory(entry.recipe)));
+      return ingredientSearchResults.filter((entry) => {
+        const matchesCategory = !ingredientSelectedCategories.size || ingredientSelectedCategories.has(ingredientResultCategory(entry.recipe));
+        const matchesSource = !ingredientSelectedSources.size || ingredientSelectedSources.has(entry.recipe.sourceId || '');
+        return matchesCategory && matchesSource;
+      });
     }
 
     function renderIngredientRecipeResults() {
       closeIngredientRecipeDetail({ focus: false });
       renderIngredientCategoryFilter();
+      renderIngredientSourceFilter();
       const container = $('#ingredient-recipe-list');
       container.replaceChildren();
       const visibleResults = visibleIngredientSearchResults();
@@ -1836,6 +1887,7 @@
     function findIngredientRecipes() {
       detectedIngredients = readIngredientInventory();
       ingredientSelectedCategories = new Set();
+      ingredientSelectedSources = new Set();
       ingredientSearchResults = rankRecipesByIngredients(detectedIngredients).slice(0, 500);
       renderIngredientInventory();
       renderIngredientRecipeResults();
@@ -2954,11 +3006,24 @@
         setStatus($('#ingredient-ai-status'), error.message, 'error');
       }
     }
+    function openVlmFilePicker(selector) {
+      const input = $(selector);
+      if (!input || input.disabled) return;
+      if (typeof input.showPicker === 'function') {
+        try {
+          input.showPicker();
+          return;
+        } catch {
+          // Alcuni browser mobili espongono showPicker ma lo rifiutano per certi input.
+        }
+      }
+      input.click();
+    }
     ['#ingredient-photo-input', '#ingredient-file-input'].forEach((selector) => {
       $(selector).addEventListener('change', () => handleIngredientFileSelection($(selector)));
     });
-    $('#ingredient-gallery-button').addEventListener('click', () => $('#ingredient-photo-input').click());
-    $('#ingredient-file-button').addEventListener('click', () => $('#ingredient-file-input').click());
+    $('#ingredient-gallery-button').addEventListener('click', () => openVlmFilePicker('#ingredient-photo-input'));
+    $('#ingredient-file-button').addEventListener('click', () => openVlmFilePicker('#ingredient-file-input'));
     $('#ingredient-camera-button').addEventListener('click', () => { void openVlmCamera('ingredients'); });
     $('#ingredient-analyze-button').addEventListener('click', async () => {
       if (!session.llmKey) {
@@ -3168,9 +3233,9 @@
     ['#recipe-source-file', '#recipe-file-input', '#recipe-pdf-input'].forEach((selector) => {
       $(selector).addEventListener('change', () => handleRecipeFileSelection($(selector)));
     });
-    $('#recipe-gallery-button').addEventListener('click', () => $('#recipe-source-file').click());
-    $('#recipe-file-button').addEventListener('click', () => $('#recipe-file-input').click());
-    $('#recipe-pdf-button').addEventListener('click', () => $('#recipe-pdf-input').click());
+    $('#recipe-gallery-button').addEventListener('click', () => openVlmFilePicker('#recipe-source-file'));
+    $('#recipe-file-button').addEventListener('click', () => openVlmFilePicker('#recipe-file-input'));
+    $('#recipe-pdf-button').addEventListener('click', () => openVlmFilePicker('#recipe-pdf-input'));
     $('#recipe-camera-button').addEventListener('click', () => { void openVlmCamera('recipe'); });
     $('#recipe-clear-files-button').addEventListener('click', () => {
       recipeImportFiles = [];
