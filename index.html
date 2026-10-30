@@ -838,6 +838,22 @@
       return null;
     }
 
+    async function encryptSecret(secret, password, iterations = KDF_ITERATIONS) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const bits = await deriveBits(password, salt, iterations);
+      const key = await crypto.subtle.importKey('raw', bits, { name: 'AES-GCM' }, false, ['encrypt']);
+      const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, textEncoder.encode(secret));
+      return {
+        algorithm: 'AES-256-GCM',
+        kdf: 'PBKDF2-HMAC-SHA-256',
+        iterations,
+        salt: bytesToBase64Url(salt),
+        iv: bytesToBase64Url(iv),
+        ciphertext: bytesToBase64Url(new Uint8Array(ciphertext))
+      };
+    }
+
     async function decryptSecret(password, payload) {
       const bits = await deriveBits(password, base64ToBytes(payload.salt), payload.iterations || KDF_ITERATIONS);
       const key = await crypto.subtle.importKey('raw', bits, { name: 'AES-GCM' }, false, ['decrypt']);
