@@ -409,8 +409,10 @@
       #login-view .login-brand { margin-bottom:auto; }
       #login-view .login-eyebrow { margin-top:clamp(2rem,10vh,5rem); }
       #login-view .login-session-note { margin-top:auto; }
-      #reader-view > .topbar { position:sticky; top:0; z-index:70; align-items:center; gap:.65rem; margin:0; padding:calc(.65rem + env(safe-area-inset-top)) 1rem .65rem; border:0; border-bottom:1px solid var(--line); background:var(--card); box-shadow:0 3px 12px var(--shadow); }
-      #reader-view > .topbar .reader-brand { min-width:0; flex:1 1 auto; gap:.65rem; }
+      #reader-view > .topbar { position:sticky; top:0; z-index:70; align-items:center; flex-wrap:wrap; gap:.55rem; margin:0; padding:calc(.65rem + env(safe-area-inset-top)) 1rem .65rem; border:0; border-bottom:1px solid var(--line); background:var(--card); box-shadow:0 3px 12px var(--shadow); }
+      #reader-view > .topbar .reader-brand { min-width:0; flex:1 0 100%; gap:.65rem; }
+      #reader-view > .topbar .actions { width:100%; justify-content:flex-end; gap:.45rem; }
+      #reader-view > .topbar .actions > button { min-height:2.65rem; padding:.45rem .75rem; font-size:.86rem; }
       #reader-view > .topbar .reader-brand-mark { width:2.35rem; height:2.35rem; border-radius:12px; }
       #reader-view > .topbar .reader-brand-kicker { display:none; }
       #reader-view > .topbar .reader-brand h1 { font-size:1.45rem; }
@@ -418,7 +420,10 @@
       #reader-view > .card { min-height:calc(100vh - 4rem); min-height:calc(100svh - 4rem); padding:.75rem 1rem calc(7rem + env(safe-area-inset-bottom)); border:0; border-radius:0; background:transparent; box-shadow:none; }
       #admin-view { display:flex; min-height:100vh; min-height:100svh; flex-direction:column; gap:0; margin:0; padding:0 1rem calc(5.8rem + env(safe-area-inset-bottom)); border:0; border-radius:0; box-shadow:none; }
       [data-theme="mediterranean"] #admin-view { border-radius:0; }
-      #admin-view > .topbar { position:sticky; top:0; z-index:70; width:calc(100% + 2rem); align-items:center; flex-direction:row; gap:.65rem; margin:0 -1rem 1rem; padding:calc(.7rem + env(safe-area-inset-top)) 1rem .7rem; border-bottom:1px solid var(--line); background:var(--card); box-shadow:0 3px 12px var(--shadow); }
+      #admin-view > .topbar { position:sticky; top:0; z-index:70; width:calc(100% + 2rem); align-items:center; flex-direction:row; flex-wrap:wrap; gap:.55rem; margin:0 -1rem 1rem; padding:calc(.7rem + env(safe-area-inset-top)) 1rem .7rem; border-bottom:1px solid var(--line); background:var(--card); box-shadow:0 3px 12px var(--shadow); }
+      #admin-view > .topbar > div:first-child { flex:1 0 100%; min-width:0; }
+      #admin-view > .topbar .actions { width:100%; justify-content:flex-end; gap:.45rem; }
+      #admin-view > .topbar .actions > button { min-height:2.65rem; padding:.45rem .75rem; font-size:.86rem; }
       #admin-view > .topbar h2 { margin:0; font-size:1.2rem; }
       #admin-view > .topbar p { display:none; }
       #admin-view > .admin-tabs { position:fixed; top:auto; right:0; bottom:0; left:0; z-index:50; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.2rem; margin:0; padding:.45rem .6rem calc(.45rem + env(safe-area-inset-bottom)); border:0; border-top:1px solid var(--line); border-radius:0; background:var(--card); box-shadow:0 -8px 28px var(--shadow); overflow:visible; }
@@ -539,7 +544,7 @@
         </div>
         <div class="actions">
           <details class="mobile-overflow-menu">
-            <summary aria-label="Apri impostazioni e azioni" title="Impostazioni e azioni">
+            <summary aria-label="Preferenze tema" title="Preferenze tema">
               <svg class="mobile-menu-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>
             </summary>
             <div class="mobile-overflow-menu-content">
@@ -549,10 +554,10 @@
                   <option value="mediterranean">Mediterraneo</option>
                 </select>
               </label>
-              <button id="show-admin-button" class="secondary" type="button" hidden>Torna al pannello Admin</button>
-              <button id="logout-button" class="secondary" type="button">Esci</button>
             </div>
           </details>
+          <button id="show-admin-button" class="secondary" type="button" hidden>Pannello Admin</button>
+          <button id="logout-button" class="secondary" type="button">Esci</button>
         </div>
       </div>
       <article class="card">
@@ -710,7 +715,7 @@
         <div><h2>Pannello amministratore</h2><p class="muted">PAT e chiave AI restano nella memoria di questa scheda.</p></div>
         <div class="actions">
           <details class="mobile-overflow-menu">
-            <summary aria-label="Apri impostazioni e azioni" title="Impostazioni e azioni">
+            <summary aria-label="Preferenze tema" title="Preferenze tema">
               <svg class="mobile-menu-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>
             </summary>
             <div class="mobile-overflow-menu-content">
@@ -721,10 +726,10 @@
                   <option value="mediterranean">Mediterraneo</option>
                 </select>
               </label>
-              <button id="show-reader-button" class="secondary" type="button">Apri ricettario</button>
-              <button id="admin-logout-button" class="secondary" type="button">Esci</button>
             </div>
           </details>
+          <button id="show-reader-button" class="secondary" type="button">Apri ricettario</button>
+          <button id="admin-logout-button" class="secondary" type="button">Esci</button>
         </div>
       </div>
       <nav class="admin-tabs" role="tablist" aria-label="Sezioni amministratore">
