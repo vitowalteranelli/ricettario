@@ -31,8 +31,8 @@
         </div>
         <label>GitHub PAT fine-grained <span class="field-hint">Contents: Read and write sulla repository</span><input id="pat" type="password" autocomplete="off" required></label>
         <div>
-          <h2>Importazione ricette da foto/PDF (opzionale)</h2>
-          <p class="hint">La chiave viene cifrata con la password Admin. Il modello viene chiamato direttamente dal browser solo durante una sessione Admin.</p>
+          <h2>Funzioni AI con foto/PDF (opzionale)</h2>
+          <p class="hint">La chiave viene cifrata con la password Admin per l’importazione ricette e con ogni password viewer per la ricerca visuale. È usata dal browser solo in RAM.</p>
           <div class="grid">
             <label>Provider AI
               <select id="llm-provider">
@@ -41,13 +41,13 @@
             </label>
             <p class="hint">Modello predefinito: <code>gemini-flash-lite-latest</code>. È ottimizzato per ridurre consumo e quota; potrai selezionare un altro modello compatibile dall’app.</p>
           </div>
-          <label>API key Gemini <span class="field-hint">lascia vuoto per disattivare l’importazione AI</span><input id="llm-api-key" type="password" autocomplete="off"></label>
+          <label>API key Gemini <span class="field-hint">lascia vuoto per disattivare le funzioni AI</span><input id="llm-api-key" type="password" autocomplete="off"></label>
         </div>
         <label>Password Admin <span class="field-hint">password dell’app, non la password GitHub</span><input id="admin-password" type="password" autocomplete="new-password" required></label>
         <label>Conferma Password Admin<input id="admin-password-confirm" type="password" autocomplete="new-password" required></label>
         <div>
           <h2>Password di sola lettura</h2>
-          <p class="hint">Le password non vengono inserite nel JSON: vengono salvati solo hash PBKDF2 con salt casuale.</p>
+          <p class="hint">Le password non vengono inserite nel JSON: vengono salvati hash PBKDF2 con salt casuale. Se configuri Gemini, la chiave viene cifrata anche per ciascun viewer.</p>
           <div id="reader-list"></div>
           <div class="actions"><button id="add-reader" class="secondary" type="button">Aggiungi password lettore</button></div>
         </div>
@@ -76,22 +76,22 @@
       return Uint8Array.from(binary, (character) => character.charCodeAt(0));
     }
     // Tutta la preparazione avviene localmente: PAT e API key vengono solo cifrati.
-    async function deriveBits(password, salt) {
+    async function deriveBits(password, salt, iterations = ITERATIONS) {
       const material = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']);
-      return new Uint8Array(await crypto.subtle.deriveBits({ name:'PBKDF2', salt, iterations:ITERATIONS, hash:'SHA-256' }, material, 256));
+      return new Uint8Array(await crypto.subtle.deriveBits({ name:'PBKDF2', salt, iterations, hash:'SHA-256' }, material, 256));
     }
     async function hashPassword(password) {
       const salt = crypto.getRandomValues(new Uint8Array(16));
       return { salt:bytesToBase64Url(salt), hash:bytesToBase64Url(await deriveBits(password, salt)), iterations:ITERATIONS };
     }
     // Il payload AES-GCM contiene solo salt, IV e ciphertext; mai i segreti in chiaro.
-    async function encryptSecret(secret, password) {
+    async function encryptSecret(secret, password, iterations = ITERATIONS) {
       const salt = crypto.getRandomValues(new Uint8Array(16));
       const iv = crypto.getRandomValues(new Uint8Array(12));
-      const bits = await deriveBits(password, salt);
+      const bits = await deriveBits(password, salt, iterations);
       const key = await crypto.subtle.importKey('raw', bits, { name:'AES-GCM' }, false, ['encrypt']);
       const ciphertext = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, encoder.encode(secret));
-      return { algorithm:'AES-256-GCM', kdf:'PBKDF2-HMAC-SHA-256', iterations:ITERATIONS, salt:bytesToBase64Url(salt), iv:bytesToBase64Url(iv), ciphertext:bytesToBase64Url(new Uint8Array(ciphertext)) };
+      return { algorithm:'AES-256-GCM', kdf:'PBKDF2-HMAC-SHA-256', iterations, salt:bytesToBase64Url(salt), iv:bytesToBase64Url(iv), ciphertext:bytesToBase64Url(new Uint8Array(ciphertext)) };
     }
     function setStatus(message, error = false) { $('#status').textContent = message; $('#status').className = `status${error ? ' error' : ''}`; }
     function repositoryIdentity(value, label) {
@@ -120,10 +120,13 @@
         const repo = repositoryIdentity($('#repo').value, 'Repository GitHub');
         setStatus('Cifratura e hashing in corso…');
         const readers = [];
+        const readerPasswords = new Map();
         for (const [index, row] of [...$('#reader-list').querySelectorAll('.reader-row')].entries()) {
           const password = row.querySelector('[data-field="password"]').value;
           if (!password) throw new Error(`Password lettore ${index + 1} vuota.`);
-          readers.push({ id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${index}`, label: row.querySelector('[data-field="label"]').value.trim() || `Lettore ${index + 1}`, ...await hashPassword(password) });
+          const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${index}`;
+          readers.push({ id, label: row.querySelector('[data-field="label"]').value.trim() || `Lettore ${index + 1}`, ...await hashPassword(password) });
+          readerPasswords.set(id, password);
         }
         const config = {
           version: 1,
@@ -132,12 +135,16 @@
           readOnlyPasswords: readers
         };
         if (llmApiKey) {
+          const readerCrypto = {};
+          for (const [id, password] of readerPasswords) readerCrypto[id] = await encryptSecret(llmApiKey, password);
           config.ai = {
             provider: $('#llm-provider').value,
             model: 'gemini-flash-lite-latest',
-            crypto: await encryptSecret(llmApiKey, adminPassword)
+            crypto: await encryptSecret(llmApiKey, adminPassword),
+            readerCrypto
           };
         }
+        readerPasswords.clear();
         $('#output').value = JSON.stringify(config, null, 2) + '\n';
         $('#output').hidden = false;
         $('#download').hidden = false;

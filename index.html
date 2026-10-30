@@ -336,8 +336,8 @@
             <button id="ingredient-clear-button" class="secondary" type="button" disabled>Azzera</button>
           </div>
           <form id="ingredient-ai-unlock" class="ingredient-ai-unlock" hidden>
-            <p>Per la prima analisi inserisci la password Admin. La chiave AI verrà usata solo nella memoria di questa scheda.</p>
-            <label for="ingredient-ai-password">Password Admin
+            <p id="ingredient-ai-unlock-copy">La chiave Gemini verrà usata solo nella memoria di questa scheda.</p>
+            <label id="ingredient-ai-password-label" for="ingredient-ai-password">Password di accesso
               <input id="ingredient-ai-password" type="password" autocomplete="current-password" required>
             </label>
             <button id="ingredient-ai-unlock-button" type="submit">Sblocca analisi</button>
@@ -625,7 +625,7 @@
 
         <form id="access-form" class="admin-panel admin-access-panel" data-admin-panel="access" role="tabpanel" aria-labelledby="admin-tab-access" hidden>
           <h3 id="access-title">Gestione Password Lettori</h3>
-          <p class="hint">Lascia vuoto il campo password per conservare l’hash esistente.</p>
+          <p class="hint">Lascia vuoto per conservare password e accesso AI attuali. Per abilitare la ricerca visuale su password viewer già esistenti, reinseriscile una volta.</p>
           <div id="reader-password-list"></div>
           <div class="actions">
             <button id="add-reader-button" class="secondary" type="button">Aggiungi lettore</button>
@@ -1374,7 +1374,7 @@
     }
 
     async function loadAiModels({ force = false } = {}) {
-      if (!session.llmKey) throw new Error('Sblocca prima l’analisi con la password Admin.');
+      if (!session.llmKey) throw new Error('Sblocca prima l’analisi visuale con la password di accesso.');
       if (aiModels.length && !force) {
         renderAiModelSelect();
         return aiModels;
@@ -1453,7 +1453,9 @@
       analyzeButton.disabled = !configured || !ingredientFiles.length;
       clearButton.disabled = !ingredientFiles.length && !detectedIngredients.length;
       findButton.disabled = !detectedIngredients.some((ingredient) => normalizeIngredientName(ingredient.canonicalName || ingredient.name));
-      $('#ingredient-ai-badge').textContent = session.llmKey ? 'Analisi sbloccata' : configured ? 'Richiede Admin' : 'AI non configurata';
+      $('#ingredient-ai-badge').textContent = session.llmKey
+        ? 'Analisi sbloccata'
+        : configured ? (session.role === 'reader' ? 'Password viewer richiesta' : 'Password Admin richiesta') : 'AI non configurata';
     }
 
     function renderIngredientFiles() {
@@ -1973,8 +1975,20 @@
       if (session.llmKey) return;
       if (!appConfig?.ai?.crypto) throw new Error('API key Gemini non configurata.');
       try {
-        session.llmKey = (await decryptSecret(password, appConfig.ai.crypto)).trim();
-      } catch {
+        if (session.role === 'reader') {
+          const reader = await verifyReaderPassword(password);
+          if (!reader) throw new Error('Password viewer errata.');
+          const payload = appConfig.ai.readerCrypto?.[reader.id];
+          if (!payload) throw new Error('La chiave Gemini non è associata a questa password viewer. L’Admin deve reinserirla nella scheda Password lettori.');
+          session.llmKey = (await decryptSecret(password, payload)).trim();
+        } else if (session.role === 'admin') {
+          session.llmKey = (await decryptSecret(password, appConfig.ai.crypto)).trim();
+        } else {
+          throw new Error('Accedi prima al ricettario.');
+        }
+      } catch (error) {
+        if (error.message === 'Password viewer errata.' || error.message.includes('non è associata')) throw error;
+        if (session.role === 'reader') throw new Error('Password viewer errata o chiave Gemini non decifrabile.');
         throw new Error('Password Admin errata oppure API key AI non decifrabile.');
       }
       if (!session.llmKey) throw new Error('API key AI vuota.');
@@ -1984,7 +1998,7 @@
 
     async function analyzeIngredientPhotos() {
       if (!ingredientFiles.length) throw new Error('Seleziona almeno una foto.');
-      if (!session.llmKey || appConfig?.ai?.provider !== 'gemini') throw new Error('Sblocca prima l’analisi con la password Admin.');
+      if (!session.llmKey || appConfig?.ai?.provider !== 'gemini') throw new Error('Sblocca prima l’analisi visuale con la password di accesso.');
       const { prompt, schema } = await loadAiIngredientAssets();
       const imageParts = await Promise.all(ingredientFiles.map(async (file) => ({
         inlineData: { mimeType: fileMimeType(file), data: bytesToBase64(new Uint8Array(await file.arrayBuffer())) }
@@ -2037,6 +2051,11 @@
     }
 
     function requestIngredientAiUnlock() {
+      const isReader = session.role === 'reader';
+      $('#ingredient-ai-unlock-copy').textContent = isReader
+        ? 'Inserisci la password viewer usata per accedere. La chiave Gemini resta solo nella memoria di questa scheda e non abilita funzioni Admin.'
+        : 'Inserisci la password Admin per decifrare la chiave Gemini. La chiave resta solo nella memoria di questa scheda.';
+      $('#ingredient-ai-password-label').firstChild.textContent = isReader ? 'Password viewer' : 'Password Admin';
       $('#ingredient-ai-unlock').hidden = false;
       $('#ingredient-ai-password').focus();
     }
@@ -2790,12 +2809,14 @@
         const row = document.createElement('div');
         row.className = 'reader-row';
         row.dataset.id = entry.id;
+        const aiPasswordNeeded = Boolean(appConfig.ai?.crypto && !appConfig.ai.readerCrypto?.[entry.id]);
+        const passwordPlaceholder = !entry.hash ? 'Inserisci password' : aiPasswordNeeded ? 'Reinserisci per abilitare Gemini' : 'Lascia vuoto per conservare';
         row.innerHTML = `
           <label>Etichetta
             <input data-field="label" value="${escapeHtml(entry.label || `Lettore ${index + 1}`)}" maxlength="80">
           </label>
           <label>Password ${entry.hash ? '(nuova opzionale)' : '(obbligatoria)'}
-            <input data-field="password" type="password" autocomplete="new-password" placeholder="${entry.hash ? 'Lascia vuoto per conservare' : 'Inserisci password'}">
+            <input data-field="password" type="password" autocomplete="new-password" placeholder="${passwordPlaceholder}">
           </label>
           <button class="danger remove-reader" type="button" data-index="${index}">Rimuovi</button>`;
         container.appendChild(row);
@@ -2962,6 +2983,16 @@
         const password = loginPassword.value;
         const reader = await verifyReaderPassword(password);
         if (reader) {
+          const readerCrypto = appConfig.ai?.readerCrypto?.[reader.id];
+          if (readerCrypto) {
+            try {
+              session.llmKey = (await decryptSecret(password, readerCrypto)).trim();
+              if (!session.llmKey) throw new Error('API key Gemini vuota.');
+            } catch (error) {
+              session.llmKey = null;
+              console.error('Chiave Gemini viewer non decifrabile.', error);
+            }
+          }
           unlock('reader');
           await loadReaderContent();
           rememberSessionRole('reader');
@@ -3270,7 +3301,8 @@
         const description = $('#source-description').value.trim();
         const id = sourceEditingId || slugify(label);
         if (!label || !id) throw new Error('Inserisci un nome fonte valido.');
-        const existing = sourceEditingId ? sourceById(sourceEditingId) : sourceById(id);
+        const existing = sourceEditingId ? sourceById(sourceEditingId) : null;
+        if (sourceEditingId && !existing) throw new Error('La fonte da modificare non esiste più. Ricarica il catalogo.');
         if (!existing && sourceById(id)) throw new Error('Esiste già una fonte con questo ID.');
         const duplicateLabel = sourceCatalog.find((source) => source.id !== (sourceEditingId || id) && normalizeSearch(source.label) === normalizeSearch(label));
         if (duplicateLabel) throw new Error('Esiste già una fonte con questo nome.');
@@ -3288,6 +3320,9 @@
           sourceCatalog.push(source);
           sourceDatasets.set(id, { source, path: source.path, sha: null, recipes: [], recipeDirty: false, metadataDirty: true });
           adminSourceId = id;
+          sourceEditingId = id;
+          $('#source-form-title').textContent = 'Modifica fonte';
+          $('#source-path').textContent = `ID: ${source.id} · file: ${source.path}`;
         }
         catalogDirty = true;
         populateAllSourceSelectors();
@@ -3540,6 +3575,8 @@
       const status = $('#access-status');
       try {
         const nextReaders = [];
+        const nextReaderCrypto = {};
+        const aiConfigured = Boolean(appConfig.ai?.crypto);
         for (const [index, row] of [...$('#reader-password-list').querySelectorAll('.reader-row')].entries()) {
           const id = row.dataset.id;
           const original = (appConfig.readOnlyPasswords || []).find((entry) => entry.id === id);
@@ -3547,11 +3584,21 @@
           const newPassword = row.querySelector('[data-field="password"]').value;
           if (!original && !newPassword) throw new Error(`Inserisci la password per ${label}.`);
           const next = original ? { ...original, label } : { id, label };
-          if (newPassword) Object.assign(next, await hashPassword(newPassword));
+          if (newPassword) {
+            Object.assign(next, await hashPassword(newPassword));
+            if (aiConfigured) {
+              if (!session.llmKey) throw new Error('Riattiva le funzioni Admin prima di cambiare le password viewer: serve la chiave Gemini in RAM per aggiornarne la cifratura.');
+              nextReaderCrypto[id] = await encryptSecret(session.llmKey, newPassword);
+            }
+          } else if (aiConfigured) {
+            const existingReaderCrypto = appConfig.ai.readerCrypto?.[id];
+            if (existingReaderCrypto) nextReaderCrypto[id] = existingReaderCrypto;
+          }
           nextReaders.push(next);
         }
         const nextConfig = JSON.parse(JSON.stringify(appConfig));
         nextConfig.readOnlyPasswords = nextReaders;
+        if (aiConfigured) nextConfig.ai.readerCrypto = nextReaderCrypto;
         delete nextConfig.setupRequired;
         setStatus(status, 'Aggiornamento config.json su GitHub…');
         const result = await githubPutFile(CONFIG_PATH, JSON.stringify(nextConfig, null, 2) + '\n', configSha, 'Aggiorna password lettori');
@@ -3559,7 +3606,10 @@
         appConfig = nextConfig;
         accessRows = nextReaders.map((entry) => ({ ...entry }));
         renderAccessRows();
-        setStatus(status, 'Password lettori aggiornate.', 'ok');
+        const viewersWithoutAi = aiConfigured ? nextReaders.filter((entry) => !nextReaderCrypto[entry.id]).length : 0;
+        setStatus(status, viewersWithoutAi
+          ? `Password lettori aggiornate. Reinserisci le password di ${viewersWithoutAi} viewer per abilitarli alla ricerca visuale.`
+          : 'Password lettori aggiornate.', 'ok');
       } catch (error) {
         setStatus(status, error.message, 'error');
       }

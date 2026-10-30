@@ -15,8 +15,9 @@ Usalo solo per contenuti che possono essere distribuiti pubblicamente.
 2. **Genera la configurazione in locale.** Avvia `python3 -m http.server 8000`,
    apri `http://localhost:8000/setup.html`, inserisci il nuovo PAT, una nuova
    password Admin e le password lettore, poi scarica `config.json`. Se vuoi
-   l’importazione da foto/PDF, inserisci anche una API key Gemini: viene cifrata
-   separatamente con la stessa password Admin. L’app usa l’alias
+   le funzioni AI, inserisci anche una API key Gemini: viene cifrata con la
+   password Admin per l’importazione ricette e con ciascuna password viewer per
+   la ricerca visuale. L’app usa l’alias
    `gemini-flash-lite-latest` come modello predefinito, ottimizzato per ridurre
    consumo e quota; dall’app è possibile selezionare un altro modello
    compatibile.
@@ -49,9 +50,11 @@ invia tutti gli allegati direttamente a Gemini, carica il prompt da
 risposta e apre una bozza nel form esistente. La ricetta
 non viene mai pubblicata senza revisione e salvataggio manuale.
 
-La API key viene decifrata solo nella sessione Admin e non viene salvata in
-localStorage, cookie o sessionStorage. È comunque una chiave client-side durante
-la chiamata: usa una chiave Gemini separata, con quota e limiti di spesa ridotti.
+La chiave usata per importare ricette viene decifrata nella sessione Admin; per
+la ricerca visuale è decifrata dalla password viewer associata. La chiave non
+viene salvata in localStorage, cookie o sessionStorage. Chi conosce una password
+viewer può usare la chiave Gemini dal browser; usa una chiave dedicata, con
+quota e limiti di spesa ridotti.
 Il prompt e lo schema non sono segreti e possono essere modificati e pubblicati
 indipendentemente dal codice.
 
@@ -65,9 +68,11 @@ leggibili; non completa automaticamente spezie o ingredienti non fotografati.
 Prima della ricerca l’elenco è sempre modificabile: controlla, correggi o
 aggiungi gli ingredienti riconosciuti.
 
-La prima analisi richiede la password Admin se la chiave AI non è già presente
-nella sessione. Se l’utente è già entrato come Admin e ha riattivato le funzioni
-Admin, non viene richiesta una seconda volta. La chiave e le fotografie restano
+I viewer usano la propria password di accesso: questa decifra la chiave Gemini
+per la ricerca visuale e non concede accesso al pannello Admin. Dopo un refresh,
+il ruolo viewer viene ripristinato ma la chiave va sbloccata di nuovo, perché
+password e chiave non vengono conservate. Se la chiave è già presente nella
+scheda, non viene richiesta una seconda volta. La chiave e le fotografie restano
 solo nella memoria della scheda e non vengono salvate nel dataset o nel browser.
 
 Il ranking delle ricette è locale: per ogni ingrediente conta in quante ricette
@@ -135,14 +140,18 @@ Poi apri `http://localhost:8000/index.html` e verifica:
 - la password Admin mostra il pannello CRUD;
 - aggiunta, modifica, duplicazione ed eliminazione aggiornano il contatore;
 - `Salva e pusha dataset` aggiorna solo il JSON della fonte attiva;
-- il pannello **Fonti** permette di creare e modificare il catalogo delle fonti;
+- il pannello **Fonti** permette di creare fonti e modificarne i nomi e i
+  dettagli; dopo la creazione, l’ID e il percorso dataset restano stabili;
+- con Gemini configurato, la password viewer sblocca la chiave per la ricerca
+  visuale, mentre l’importazione di ricette resta una funzione Admin;
 - il selettore **Tema** alterna tra il tema Mediterraneo (predefinito) e quello
   Classico e conserva la preferenza solo nel browser;
 - gestione password lettori continua a funzionare;
 - con una configurazione AI valida, foto e PDF compilano una bozza ricetta;
 - una bozza AI mostra gli eventuali warning e richiede revisione manuale;
-- la ricerca per ingredienti permette di aggiungere più foto, richiede lo
-  sblocco Admin al primo uso, mostra l’elenco riconosciuto e ordina le ricette;
+- la ricerca per ingredienti usa la password viewer, mostra l’elenco
+  riconosciuto e ordina le ricette; dopo un refresh la chiave va sbloccata di
+  nuovo;
 - dopo logout il contenuto scompare.
 
 Per i lettori, dopo il primo accesso la sessione viene ricordata solo nella scheda
@@ -150,7 +159,9 @@ corrente tramite `sessionStorage`: un refresh non richiede nuovamente la passwor
 mentre la chiusura della scheda la cancella. Anche l’area Admin viene ripristinata
 dopo un refresh, ma il PAT e la API key vengono rimossi dalla RAM: il pannello
 mostra il dataset pubblico e richiede nuovamente la password Admin solo quando
-serve pubblicare, aggiornare le password lettore o usare l’importazione AI. Né il
+serve pubblicare, aggiornare le password lettore o usare l’importazione AI.
+Nelle configurazioni già esistenti, reinserisci una volta la password di ciascun
+viewer dalla scheda **Password lettori** per abilitarne la ricerca visuale. Né il
 PAT né la API key vengono mai salvati nel browser.
 
 ## Installazione come web app
