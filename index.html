@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow">
   <title>Ricettario</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -17,7 +17,7 @@
     [data-theme="mediterranean"] h1,[data-theme="mediterranean"] h2,[data-theme="mediterranean"] h3,[data-theme="mediterranean"] h4,[data-theme="mediterranean"] legend { font-family:var(--heading-font); }
     * { box-sizing:border-box; }
     body { margin:0; min-height:100vh; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
-    main { width:min(1120px,calc(100% - 2rem)); margin:2rem auto 4rem; }
+    main { width:min(1240px,calc(100% - 2rem)); margin:2rem auto 4rem; }
     .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:clamp(1rem,3vw,2rem); box-shadow:0 8px 28px var(--shadow); }
     .login-card { position:relative; max-width:470px; margin:clamp(3rem,14vh,9rem) auto 0; overflow:hidden; }
     .login-card::before { position:absolute; inset:0 0 auto; height:5px; background:linear-gradient(90deg,var(--accent),var(--accent-secondary)); content:""; }
@@ -43,14 +43,21 @@
     input, textarea, select, button { font:inherit; }
     input, textarea, select { width:100%; border:1px solid var(--line); border-radius:8px; padding:.7rem .8rem; color:var(--ink); background:var(--input-bg); }
     textarea { min-height:300px; resize:vertical; font: .9rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace; }
-    button { border:0; border-radius:8px; padding:.7rem 1rem; background:var(--accent); color:#fff; cursor:pointer; font-weight:700; }
+    button { border:0; border-radius:8px; padding:.7rem 1rem; background:var(--accent); color:#fff; cursor:pointer; font-weight:700; touch-action:manipulation; transition:transform .14s ease,box-shadow .14s ease,background-color .14s ease; }
+    button:active { transform:scale(.98); }
     button.secondary { background:var(--surface-muted); color:var(--ink); }
     button.danger { background:var(--danger-soft); color:var(--danger); }
     button:disabled { cursor:not-allowed; opacity:.55; }
-    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid var(--accent-secondary); outline-offset:2px; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline:3px solid var(--accent-secondary); outline-offset:2px; }
     form { display:grid; gap:1rem; }
     .actions { display:flex; flex-wrap:wrap; gap:.65rem; align-items:center; }
     .topbar { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem; }
+    .mobile-overflow-menu { display:contents; }
+    .mobile-overflow-menu > summary { display:none; }
+    .mobile-overflow-menu-content { display:flex; flex-wrap:wrap; align-items:center; gap:.65rem; }
+    .mobile-overflow-menu-content > .badge { margin-right:.25rem; }
+    .mobile-overflow-menu-content > .theme-control { margin-right:.25rem; }
+    .mobile-menu-icon { display:block; width:1.35rem; height:1.35rem; }
     .reader-brand { display:flex; align-items:center; gap:.85rem; }
     .reader-brand-mark { display:grid; place-items:center; width:3rem; height:3rem; overflow:hidden; border-radius:14px 14px 14px 5px; background:var(--accent); box-shadow:0 8px 18px var(--accent-shadow); transform:rotate(-4deg); }
     .reader-brand-mark img { width:78%; height:78%; transform:rotate(4deg); }
@@ -64,28 +71,47 @@
     .status.ok { color:var(--ok); }
     .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
     .admin-grid { display:block; }
-    .admin-tabs { display:flex; gap:.35rem; margin:0 -0.25rem 1.25rem; padding:.25rem; border-bottom:1px solid var(--line); overflow-x:auto; }
-    .admin-tab { flex:0 0 auto; border-radius:7px 7px 0 0; padding:.65rem .85rem; background:transparent; color:var(--muted); }
+    .admin-tabs { position:sticky; top:.5rem; z-index:3; display:flex; gap:.35rem; margin:0 -0.25rem 1.25rem; padding:.25rem; border-bottom:1px solid var(--line); background:var(--card); overflow-x:auto; }
+    .admin-tab { flex:0 0 auto; border:1px solid transparent; border-radius:10px 10px 0 0; padding:.65rem .85rem; background:transparent; color:var(--muted); }
     .admin-tab:hover, .admin-tab.active { background:var(--accent-soft); color:var(--accent); }
-    .admin-tab.active { box-shadow:inset 0 -3px var(--accent); }
+    .admin-tab.active { border-color:var(--line); border-bottom-color:var(--card); background:var(--card); box-shadow:inset 0 -3px var(--accent); }
     .admin-session-notice { display:grid; gap:.75rem; margin:-.25rem 0 1.25rem; padding:.85rem 1rem; border:1px solid var(--warning-line); border-radius:10px; background:var(--warning-bg); }
     .admin-session-notice p { margin:0; }
     .admin-reauth-form { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:end; }
-    .admin-panel { min-width:0; }
+    .admin-panel { min-width:0; padding:clamp(1rem,2vw,1.5rem); border:1px solid var(--line); border-radius:14px; background:var(--card); }
+    .recipe-admin-panel > .topbar { margin-bottom:.5rem; padding-bottom:1rem; border-bottom:1px solid var(--line); }
+    .admin-recipe-workspace { margin-top:1.25rem; }
+    .admin-subsection-title { margin:0 0 .75rem; color:var(--ink); font-size:1.05rem; }
     .admin-recipe-workspace { display:grid; grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr); gap:1rem; align-items:start; }
-    .admin-recipe-browser { min-width:0; }
-    .reader-toolbar { position:sticky; top:.5rem; z-index:2; display:grid; grid-template-columns:minmax(0,1fr) 220px 260px; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:var(--overlay); box-shadow:0 5px 18px var(--shadow-strong); }
+    .admin-recipe-browser { min-width:0; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
+    .reader-toolbar { position:sticky; top:.5rem; z-index:2; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:end; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:var(--overlay); box-shadow:0 5px 18px var(--shadow-strong); }
+    .reader-filters { min-width:0; }
+    .reader-filters > summary { display:flex; min-height:2.85rem; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .8rem; border:1px solid var(--line); border-radius:8px; background:var(--surface-soft); color:var(--ink); font-size:.9rem; font-weight:700; cursor:pointer; list-style:none; }
+    .reader-filters > summary::-webkit-details-marker { display:none; }
+    .reader-filters > summary::after { color:var(--accent); content:"＋"; font-size:1.1rem; }
+    .reader-filters[open] { grid-column:1 / -1; }
+    .reader-filters[open] > summary { margin-bottom:.75rem; }
+    .reader-filters[open] > summary::after { content:"−"; }
+    .reader-filter-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
     .reader-search-modes { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin:1rem 0; padding:.75rem; border:1px solid var(--line); border-radius:10px; background:var(--surface-soft); }
     .reader-search-modes-copy { display:grid; gap:.1rem; min-width:0; }
     .reader-search-modes-copy strong { color:var(--ink); }
     .reader-search-modes-copy span { color:var(--muted); font-size:.85rem; }
-    .reader-search-mode-buttons { display:flex; flex-wrap:wrap; gap:.5rem; }
-    .reader-search-mode-button { white-space:nowrap; }
+    .reader-search-mode-buttons { display:flex; flex-wrap:wrap; gap:.5rem; padding:.25rem; border-radius:11px; background:var(--surface-muted); }
+    .reader-search-mode-button.secondary { background:transparent; }
+    .reader-search-mode-button { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; white-space:nowrap; }
+    .reader-search-mode-icon { display:block; width:1.15rem; height:1.15rem; flex:0 0 auto; }
     .reader-search-mode-button[aria-pressed="true"] { background:var(--accent); color:#fff; box-shadow:0 4px 12px var(--accent-shadow); }
     .ingredient-search-panel { display:grid; gap:.75rem; margin:1rem 0; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
     .ingredient-search-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
     .ingredient-search-header h2,.ingredient-search-header p { margin:0; }
     .ingredient-search-header p { max-width:48rem; color:var(--muted); font-size:.9rem; }
+    .ingredient-stage { display:grid; gap:.75rem; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--card); }
+    .ingredient-stage-heading { display:flex; align-items:flex-start; gap:.75rem; }
+    .ingredient-step-number { display:grid; flex:0 0 auto; width:1.8rem; height:1.8rem; place-items:center; border-radius:50%; background:var(--accent-soft); color:var(--accent); font-size:.82rem; font-weight:850; }
+    .ingredient-stage-heading h3,.ingredient-stage-heading p { margin:0; }
+    .ingredient-stage-heading p { color:var(--muted); font-size:.86rem; }
+    .ingredient-inventory-header h3,.ingredient-results-header h3 { display:flex; align-items:center; gap:.5rem; }
     .ingredient-search-panel input[type="file"] { padding:.55rem; }
     .ingredient-file-list { margin:0; color:var(--muted); font-size:.85rem; }
     .vlm-file-input { position:absolute; width:1px; height:1px; overflow:hidden; opacity:0; pointer-events:none; }
@@ -102,7 +128,7 @@
     .ingredient-model-picker { display:grid; gap:.65rem; padding:.75rem; border:1px solid var(--warning-line); border-radius:9px; background:var(--warning-bg); }
     .ingredient-model-picker p { margin:0; color:var(--muted); font-size:.88rem; }
     .ingredient-model-controls { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.75rem; align-items:end; }
-    .ingredient-inventory { display:grid; gap:.65rem; padding-top:.35rem; border-top:1px solid var(--line); }
+    .ingredient-inventory { display:grid; gap:.75rem; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--card); }
     .ingredient-inventory-header { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
     .ingredient-inventory-header h3,.ingredient-inventory-header p { margin:0; }
     .ingredient-inventory-header p { color:var(--muted); font-size:.85rem; }
@@ -111,7 +137,7 @@
     .ingredient-row label { min-width:0; }
     .ingredient-row small { align-self:center; color:var(--muted); font-size:.75rem; }
     .ingredient-row button { padding:.45rem .65rem; }
-    .ingredient-results { display:grid; gap:.65rem; padding-top:.75rem; border-top:1px solid var(--line); }
+    .ingredient-results { display:grid; gap:.75rem; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--card); }
     .ingredient-results-header { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
     .ingredient-results-header h3,.ingredient-results-header p { margin:0; }
     .ingredient-results-header p { color:var(--muted); font-size:.85rem; }
@@ -135,8 +161,8 @@
     .search-help { grid-column:1 / -1; margin:0; color:var(--muted); font-size:.82rem; }
     .reader-layout { display:grid; gap:1rem; }
     .reader-layout.has-selection { grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr); align-items:start; }
-    .reader-results-column { min-width:0; }
-    .reader-section-heading { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .reader-results-column { min-width:0; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
+    .reader-section-heading { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; margin-bottom:.75rem; }
     .reader-section-heading h2 { margin:0; }
     .recipe-list { display:grid; gap:.55rem; }
     .recipe-result { display:grid; gap:.2rem; width:100%; padding:.9rem 1rem; border:1px solid var(--line); border-radius:10px; background:var(--card); color:var(--ink); text-align:left; }
@@ -173,8 +199,7 @@
     .recipe-section ul,.recipe-section ol { margin:.35rem 0; padding-left:1.5rem; }
     .recipe-section li { margin:.3rem 0; }
     .recipe-count { color:var(--muted); font-size:.9rem; }
-    .recipe-import-panel { display:grid; gap:.65rem; padding:1rem; border:1px dashed var(--line); border-radius:10px; background:var(--surface-soft); }
-    .recipe-import-panel h4 { margin:0; }
+    .recipe-import-panel { display:grid; gap:.75rem; margin-top:1rem; padding:.9rem 1rem; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
     .recipe-import-panel input[type="file"] { padding:.55rem; }
     .recipe-admin-panel { display:grid; gap:1rem; }
     .admin-recipe-toolbar { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:1rem; }
@@ -185,8 +210,8 @@
     .admin-recipe-meta { color:var(--muted); font-size:.85rem; }
     .admin-recipe-actions { display:flex; flex-wrap:wrap; gap:.4rem; }
     .admin-recipe-actions button { padding:.45rem .65rem; font-size:.85rem; }
-    .recipe-publish-bar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:1rem; align-items:end; position:sticky; bottom:.5rem; z-index:2; margin-top:.25rem; padding:.85rem; border:1px solid var(--line); border-radius:10px; background:var(--overlay); box-shadow:0 -5px 18px var(--shadow-strong); }
-    .recipe-editor { min-width:0; border-left:1px solid var(--line); padding-left:1rem; }
+    .recipe-publish-bar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:1rem; align-items:end; margin-top:1.25rem; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
+    .recipe-editor { min-width:0; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
     .admin-access-panel { max-width:900px; }
     .section-editor { min-width:0; margin:0; padding:.8rem; border:1px solid var(--line); border-radius:9px; }
     .section-editor legend { padding:0 .35rem; font-weight:750; }
@@ -203,16 +228,22 @@
     .source-row-actions button { padding:.45rem .65rem; font-size:.85rem; }
     .source-editor { max-width:720px; padding:1rem; border:1px solid var(--line); border-radius:10px; background:var(--surface-soft); }
     .source-editor-path { margin:0; color:var(--muted); font-size:.85rem; }
-    .source-publish-bar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:1rem; align-items:end; position:sticky; bottom:.5rem; z-index:2; margin-top:.25rem; padding:.85rem; border:1px solid var(--line); border-radius:10px; background:var(--overlay); box-shadow:0 -5px 18px var(--shadow-strong); }
+    .source-publish-bar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:1rem; align-items:end; margin-top:1.25rem; padding:1rem; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
     .section-actions { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.65rem; }
     .section-actions button { padding:.45rem .65rem; font-size:.85rem; }
-    .reader-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; gap:.65rem; padding:.75rem 0; border-bottom:1px solid var(--line); align-items:end; }
-    .reader-row:last-child { border-bottom:0; }
+    .reader-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; gap:.75rem; margin:.65rem 0; padding:1rem; border:1px solid var(--line); border-radius:10px; background:var(--surface-soft); align-items:end; }
     .badge { display:inline-block; border-radius:999px; padding:.2rem .55rem; background:var(--surface-muted); color:var(--muted); font-size:.8rem; font-weight:700; }
     .hint { font-size:.9rem; color:var(--muted); }
     code { background:var(--surface-muted); border-radius:4px; padding:.1rem .3rem; }
     .theme-control { display:flex; grid-template-columns:none; align-items:center; gap:.45rem; color:var(--muted); font-size:.82rem; font-weight:750; white-space:nowrap; }
     .theme-control select { width:auto; min-width:9.5rem; padding:.45rem .65rem; border-radius:999px; background:var(--surface-muted); font-size:.86rem; font-weight:700; }
+    .recipe-import-panel > summary { display:flex; justify-content:space-between; align-items:center; gap:.75rem; cursor:pointer; list-style:none; font-weight:800; }
+    .recipe-import-panel > summary::-webkit-details-marker { display:none; }
+    .recipe-import-panel > summary::after { flex:0 0 auto; color:var(--accent); content:"＋"; font-size:1.2rem; }
+    .recipe-import-panel[open] > summary { padding-bottom:.8rem; border-bottom:1px solid var(--line); }
+    .recipe-import-panel[open] > summary::after { content:"−"; }
+    .recipe-import-summary-note { color:var(--muted); font-size:.84rem; font-weight:500; }
+    .recipe-import-content { display:grid; gap:.8rem; padding-top:.8rem; }
     [data-theme="mediterranean"] .theme-control select { border-color:#d9b99a; background:#f4e5d6; }
     [data-theme="mediterranean"] .admin-tabs { border-bottom-color:#d9c3ae; }
     [data-theme="mediterranean"] .admin-tab.active { box-shadow:inset 0 -3px var(--accent); }
@@ -222,33 +253,98 @@
     [data-theme="mediterranean"] button { border-radius:10px; }
     [data-theme="mediterranean"] .login-card,[data-theme="mediterranean"] #admin-view { border-radius:20px; }
     [hidden] { display:none !important; }
+    @media (max-width:980px) and (min-width:761px) {
+      .admin-recipe-workspace { grid-template-columns:1fr; }
+      .recipe-editor { order:-1; }
+    }
     @media (max-width:760px) {
-      main { width:min(100% - 1rem,1120px); margin-top:1rem; }
+      html { scroll-padding-top:5rem; scroll-padding-bottom:7rem; }
+      body { min-height:100vh; min-height:100svh; background:var(--surface-soft); }
+      main { width:100%; margin:0 auto; padding-bottom:env(safe-area-inset-bottom); }
+      .card { padding:1rem; border-radius:0; }
+      #reader-view > .topbar { position:sticky; top:0; z-index:5; align-items:center; flex-direction:row; gap:.65rem; margin:0; padding:calc(.6rem + env(safe-area-inset-top)) 1rem .6rem; border-bottom:1px solid var(--line); background:var(--card); background:color-mix(in srgb,var(--card) 92%,transparent); backdrop-filter:blur(18px) saturate(1.35); -webkit-backdrop-filter:blur(18px) saturate(1.35); }
+      #reader-view > .topbar .reader-brand { min-width:0; flex:1 1 auto; gap:.65rem; }
+      #reader-view > .topbar .reader-brand-mark { width:2.35rem; height:2.35rem; border-radius:12px; }
+      #reader-view > .topbar .reader-brand-kicker { font-size:.58rem; letter-spacing:.11em; }
+      #reader-view > .topbar .reader-brand h1 { font-size:1.65rem; }
+      #reader-view > .topbar .reader-brand h1::after { width:1.8rem; height:2px; margin-top:.3rem; }
+      #reader-view > .topbar .reader-brand .badge { margin-top:.25rem; font-size:.68rem; }
+      #reader-view > .card { min-height:calc(100vh - 4.2rem); min-height:calc(100svh - 4.2rem); padding:.75rem 1rem calc(7.25rem + env(safe-area-inset-bottom)); border:0; background:transparent; box-shadow:none; }
+      #admin-view { min-height:100vh; min-height:100svh; padding:calc(.75rem + env(safe-area-inset-top)) .75rem 1.5rem; border:0; box-shadow:none; }
+      #admin-view > .topbar { align-items:center; flex-direction:row; }
+      #admin-view > .topbar h2 { margin-bottom:.25rem; font-size:1.25rem; }
+      #admin-view > .topbar p { margin-bottom:0; font-size:.82rem; }
       .grid,.reader-toolbar,.admin-recipe-toolbar,.admin-recipe-workspace,.section-editor-grid,.recipe-publish-bar,.admin-source-toolbar,.source-publish-bar { grid-template-columns:1fr; }
       .reader-toolbar { position:static; }
-      .reader-search-modes { align-items:stretch; flex-direction:column; }
-      .reader-search-mode-buttons { display:grid; grid-template-columns:1fr 1fr; }
-      .reader-search-mode-button { width:100%; }
+      .reader-filters[open] { grid-column:1; }
+      .reader-filter-fields { grid-template-columns:1fr; }
+      .reader-search-modes { position:fixed; right:auto; bottom:calc(.55rem + env(safe-area-inset-bottom)); left:50%; z-index:20; display:block; width:min(calc(100% - 1rem),32rem); margin:0; padding:.35rem; transform:translateX(-50%); border:1px solid var(--line); border-radius:18px; background:var(--card); background:color-mix(in srgb,var(--card) 90%,transparent); box-shadow:0 10px 34px var(--shadow-strong); backdrop-filter:blur(20px) saturate(1.4); -webkit-backdrop-filter:blur(20px) saturate(1.4); }
+      .reader-search-modes-copy { display:none; }
+      .reader-search-mode-buttons { display:grid; width:100%; grid-template-columns:1fr 1fr; gap:.25rem; padding:0; border-radius:14px; background:transparent; }
+      .reader-search-mode-button { width:100%; min-width:0; min-height:3.1rem; padding:.55rem .35rem; border-radius:13px; font-size:.88rem; white-space:normal; }
+      .reader-search-mode-icon { width:1.2rem; height:1.2rem; }
+      .reader-search-mode-button[aria-pressed="true"] { box-shadow:0 4px 12px var(--accent-shadow); }
+      .mobile-overflow-menu { position:relative; display:block; flex:0 0 auto; }
+      .mobile-overflow-menu > summary { display:grid; width:2.8rem; height:2.8rem; place-items:center; border:1px solid var(--line); border-radius:14px; background:var(--surface-soft); color:var(--ink); cursor:pointer; list-style:none; }
+      .mobile-overflow-menu > summary::-webkit-details-marker { display:none; }
+      .mobile-overflow-menu[open] > summary { border-color:var(--accent); color:var(--accent); }
+      .mobile-overflow-menu-content { position:absolute; top:calc(100% + .55rem); right:0; display:none; width:min(88vw,20rem); padding:.85rem; border:1px solid var(--line); border-radius:16px; background:var(--card); box-shadow:0 14px 36px var(--shadow-strong); }
+      .mobile-overflow-menu[open] .mobile-overflow-menu-content { display:grid; gap:.7rem; }
+      .mobile-overflow-menu-content > .badge { justify-self:start; }
+      .mobile-overflow-menu-content > .theme-control { width:100%; justify-content:space-between; margin:0; }
+      .mobile-overflow-menu-content > .theme-control select { min-width:0; }
+      .mobile-overflow-menu-content > button { width:100%; min-height:2.8rem; }
       .reader-layout.has-selection { grid-template-columns:1fr; }
       .reader-layout.has-selection .recipe-results-column { display:none; }
       .recipe-detail-content { border:0; padding:0; }
       .recipe-media { aspect-ratio:4/3; margin-bottom:1rem; border-radius:12px; }
       .recipe-media figcaption { font-size:.7rem; }
-      .recipe-editor { border-left:0; border-top:1px solid var(--line); padding:1rem 0 0; }
-      .recipe-publish-bar { position:static; padding:0; border:0; background:transparent; box-shadow:none; }
+      .recipe-editor { order:-1; padding:1rem; border:1px solid var(--line); }
+      .recipe-publish-bar { position:static; padding:1rem; border:1px solid var(--line); background:var(--surface-soft); box-shadow:none; }
       .admin-reauth-form { grid-template-columns:1fr; }
       .reader-row { grid-template-columns:1fr; align-items:stretch; }
       .ingredient-search-header,.ingredient-inventory-header,.ingredient-results-header { align-items:flex-start; flex-direction:column; }
       .ingredient-ai-unlock,.ingredient-model-controls,.ingredient-row { grid-template-columns:1fr; align-items:stretch; }
       .topbar { align-items:flex-start; flex-direction:column; }
       .source-row { grid-template-columns:1fr; }
-      .login-card { margin:2rem 0 0; }
+      .admin-panel { padding:1rem; }
+      .admin-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.35rem; margin:0 0 1rem; padding:.25rem; overflow:visible; border:1px solid var(--line); border-radius:12px; background:var(--surface-soft); }
+      .admin-tab { min-width:0; min-height:2.8rem; padding:.55rem .35rem; border:0; border-radius:8px; font-size:.84rem; line-height:1.2; white-space:normal; }
+      .admin-tab.active { border:0; border-radius:8px; background:var(--accent-soft); box-shadow:inset 0 -3px var(--accent); }
+      #admin-view > .topbar .actions,#reader-view > .topbar .actions { display:flex; width:auto; gap:0; }
+      .vlm-file-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.5rem; }
+      .vlm-file-actions button { width:100%; min-height:3rem; padding:.6rem .5rem; font-size:.9rem; }
+      .recipe-import-panel { padding:.8rem; }
+      .recipe-import-panel > summary { align-items:flex-start; }
+      .recipe-import-summary-note { flex-basis:100%; order:2; }
+      .recipe-import-panel > summary::after { order:1; margin-left:auto; }
+      .admin-recipe-actions button { flex:1 1 calc(50% - .4rem); }
+      .admin-recipe-list { max-height:none; }
+      .admin-tabs { position:sticky; top:calc(env(safe-area-inset-top) + .25rem); z-index:6; box-shadow:0 5px 18px var(--shadow); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
+      .admin-tab { min-height:3rem; }
+      input,textarea,select { min-height:3rem; font-size:16px; }
+      textarea { min-height:160px; }
+      button { min-height:2.8rem; }
+      .recipe-result { min-height:5rem; padding:.95rem 1rem; border-radius:14px; }
+      .reader-results-column,.ingredient-search-panel,.admin-recipe-browser,.recipe-editor,.ingredient-stage,.ingredient-inventory,.ingredient-results { padding:1rem; border-radius:16px; }
+      .ingredient-recipe-result,.admin-recipe-row,.source-row { border-radius:14px; }
+      .ingredient-row { grid-template-columns:minmax(0,1fr) minmax(5rem,.45fr) auto; align-items:end; }
+      .ingredient-row button { min-height:3rem; }
+      .recipe-import-summary-note { font-size:.78rem; }
+      .vlm-camera-dialog { width:min(calc(100vw - 1rem),720px); max-width:none; border-radius:18px; }
+      .vlm-camera-content { padding:calc(.9rem + env(safe-area-inset-top)) .9rem calc(.9rem + env(safe-area-inset-bottom)); }
+      .login-card { width:calc(100% - 1.25rem); margin:2rem auto 0; border:1px solid var(--line); border-radius:20px; }
       .login-brand { margin-bottom:1.5rem; }
       .reader-brand-mark { width:2.6rem; height:2.6rem; }
       .reader-brand h1 { font-size:clamp(1.85rem,10vw,2.35rem); }
     }
+    @media (max-width:430px) {
+      .reader-search-mode-button { gap:.35rem; font-size:.82rem; }
+      .reader-search-mode-button .reader-search-mode-icon { width:1.05rem; height:1.05rem; }
+      .admin-tab { font-size:.78rem; }
+    }
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior:auto !important; }
+      *, *::before, *::after { scroll-behavior:auto !important; transition-duration:.01ms !important; animation-duration:.01ms !important; }
     }
   </style>
   <script>
@@ -289,14 +385,21 @@
           </div>
         </div>
         <div class="actions">
-          <label class="theme-control">Tema
-            <select class="theme-select" aria-label="Tema grafico">
-              <option value="classic">Classico</option>
-              <option value="mediterranean">Mediterraneo</option>
-            </select>
-          </label>
-          <button id="show-admin-button" class="secondary" type="button" hidden>Torna al pannello Admin</button>
-          <button id="logout-button" class="secondary" type="button">Esci</button>
+          <details class="mobile-overflow-menu">
+            <summary aria-label="Apri impostazioni e azioni" title="Impostazioni e azioni">
+              <svg class="mobile-menu-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>
+            </summary>
+            <div class="mobile-overflow-menu-content">
+              <label class="theme-control">Tema
+                <select class="theme-select" aria-label="Tema grafico">
+                  <option value="classic">Classico</option>
+                  <option value="mediterranean">Mediterraneo</option>
+                </select>
+              </label>
+              <button id="show-admin-button" class="secondary" type="button" hidden>Torna al pannello Admin</button>
+              <button id="logout-button" class="secondary" type="button">Esci</button>
+            </div>
+          </details>
         </div>
       </div>
       <article class="card">
@@ -307,8 +410,12 @@
             <span id="reader-search-mode-description">Cerca per nome, ingrediente o parola chiave.</span>
           </div>
           <div class="reader-search-mode-buttons">
-            <button id="manual-search-mode-button" class="reader-search-mode-button secondary" type="button" aria-pressed="true">Cerca nel ricettario</button>
-            <button id="ingredient-search-mode-button" class="reader-search-mode-button secondary" type="button" aria-pressed="false">Cerca con foto</button>
+            <button id="manual-search-mode-button" class="reader-search-mode-button secondary" type="button" aria-pressed="true" aria-label="Cerca nel ricettario">
+              <svg class="reader-search-mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.3 4.3"></path></svg><span>Ricettario</span>
+            </button>
+            <button id="ingredient-search-mode-button" class="reader-search-mode-button secondary" type="button" aria-pressed="false" aria-label="Cerca con foto">
+              <svg class="reader-search-mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5h3l1.5-2h7l1.5 2h3A1.5 1.5 0 0 1 21.5 9v9A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18V9A1.5 1.5 0 0 1 4 7.5Z"></path><circle cx="12" cy="13" r="3.5"></circle></svg><span>Con una foto</span>
+            </button>
           </div>
         </nav>
         <section id="ingredient-search-panel" class="ingredient-search-panel" hidden aria-labelledby="ingredient-search-title">
@@ -319,32 +426,37 @@
             </div>
             <span id="ingredient-ai-badge" class="badge">Analisi protetta</span>
           </div>
-          <div>
-            <strong>Foto degli ingredienti</strong>
-            <p class="hint">Puoi usare la galleria, scattare più foto o caricare file immagine.</p>
-          </div>
-          <div class="vlm-file-actions">
-            <button id="ingredient-gallery-button" class="secondary" type="button">Galleria foto multiple</button>
-            <button id="ingredient-camera-button" type="button">Scatta foto</button>
-            <button id="ingredient-file-button" class="secondary" type="button">Carica file immagini</button>
-          </div>
-          <input id="ingredient-photo-input" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Seleziona più foto dalla galleria">
-          <input id="ingredient-file-input" class="vlm-file-input" type="file" accept=".avif,.gif,.heic,.heif,.jpeg,.jpg,.png,.webp" multiple aria-label="Carica più file immagine">
-          <p id="ingredient-photo-list" class="ingredient-file-list">Puoi aggiungere fino a 6 foto.</p>
-          <div class="actions">
-            <button id="ingredient-analyze-button" type="button" disabled>Analizza ingredienti</button>
-            <button id="ingredient-clear-button" class="secondary" type="button" disabled>Azzera</button>
-          </div>
-          <form id="ingredient-ai-unlock" class="ingredient-ai-unlock" hidden>
-            <p id="ingredient-ai-unlock-copy">La chiave Gemini verrà usata solo nella memoria di questa scheda.</p>
-            <label id="ingredient-ai-password-label" for="ingredient-ai-password">Password di accesso
-              <input id="ingredient-ai-password" type="password" autocomplete="current-password" required>
-            </label>
-            <button id="ingredient-ai-unlock-button" type="submit">Sblocca analisi</button>
-          </form>
+          <section class="ingredient-stage" aria-labelledby="ingredient-photo-stage-title">
+            <div class="ingredient-stage-heading">
+              <span class="ingredient-step-number" aria-hidden="true">1</span>
+              <div>
+                <h3 id="ingredient-photo-stage-title">Aggiungi foto</h3>
+                <p>Galleria, fotocamera o file immagine. Puoi combinare più foto.</p>
+              </div>
+            </div>
+            <div class="vlm-file-actions">
+              <button id="ingredient-gallery-button" class="secondary" type="button">Galleria foto multiple</button>
+              <button id="ingredient-camera-button" type="button">Scatta foto</button>
+              <button id="ingredient-file-button" class="secondary" type="button">Carica file immagini</button>
+            </div>
+            <input id="ingredient-photo-input" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Seleziona più foto dalla galleria">
+            <input id="ingredient-file-input" class="vlm-file-input" type="file" accept=".avif,.gif,.heic,.heif,.jpeg,.jpg,.png,.webp" multiple aria-label="Carica più file immagine">
+            <p id="ingredient-photo-list" class="ingredient-file-list">Puoi aggiungere fino a 6 foto.</p>
+            <div class="actions">
+              <button id="ingredient-analyze-button" type="button" disabled>Analizza ingredienti</button>
+              <button id="ingredient-clear-button" class="secondary" type="button" disabled>Azzera</button>
+            </div>
+            <form id="ingredient-ai-unlock" class="ingredient-ai-unlock" hidden>
+              <p id="ingredient-ai-unlock-copy">La chiave Gemini verrà usata solo nella memoria di questa scheda.</p>
+              <label id="ingredient-ai-password-label" for="ingredient-ai-password">Password di accesso
+                <input id="ingredient-ai-password" type="password" autocomplete="current-password" required>
+              </label>
+              <button id="ingredient-ai-unlock-button" type="submit">Sblocca analisi</button>
+            </form>
+          </section>
           <div id="ingredient-inventory" class="ingredient-inventory" hidden>
             <div class="ingredient-inventory-header">
-              <h3>Ingredienti riconosciuti</h3>
+              <h3><span class="ingredient-step-number" aria-hidden="true">2</span>Ingredienti riconosciuti</h3>
               <p>Controllali: puoi correggere, eliminare o aggiungere voci prima della ricerca.</p>
             </div>
             <div id="ingredient-list" class="ingredient-list"></div>
@@ -361,7 +473,7 @@
           </article>
           <div id="ingredient-results" class="ingredient-results" hidden>
             <div class="ingredient-results-header">
-              <h3>Ricette possibili</h3>
+              <h3><span class="ingredient-step-number" aria-hidden="true">3</span>Ricette possibili</h3>
               <p id="ingredient-results-count"></p>
             </div>
             <div id="ingredient-category-filter" class="ingredient-category-filter" hidden>
@@ -403,16 +515,21 @@
                 <button id="clear-search-button" class="search-clear" type="button" aria-label="Cancella ricerca" title="Cancella ricerca" hidden>×</button>
               </span>
             </label>
-            <label for="category-filter">Categoria
-              <select id="category-filter">
-                <option value="">Tutte</option>
-              </select>
-            </label>
-            <label for="source-filter">Fonte
-              <select id="source-filter">
-                <option value="">Tutte le fonti</option>
-              </select>
-            </label>
+            <details class="reader-filters">
+              <summary>Filtri: categoria e fonte</summary>
+              <div class="reader-filter-fields">
+                <label for="category-filter">Categoria
+                  <select id="category-filter">
+                    <option value="">Tutte</option>
+                  </select>
+                </label>
+                <label for="source-filter">Fonte
+                  <select id="source-filter">
+                    <option value="">Tutte le fonti</option>
+                  </select>
+                </label>
+              </div>
+            </details>
             <p id="search-help" class="search-help">Cerca tutte le parole, anche parziali da 3 caratteri; usa le virgolette per una frase esatta, ad esempio <span aria-hidden="true">“</span>pasta sfoglia<span aria-hidden="true">”</span>.</p>
           </div>
           <div id="reader-layout" class="reader-layout">
@@ -439,21 +556,28 @@
       <div class="topbar">
         <div><h2>Pannello amministratore</h2><p class="muted">PAT e chiave AI restano nella memoria di questa scheda.</p></div>
         <div class="actions">
-          <span id="repository-badge" class="badge"></span>
-          <label class="theme-control">Tema
-            <select class="theme-select" aria-label="Tema grafico">
-              <option value="classic">Classico</option>
-              <option value="mediterranean">Mediterraneo</option>
-            </select>
-          </label>
-          <button id="show-reader-button" class="secondary" type="button">Apri ricettario</button>
-          <button id="admin-logout-button" class="secondary" type="button">Esci</button>
+          <details class="mobile-overflow-menu">
+            <summary aria-label="Apri impostazioni e azioni" title="Impostazioni e azioni">
+              <svg class="mobile-menu-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>
+            </summary>
+            <div class="mobile-overflow-menu-content">
+              <span id="repository-badge" class="badge"></span>
+              <label class="theme-control">Tema
+                <select class="theme-select" aria-label="Tema grafico">
+                  <option value="classic">Classico</option>
+                  <option value="mediterranean">Mediterraneo</option>
+                </select>
+              </label>
+              <button id="show-reader-button" class="secondary" type="button">Apri ricettario</button>
+              <button id="admin-logout-button" class="secondary" type="button">Esci</button>
+            </div>
+          </details>
         </div>
       </div>
       <nav class="admin-tabs" role="tablist" aria-label="Sezioni amministratore">
-        <button id="admin-tab-recipes" class="admin-tab active" role="tab" type="button" data-admin-tab="recipes" aria-controls="admin-recipes-panel" aria-selected="true">Ricette e importazione</button>
-        <button id="admin-tab-sources" class="admin-tab" role="tab" type="button" data-admin-tab="sources" aria-controls="admin-sources-panel" aria-selected="false">Fonti</button>
-        <button id="admin-tab-access" class="admin-tab" role="tab" type="button" data-admin-tab="access" aria-controls="access-form" aria-selected="false">Password lettori</button>
+        <button id="admin-tab-recipes" class="admin-tab active" role="tab" type="button" data-admin-tab="recipes" aria-controls="admin-recipes-panel" aria-selected="true" aria-label="Ricette e importazione" title="Ricette e importazione">Ricette</button>
+        <button id="admin-tab-sources" class="admin-tab" role="tab" type="button" data-admin-tab="sources" aria-controls="admin-sources-panel" aria-selected="false" aria-label="Gestione fonti" title="Gestione fonti">Fonti</button>
+        <button id="admin-tab-access" class="admin-tab" role="tab" type="button" data-admin-tab="access" aria-controls="access-form" aria-selected="false" aria-label="Password lettori" title="Password lettori">Lettori</button>
       </nav>
       <section id="admin-session-notice" class="admin-session-notice" aria-labelledby="admin-session-title" hidden>
         <p id="admin-session-title"><strong>Sessione Admin ripristinata.</strong> Per pubblicare modifiche o usare l’importazione AI, riattiva temporaneamente i token inserendo la password Admin.</p>
@@ -477,48 +601,52 @@
             </label>
             <p id="admin-source-path" class="recipe-source-note"></p>
           </div>
-          <section class="recipe-import-panel" aria-labelledby="recipe-import-title">
-            <div>
-              <h4 id="recipe-import-title">Importa da foto o PDF</h4>
-              <p class="hint">L’AI crea una bozza: controlla sempre il form prima di salvarlo.</p>
-            </div>
-            <label for="recipe-import-source">Fonte di destinazione
-              <select id="recipe-import-source" required></select>
-            </label>
-            <div>
-              <strong>Immagini o documenti</strong>
-              <p class="hint">Puoi selezionare più immagini o PDF dalla galleria e dai file, oppure scattare più foto.</p>
-            </div>
-            <div class="vlm-file-actions">
-              <button id="recipe-gallery-button" class="secondary" type="button" disabled>Galleria foto multiple</button>
-              <button id="recipe-camera-button" type="button" disabled>Scatta foto</button>
-              <button id="recipe-file-button" class="secondary" type="button" disabled>Carica file immagini</button>
-              <button id="recipe-pdf-button" class="secondary" type="button" disabled>Carica PDF multipli</button>
-            </div>
-            <input id="recipe-source-file" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Seleziona più foto dalla galleria" disabled>
-            <input id="recipe-file-input" class="vlm-file-input" type="file" accept=".avif,.gif,.heic,.heif,.jpeg,.jpg,.png,.webp" multiple aria-label="Carica più file immagine" disabled>
-            <input id="recipe-pdf-input" class="vlm-file-input" type="file" accept="application/pdf,.pdf" multiple aria-label="Carica più file PDF" disabled>
-            <div class="actions">
-              <button id="extract-recipe-button" class="secondary" type="button" disabled>Analizza e compila</button>
-              <button id="recipe-clear-files-button" class="secondary" type="button" disabled>Azzera file</button>
-              <span id="recipe-source-name" class="hint"></span>
-            </div>
-            <p id="ai-status" class="status" role="status" aria-live="polite"></p>
-            <div id="recipe-model-picker" class="ingredient-model-picker" hidden>
-              <p id="recipe-model-error">Il modello selezionato ha restituito un errore. Puoi scegliere un altro modello compatibile e riprovare.</p>
-              <div class="ingredient-model-controls">
-                <label for="recipe-model-select">Modello per l’importazione
-                  <select id="recipe-model-select" disabled>
-                    <option value="">Caricamento modelli…</option>
-                  </select>
+          <details class="recipe-import-panel">
+            <summary id="recipe-import-title">
+              <span>Importa ricetta da foto o PDF</span>
+              <span class="recipe-import-summary-note">Gemini prepara una bozza da rivedere</span>
+            </summary>
+            <div class="recipe-import-content">
+                <p class="hint">Controlla e salva sempre la ricetta dal form: l’importazione non pubblica nulla da sola.</p>
+                <label for="recipe-import-source">Fonte di destinazione
+                  <select id="recipe-import-source" required></select>
                 </label>
-                <button id="recipe-model-refresh-button" class="secondary" type="button">Aggiorna modelli</button>
-              </div>
-              <p id="recipe-model-status" class="status" role="status" aria-live="polite"></p>
+                <div>
+                  <strong>Immagini o documenti</strong>
+                  <p class="hint">Puoi selezionare più immagini o PDF dalla galleria e dai file, oppure scattare più foto.</p>
+                </div>
+                <div class="vlm-file-actions">
+                  <button id="recipe-gallery-button" class="secondary" type="button" disabled>Galleria foto multiple</button>
+                  <button id="recipe-camera-button" type="button" disabled>Scatta foto</button>
+                  <button id="recipe-file-button" class="secondary" type="button" disabled>Carica file immagini</button>
+                  <button id="recipe-pdf-button" class="secondary" type="button" disabled>Carica PDF multipli</button>
+                </div>
+                <input id="recipe-source-file" class="vlm-file-input" type="file" accept="image/*" multiple aria-label="Seleziona più foto dalla galleria" disabled>
+                <input id="recipe-file-input" class="vlm-file-input" type="file" accept=".avif,.gif,.heic,.heif,.jpeg,.jpg,.png,.webp" multiple aria-label="Carica più file immagine" disabled>
+                <input id="recipe-pdf-input" class="vlm-file-input" type="file" accept="application/pdf,.pdf" multiple aria-label="Carica più file PDF" disabled>
+                <div class="actions">
+                  <button id="extract-recipe-button" class="secondary" type="button" disabled>Analizza e compila</button>
+                  <button id="recipe-clear-files-button" class="secondary" type="button" disabled>Azzera file</button>
+                  <span id="recipe-source-name" class="hint"></span>
+                </div>
+                <p id="ai-status" class="status" role="status" aria-live="polite"></p>
+                <div id="recipe-model-picker" class="ingredient-model-picker" hidden>
+                  <p id="recipe-model-error">Il modello selezionato ha restituito un errore. Puoi scegliere un altro modello compatibile e riprovare.</p>
+                  <div class="ingredient-model-controls">
+                    <label for="recipe-model-select">Modello per l’importazione
+                      <select id="recipe-model-select" disabled>
+                        <option value="">Caricamento modelli…</option>
+                      </select>
+                    </label>
+                    <button id="recipe-model-refresh-button" class="secondary" type="button">Aggiorna modelli</button>
+                  </div>
+                  <p id="recipe-model-status" class="status" role="status" aria-live="polite"></p>
+                </div>
             </div>
-          </section>
+          </details>
           <div class="admin-recipe-workspace">
             <div class="admin-recipe-browser">
+              <h4 class="admin-subsection-title">Archivio ricette</h4>
               <div class="admin-recipe-toolbar">
                 <label for="admin-recipe-search">Cerca nell’archivio
                   <input id="admin-recipe-search" type="search" placeholder="Titolo, ingrediente o keyword…" autocomplete="off">
@@ -2915,6 +3043,7 @@
 
     function showAdminView() {
       if (session.role !== 'admin') return;
+      document.querySelectorAll('.mobile-overflow-menu[open]').forEach((menu) => { menu.open = false; });
       if (adminSourceId) setAdminSource(adminSourceId, { closeEditor: false });
       adminView.hidden = false;
       readerView.hidden = true;
@@ -2924,16 +3053,20 @@
 
     function showReaderView() {
       if (!session.role) return;
+      document.querySelectorAll('.mobile-overflow-menu[open]').forEach((menu) => { menu.open = false; });
       applyReaderDatasets();
       setReaderSearchMode(readerSearchMode, { focus: false });
       adminView.hidden = true;
       readerView.hidden = false;
       updatePageTitle('reader');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      (readerSearchMode === 'ingredients' ? $('#ingredient-photo-input') : $('#search-input')).focus();
+      if (window.matchMedia('(pointer: fine)').matches) {
+        (readerSearchMode === 'ingredients' ? $('#ingredient-photo-input') : $('#search-input')).focus();
+      }
     }
 
     function logout() {
+      document.querySelectorAll('.mobile-overflow-menu[open]').forEach((menu) => { menu.open = false; });
       clearIngredientSearch();
       readerSearchMode = 'manual';
       aiModel = AI_DEFAULT_MODEL;
@@ -3068,8 +3201,22 @@
 
     $('#logout-button').addEventListener('click', logout);
     $('#admin-logout-button').addEventListener('click', logout);
+    document.addEventListener('click', (event) => {
+      document.querySelectorAll('.mobile-overflow-menu[open]').forEach((menu) => {
+        if (!menu.contains(event.target)) menu.open = false;
+      });
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        document.querySelectorAll('.mobile-overflow-menu[open]').forEach((menu) => { menu.open = false; });
+      }
+    });
     document.querySelectorAll('.theme-select').forEach((select) => {
-      select.addEventListener('change', () => applyTheme(select.value));
+      select.addEventListener('change', () => {
+        applyTheme(select.value);
+        const menu = select.closest('.mobile-overflow-menu');
+        if (menu) menu.open = false;
+      });
     });
     applyTheme(storedTheme(), { persist: false });
     $('#show-reader-button').addEventListener('click', showReaderView);
