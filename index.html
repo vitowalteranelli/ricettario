@@ -1012,6 +1012,7 @@
     let cameraTarget = '';
     let cameraDevices = [];
     let cameraDeviceIndex = 0;
+    let cameraSwitching = false;
 
     const $ = (selector) => document.querySelector(selector);
     const loginView = $('#login-view');
@@ -1843,20 +1844,33 @@
       if (!navigator.mediaDevices?.enumerateDevices) return;
       const devices = await navigator.mediaDevices.enumerateDevices();
       cameraDevices = devices.filter((device) => device.kind === 'videoinput');
-      const activeDeviceId = cameraStream?.getVideoTracks()[0]?.getSettings?.().deviceId;
-      const activeIndex = cameraDevices.findIndex((device) => device.deviceId === activeDeviceId);
+      const activeTrack = cameraStream?.getVideoTracks()[0];
+      const activeSettings = activeTrack?.getSettings?.() || {};
+      let activeIndex = activeSettings.deviceId
+        ? cameraDevices.findIndex((device) => device.deviceId === activeSettings.deviceId)
+        : -1;
+      if (activeIndex < 0 && activeTrack?.label) {
+        const activeLabel = activeTrack.label.trim().toLocaleLowerCase();
+        activeIndex = cameraDevices.findIndex((device) => device.label.trim().toLocaleLowerCase() === activeLabel);
+      }
+      if (activeIndex < 0 && activeSettings.facingMode) {
+        const facingLabel = activeSettings.facingMode === 'environment'
+          ? /\b(back|rear|environment|posteriore|retro)\b/i
+          : /\b(front|user|anteriore|frontale)\b/i;
+        activeIndex = cameraDevices.findIndex((device) => facingLabel.test(device.label));
+      }
       if (activeIndex >= 0) cameraDeviceIndex = activeIndex;
       const switchButton = $('#vlm-camera-switch-button');
       switchButton.hidden = cameraDevices.length < 2;
-      switchButton.disabled = cameraDevices.length < 2;
+      switchButton.disabled = cameraSwitching || cameraDevices.length < 2;
     }
 
-    async function startVlmCamera(deviceId = '') {
+    async function startVlmCamera(deviceId = '', facingMode = 'environment') {
       cameraStream?.getTracks().forEach((track) => track.stop());
       cameraStream = null;
       const video = deviceId
         ? { deviceId: { exact: deviceId } }
-        : { facingMode: { ideal: 'environment' } };
+        : { facingMode: { ideal: facingMode } };
       cameraStream = await navigator.mediaDevices.getUserMedia({ video, audio: false });
       $('#vlm-camera-preview').srcObject = cameraStream;
       await $('#vlm-camera-preview').play();
@@ -1864,27 +1878,56 @@
     }
 
     async function switchVlmCamera() {
-      if (cameraDevices.length < 2) return;
-      const nextIndex = (cameraDeviceIndex + 1) % cameraDevices.length;
-      const nextDevice = cameraDevices[nextIndex];
-      const previousDeviceId = cameraStream?.getVideoTracks()[0]?.getSettings?.().deviceId || '';
       const switchButton = $('#vlm-camera-switch-button');
+      if (cameraSwitching || switchButton.disabled) return;
+      cameraSwitching = true;
       switchButton.disabled = true;
-      $('#vlm-camera-status').textContent = 'Cambio fotocamera…';
       try {
-        await startVlmCamera(nextDevice.deviceId);
-        cameraDeviceIndex = nextIndex;
-        $('#vlm-camera-status').textContent = 'Fotocamera cambiata. Inquadra e premi “Scatta foto”.';
-      } catch (error) {
-        try {
-          await startVlmCamera(previousDeviceId);
-          $('#vlm-camera-status').textContent = `Impossibile cambiare fotocamera: ${error.message || 'dispositivo non disponibile'}. È stata ripristinata quella precedente.`;
-        } catch {
-          const statusElement = cameraTarget === 'ingredients' ? $('#ingredient-ai-status') : $('#ai-status');
-          closeVlmCamera();
-          setStatus(statusElement, 'Impossibile cambiare fotocamera. Riavvia lo scatto oppure usa Galleria o Carica file.', 'error');
+        await refreshVlmCameraDevices();
+        if (cameraDevices.length < 2) {
+          $('#vlm-camera-status').textContent = 'È disponibile una sola fotocamera.';
+          return;
         }
+        const activeTrack = cameraStream?.getVideoTracks()[0];
+        const activeSettings = activeTrack?.getSettings?.() || {};
+        const previousDeviceId = activeSettings.deviceId || '';
+        const previousFacingMode = activeSettings.facingMode || 'environment';
+        let activeIndex = previousDeviceId
+          ? cameraDevices.findIndex((device) => device.deviceId === previousDeviceId)
+          : -1;
+        if (activeIndex < 0 && activeTrack?.label) {
+          const activeLabel = activeTrack.label.trim().toLocaleLowerCase();
+          activeIndex = cameraDevices.findIndex((device) => device.label.trim().toLocaleLowerCase() === activeLabel);
+        }
+        const activeDeviceMapped = activeIndex >= 0;
+        if (activeIndex >= 0) cameraDeviceIndex = activeIndex;
+        const nextIndex = (cameraDeviceIndex + 1) % cameraDevices.length;
+        const nextDevice = cameraDevices[nextIndex];
+        const facingFallback = !activeDeviceMapped && activeSettings.facingMode
+          ? (activeSettings.facingMode === 'environment' ? 'user' : 'environment')
+          : '';
+        $('#vlm-camera-status').textContent = 'Cambio fotocamera…';
+        try {
+          if (facingFallback) await startVlmCamera('', facingFallback);
+          else await startVlmCamera(nextDevice.deviceId);
+          const switchedDeviceId = cameraStream?.getVideoTracks()[0]?.getSettings?.().deviceId;
+          const switchedIndex = cameraDevices.findIndex((device) => device.deviceId === switchedDeviceId);
+          cameraDeviceIndex = switchedIndex >= 0 ? switchedIndex : nextIndex;
+          $('#vlm-camera-status').textContent = 'Fotocamera cambiata. Inquadra e premi “Scatta foto”.';
+        } catch (error) {
+          try {
+            await startVlmCamera(activeDeviceMapped ? previousDeviceId : '', previousFacingMode);
+            $('#vlm-camera-status').textContent = `Impossibile cambiare fotocamera: ${error.message || 'dispositivo non disponibile'}. È stata ripristinata quella precedente.`;
+          } catch {
+            const statusElement = cameraTarget === 'ingredients' ? $('#ingredient-ai-status') : $('#ai-status');
+            closeVlmCamera();
+            setStatus(statusElement, 'Impossibile cambiare fotocamera. Riavvia lo scatto oppure usa Galleria o Carica file.', 'error');
+          }
+        }
+      } catch (error) {
+        $('#vlm-camera-status').textContent = `Impossibile rilevare le fotocamere: ${error.message || 'errore del dispositivo'}.`;
       } finally {
+        cameraSwitching = false;
         switchButton.disabled = cameraDevices.length < 2;
       }
     }
