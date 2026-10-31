@@ -2,5 +2,49 @@
   "version": 1,
   "sourceId": "famiglia-anelli",
   "sourceName": "Famiglia Anelli",
-  "recipes": []
+  "recipes": [
+    {
+      "id": "famiglia-anelli--dolci-salame-di-cioccolato",
+      "sourceId": "famiglia-anelli",
+      "title": "Salame di cioccolato",
+      "category": "Dolci",
+      "subcategory": "",
+      "tags": [],
+      "notes": [
+        "Tempo di lavorazione: 30 minuti, più il tempo necessario per tenere il dolce in frigorifero",
+        "Tempo di cottura: 4 minuti circa"
+      ],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "Burro freschissimo g 150",
+            "cioccolato fondente g 150",
+            "zucchero g 150",
+            "biscotti secchi g 125",
+            "mandorle dolci g 75",
+            "pochissimo olio di mandorle (in mancanza, di semi)",
+            "due uova freschissime"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Preparazione",
+          "type": "ordered",
+          "items": [
+            "Mettete il burro a pezzetti in una ciotola e fatelo ammorbidire nel forno, programmato alla minima potenza.",
+            "Nel frattempo, tagliate a pezzettini il cioccolato, ponetelo in un'altra ciotola e, dopo aver tolto il burro, fatelo sciogliere nel forno, sempre programmato al minimo della potenza. Pelate le mandorle, poi tritatele grossolanamente. Sminuzzate i biscotti (non devono essere ridotti in briciole finissime).",
+            "Ungete con poco olio un largo foglio di carta oleata pesante. Ponete in una ciotola un uovo intero, un tuorlo e tutto lo zucchero; con una frusta, meglio se elettrica, montate le uova, poi aggiungete, poco alla volta, il burro e il cioccolato sciolti e, sempre poco alla volta, le mandorle e i biscotti sminuzzati. Versate il composto ottenuto sulla carta, dategli la forma di un salame e avvolgetelo nella carta, che legherete alle due estremità e al centro con uno spago sottile. Mettete il salame a rassodare in frigorifero per circa 4 ore. Toglietelo poi dalla carta e tagliatelo, di sbieco, a fette regolari.",
+            "Servitelo su un piatto di portata (tenuto prima in frigorifero), accompagnandolo, a piacere, con crema inglese o zabaione freddi."
+          ],
+          "sections": []
+        }
+      ]
+    }
+  ]
 }
