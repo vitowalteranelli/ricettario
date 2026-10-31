@@ -7,7 +7,7 @@
   <title>Ricettario</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#f5f5f7">
+  <meta name="theme-color" content="#eee4d0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Ricettario">
   <style>
@@ -71,9 +71,10 @@
     .reader-brand h1::after { display:block; width:2.5rem; height:3px; margin-top:.42rem; border-radius:999px; background:linear-gradient(90deg,var(--accent),var(--accent-secondary)); content:""; }
     .reader-brand .badge { margin-top:.42rem; }
     .muted { color:var(--muted); }
-    .status { min-height:1.5em; color:var(--muted); }
+    .status { min-height:1.5em; color:var(--muted); font-family:var(--brand-font); }
     .status.error { color:var(--danger); }
     .status.ok { color:var(--ok); }
+    .status.accent { color:var(--accent); }
     .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
     .admin-grid { display:block; }
     .admin-tabs { position:sticky; top:.5rem; z-index:3; display:flex; gap:.35rem; margin:0 -0.25rem 1.25rem; padding:.25rem; border-bottom:1px solid var(--line); background:var(--card); overflow-x:auto; }
@@ -178,6 +179,7 @@
     .recipe-result-title { font-size:1rem; font-weight:800; }
     .recipe-result-meta { color:var(--muted); font-size:.78rem; font-weight:750; letter-spacing:.04em; text-transform:uppercase; }
     .recipe-result-preview { display:-webkit-box; overflow:hidden; color:var(--muted); font-size:.9rem; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+    .results-more-button { width:100%; margin-top:.75rem; }
     .recipe-result-image { display:none; }
     .recipe-detail { min-width:0; }
     .recipe-detail-toolbar { display:flex; justify-content:flex-start; margin-bottom:.75rem; }
@@ -294,8 +296,13 @@
       --accent-secondary:#c68b32;
       --accent-soft:#f9ebe1;
       --line:#e6d9cc;
+      --ok:#426d50;
+      --danger:#9d4035;
+      --danger-soft:#f8e4de;
       --surface-muted:#efe6dc;
       --surface-soft:#fcf8f2;
+      --warning-bg:#fff4d9;
+      --warning-line:#d9ae62;
       --input-bg:#fffdf9;
       --overlay:#fffcf7ed;
       --shadow:#6f4b321c;
@@ -354,9 +361,9 @@
       --shadow-strong:#59432b38;
       --accent-shadow:#8c3f3830;
       --media-bg:#dfcfb0;
-      --heading-font:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
-      --brand-font:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
       --handwriting-font:Noteworthy,"Bradley Hand","Segoe Print","Comic Sans MS",cursive;
+      --heading-font:var(--handwriting-font);
+      --brand-font:var(--handwriting-font);
       --olive:#657151;
     }
     html { background:var(--bg); scroll-behavior:smooth; }
@@ -579,9 +586,10 @@
     [data-theme="apple"] .recipe-result,[data-theme="apple"] .ingredient-recipe-result { border-radius:16px; }
     [data-theme="apple"] .recipe-media { border-radius:18px; }
     [data-theme="apple"] .admin-session-notice { border-color:var(--line); border-left-color:var(--accent); background:var(--card); box-shadow:0 8px 24px var(--shadow); }
-    [data-theme="magic"] body { background-color:var(--bg); background-image:radial-gradient(ellipse at 12% 8%,#fff8e9 0,transparent 32rem),radial-gradient(circle at 1px 1px,#7055360b .6px,transparent .9px); background-size:auto,8px 8px; color:var(--ink); font-family:Georgia,"Times New Roman",serif; letter-spacing:0; }
+    [data-theme="magic"] body { background-color:var(--bg); background-image:radial-gradient(ellipse at 12% 8%,#fff8e9 0,transparent 32rem),radial-gradient(circle at 1px 1px,#7055360b .6px,transparent .9px); background-size:auto,8px 8px; color:var(--ink); font-family:var(--handwriting-font); letter-spacing:0; }
     [data-theme="magic"] h1,[data-theme="magic"] h2,[data-theme="magic"] h3,[data-theme="magic"] h4,[data-theme="magic"] legend { font-family:var(--heading-font); letter-spacing:-.015em; }
-    [data-theme="magic"] button,[data-theme="magic"] input,[data-theme="magic"] textarea,[data-theme="magic"] select { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }
+    [data-theme="magic"] button,[data-theme="magic"] input,[data-theme="magic"] textarea,[data-theme="magic"] select { font-family:var(--handwriting-font); }
+    [data-theme="magic"] body * { font-family:var(--handwriting-font) !important; }
     [data-theme="magic"] button { border-radius:9px 14px 10px 12px; box-shadow:0 2px 4px var(--shadow-strong); }
     [data-theme="magic"] .card,[data-theme="magic"] .reader-search-modes,[data-theme="magic"] .reader-toolbar,[data-theme="magic"] .reader-results-column,[data-theme="magic"] .ingredient-search-panel,[data-theme="magic"] .ingredient-stage,[data-theme="magic"] .ingredient-inventory,[data-theme="magic"] .ingredient-results,[data-theme="magic"] .admin-panel { border-color:var(--line); }
     [data-theme="magic"] .reader-brand h1 { font-family:var(--handwriting-font); font-size:2.55rem; font-weight:700; letter-spacing:0; }
@@ -625,14 +633,105 @@
       [data-theme="magic"] .recipe-card[data-page-style="scrapbook"] { transform:none; }
       [data-theme="magic"] .recipe-card[data-page-style="scrapbook"] .recipe-media { transform:none; }
     }
+    [data-theme="apple"] {
+      --bg:#f2f2f7;
+      --card:#fff;
+      --ink:#1c1c1e;
+      --muted:#6c6c70;
+      --accent:#007aff;
+      --accent-secondary:#5e5ce6;
+      --accent-soft:#eaf3ff;
+      --line:#e2e2e7;
+      --surface-muted:#f0f0f5;
+      --surface-soft:#fafafd;
+      --input-bg:#f7f7fa;
+      --overlay:#ffffffed;
+      --shadow:#1c1c1e0a;
+      --shadow-strong:#1c1c1e12;
+      --accent-shadow:#007aff20;
+      --media-bg:#e5e5ea;
+      --heading-font:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;
+      --brand-font:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;
+    }
+    [data-theme="apple"] body { background-image:none; font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif; letter-spacing:-.012em; line-height:1.55; }
+    [data-theme="apple"] main { width:min(1160px,calc(100% - 3rem)); margin:clamp(2rem,6vh,4.5rem) auto 5rem; }
+    [data-theme="apple"] .card { border-color:#e6e6eb; border-radius:28px; padding:clamp(1.5rem,4vw,3rem); box-shadow:0 18px 48px #1c1c1e0a; }
+    [data-theme="apple"] h1,[data-theme="apple"] h2,[data-theme="apple"] h3,[data-theme="apple"] h4,[data-theme="apple"] legend { font-family:var(--heading-font); letter-spacing:-.035em; }
+    [data-theme="apple"] h2 { font-size:1.45rem; }
+    [data-theme="apple"] .login-card { padding:clamp(1.6rem,5vw,2.75rem); }
+    [data-theme="apple"] .login-card::before { height:3px; background:var(--accent); }
+    [data-theme="apple"] .login-brand-name { font-family:var(--brand-font); letter-spacing:-.025em; }
+    [data-theme="apple"] .login-eyebrow,[data-theme="apple"] .reader-brand-kicker { color:var(--muted); letter-spacing:.12em; }
+    [data-theme="apple"] .topbar { gap:1.5rem; margin-bottom:1.75rem; }
+    [data-theme="apple"] .reader-brand { gap:1.1rem; }
+    [data-theme="apple"] .reader-brand-mark { width:3.4rem; height:3.4rem; border-radius:22px; box-shadow:0 8px 20px var(--accent-shadow); transform:none; }
+    [data-theme="apple"] .reader-brand-mark img { transform:none; }
+    [data-theme="apple"] .reader-brand h1 { font-size:clamp(2.2rem,4.3vw,3.25rem); font-weight:700; line-height:1.05; letter-spacing:-.065em; }
+    [data-theme="apple"] .reader-brand h1::after { display:none; }
+    [data-theme="apple"] .reader-toolbar { gap:1.15rem; margin:1.6rem 0; padding:1.1rem 1.2rem; border:0; border-radius:22px; background:var(--card); box-shadow:0 7px 25px var(--shadow); }
+    [data-theme="apple"] .reader-search-modes { margin:1.75rem 0 1.35rem; padding:0; border:0; background:transparent; }
+    [data-theme="apple"] .reader-search-mode-buttons { gap:.35rem; padding:.3rem; border-radius:15px; background:#e8e8ed; }
+    [data-theme="apple"] .reader-search-mode-button { border-radius:12px; font-weight:650; }
+    [data-theme="apple"] .reader-search-mode-button[aria-pressed="true"] { background:#fff; color:var(--ink); box-shadow:0 1px 5px #00000014; }
+    [data-theme="apple"] button.reader-search-mode-button[aria-pressed="true"] { color:var(--ink); -webkit-text-fill-color:var(--ink); }
+    [data-theme="apple"] .reader-layout { gap:1.5rem; }
+    [data-theme="apple"] .reader-results-column { padding:0; border:0; background:transparent; }
+    [data-theme="apple"] .reader-section-heading { margin:0 0 1rem; }
+    [data-theme="apple"] .reader-section-heading h2 { font-size:1.5rem; }
+    [data-theme="apple"] .recipe-list,[data-theme="apple"] .ingredient-recipe-list { gap:.7rem; }
+    [data-theme="apple"] .recipe-result,[data-theme="apple"] .ingredient-recipe-result { gap:.35rem; padding:1.1rem 1.2rem; border:1px solid #e7e7ec; border-radius:18px; background:var(--card); box-shadow:0 3px 12px var(--shadow); }
+    [data-theme="apple"] .recipe-result:hover,[data-theme="apple"] .ingredient-recipe-result:hover { border-color:#c9c9d0; box-shadow:0 6px 18px var(--shadow-strong); transform:none; }
+    [data-theme="apple"] .recipe-result[aria-current="true"] { border-color:var(--accent); box-shadow:inset 3px 0 var(--accent),0 3px 12px var(--shadow); }
+    [data-theme="apple"] .recipe-result-title,[data-theme="apple"] .ingredient-recipe-result-title { font-weight:650; letter-spacing:-.015em; }
+    [data-theme="apple"] .recipe-result-meta { letter-spacing:.055em; }
+    [data-theme="apple"] .recipe-detail-content { padding:clamp(1.25rem,4vw,2.5rem); border:0; border-radius:24px; box-shadow:none; }
+    [data-theme="apple"] .recipe-card { padding:0; border:0; }
+    [data-theme="apple"] .recipe-card h2 { margin:.35rem 0 .5rem; color:var(--ink); font-size:clamp(1.8rem,4vw,2.5rem); }
+    [data-theme="apple"] .recipe-category { color:var(--muted); font-size:.76rem; letter-spacing:.1em; }
+    [data-theme="apple"] .recipe-section { margin-top:1.6rem; }
+    [data-theme="apple"] .recipe-section h4 { margin-bottom:.65rem; font-size:1.08rem; }
+    [data-theme="apple"] .recipe-note { border-left-width:2px; border-radius:0 12px 12px 0; }
+    [data-theme="apple"] input,[data-theme="apple"] textarea,[data-theme="apple"] select { min-height:3rem; border-color:#e1e1e6; border-radius:14px; background:var(--input-bg); font-family:var(--brand-font); }
+    [data-theme="apple"] textarea { font-family:var(--brand-font); }
+    [data-theme="apple"] label { gap:.45rem; font-weight:600; }
+    [data-theme="apple"] button { min-height:2.9rem; border-radius:14px; font-weight:650; }
+    [data-theme="apple"] button.secondary { border:1px solid #e5e5ea; background:#f2f2f7; }
+    [data-theme="apple"] button:focus-visible,[data-theme="apple"] input:focus-visible,[data-theme="apple"] select:focus-visible,[data-theme="apple"] textarea:focus-visible,[data-theme="apple"] summary:focus-visible { outline:3px solid #007aff45; outline-offset:2px; }
+    [data-theme="apple"] .settings-menu > summary { min-height:2.9rem; border-color:#e5e5ea; border-radius:15px; background:#ffffffd9; font-weight:600; }
+    [data-theme="apple"] .settings-menu-content { border-color:#e5e5ea; border-radius:22px; box-shadow:0 18px 48px #1c1c1e18; }
+    [data-theme="apple"] .settings-menu-content > .theme-control select { border-radius:13px; background:var(--surface-soft); }
+    [data-theme="apple"] .reader-search-modes-copy span,[data-theme="apple"] .reader-count { font-size:.9rem; }
+    [data-theme="apple"] .ingredient-search-panel,[data-theme="apple"] .ingredient-stage,[data-theme="apple"] .ingredient-inventory,[data-theme="apple"] .ingredient-results,[data-theme="apple"] .admin-panel { gap:1rem; border-color:#e7e7ec; border-radius:20px; box-shadow:0 4px 16px var(--shadow); }
+    [data-theme="apple"] .admin-tabs { gap:.4rem; margin-bottom:1.5rem; padding:.35rem; border:0; border-radius:18px; background:#f0f0f5; }
+    [data-theme="apple"] .admin-tab,[data-theme="apple"] .admin-tab.active { border:0; border-radius:13px; box-shadow:none; }
+    [data-theme="apple"] .admin-tab.active { background:#fff; color:var(--accent); box-shadow:0 1px 5px #00000012; }
+    @media (max-width:760px) {
+      [data-theme="apple"] main { width:calc(100% - 1.25rem); margin:1rem auto calc(4.5rem + env(safe-area-inset-bottom)); }
+      [data-theme="apple"] .card { padding:1.15rem; border-radius:23px; }
+      [data-theme="apple"] .topbar { gap:.75rem; margin-bottom:1.25rem; }
+      [data-theme="apple"] .reader-brand { gap:.75rem; }
+      [data-theme="apple"] .reader-brand-mark { width:2.75rem; height:2.75rem; border-radius:18px; }
+      [data-theme="apple"] #reader-view > .topbar .reader-brand h1 { font-size:1.85rem; }
+      [data-theme="apple"] .reader-toolbar { position:static; grid-template-columns:minmax(0,1fr) auto; gap:.65rem; margin:1.1rem 0; padding:.8rem; border-radius:19px; }
+      [data-theme="apple"] .reader-search-modes { align-items:stretch; gap:.75rem; flex-direction:column; margin:1.35rem 0 1rem; }
+      [data-theme="apple"] .reader-search-modes-copy span { font-size:.82rem; }
+      [data-theme="apple"] .reader-results-column { padding:0; }
+      [data-theme="apple"] .recipe-result,[data-theme="apple"] .ingredient-recipe-result { padding:.95rem 1rem; border-radius:16px; }
+      [data-theme="apple"] .ingredient-search-panel,[data-theme="apple"] .ingredient-stage,[data-theme="apple"] .ingredient-inventory,[data-theme="apple"] .ingredient-results,[data-theme="apple"] .admin-panel { padding:.9rem; border-radius:18px; }
+      [data-theme="apple"] .recipe-detail-content { padding:1rem; border-radius:19px; }
+      [data-theme="apple"] .admin-tabs { top:calc(.35rem + env(safe-area-inset-top)); }
+    }
   </style>
   <script>
     try {
       const savedTheme = localStorage.getItem('ricettario-theme-v1');
-      const theme = ['classic', 'mediterranean', 'apple', 'magic'].includes(savedTheme) ? savedTheme : 'mediterranean';
+      const theme = ['classic', 'mediterranean', 'apple', 'magic'].includes(savedTheme) ? savedTheme : 'magic';
       document.documentElement.dataset.theme = theme;
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'magic' ? '#eee4d0' : theme === 'mediterranean' ? '#f6f0e8' : '#f5f5f7');
-    } catch { document.documentElement.dataset.theme = 'mediterranean'; }
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'magic' ? '#eee4d0' : theme === 'mediterranean' ? '#f6f0e8' : theme === 'apple' ? '#f2f2f7' : '#f5f5f7');
+    } catch {
+      document.documentElement.dataset.theme = 'magic';
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#eee4d0');
+    }
   </script>
 </head>
 <body>
@@ -642,7 +741,7 @@
         <span class="login-mark" aria-hidden="true"><img src="favicon.svg" alt=""></span>
         <span class="login-brand-name">Ricettario</span>
       </div>
-      <p class="login-eyebrow">Archivio personale</p>
+      <p class="login-eyebrow">Ricette di famiglia</p>
       <h1 id="login-title">Le tue ricette, sempre a portata di mano.</h1>
       <p id="login-description" class="login-description">Accedi al ricettario per cercare, consultare e gestire il tuo archivio.</p>
       <form id="login-form" class="login-form" aria-describedby="login-description">
@@ -661,7 +760,7 @@
         <div class="reader-brand" aria-label="Ricettario">
           <span class="reader-brand-mark" aria-hidden="true"><img src="favicon.svg" alt=""></span>
           <div>
-            <p class="reader-brand-kicker">Archivio personale</p>
+            <p class="reader-brand-kicker">Ricette di famiglia</p>
             <h1>Ricettario</h1>
             <span id="role-badge" class="badge"></span>
           </div>
@@ -677,8 +776,8 @@
                 <select class="theme-select" aria-label="Tema grafico">
                   <option value="classic">Classico</option>
                   <option value="mediterranean">Mediterraneo</option>
-                  <option value="apple">Essenziale Apple</option>
-                  <option value="magic">Cookbook magico</option>
+                  <option value="apple">Essenziale</option>
+                  <option value="magic">Antichi sapori</option>
                 </select>
               </label>
             </div>
@@ -732,7 +831,7 @@
               <button id="ingredient-clear-button" class="secondary" type="button" disabled>Azzera</button>
             </div>
             <form id="ingredient-ai-unlock" class="ingredient-ai-unlock" hidden>
-              <p id="ingredient-ai-unlock-copy">La chiave Gemini verrà usata solo nella memoria di questa scheda.</p>
+              <p id="ingredient-ai-unlock-copy">La chiave Gemini viene conservata cifrata nel browser fino al logout.</p>
               <label id="ingredient-ai-password-label" for="ingredient-ai-password">Password di accesso
                 <input id="ingredient-ai-password" type="password" autocomplete="current-password" required>
               </label>
@@ -824,6 +923,7 @@
                 <p id="recipe-count" class="recipe-count"></p>
               </div>
               <div id="recipe-list" class="recipe-list"></div>
+              <button id="load-more-recipes-button" class="secondary results-more-button" type="button" hidden></button>
               <p id="no-results" class="status" hidden>Nessuna ricetta trovata. Prova a rimuovere una parola o a usare un termine più generico.</p>
             </section>
             <article id="recipe-detail" class="recipe-detail" hidden aria-labelledby="recipe-detail-title">
@@ -839,7 +939,7 @@
 
     <section id="admin-view" class="card" hidden>
       <div class="topbar">
-        <div><h2>Pannello amministratore</h2><p class="muted">PAT e chiave AI restano nella memoria di questa scheda.</p></div>
+        <div><h2>Pannello amministratore</h2><p class="muted">La sessione resta attiva fino al logout.</p></div>
         <div class="actions">
           <details class="settings-menu">
             <summary aria-label="Apri impostazioni" title="Impostazioni">
@@ -847,13 +947,12 @@
               <span>Impostazioni</span>
             </summary>
             <div class="settings-menu-content">
-              <span id="repository-badge" class="badge"></span>
               <label class="theme-control">Tema
                 <select class="theme-select" aria-label="Tema grafico">
                   <option value="classic">Classico</option>
                   <option value="mediterranean">Mediterraneo</option>
-                  <option value="apple">Essenziale Apple</option>
-                  <option value="magic">Cookbook magico</option>
+                  <option value="apple">Essenziale</option>
+                  <option value="magic">Antichi sapori</option>
                 </select>
               </label>
             </div>
@@ -874,7 +973,7 @@
         </button>
       </nav>
       <section id="admin-session-notice" class="admin-session-notice" aria-labelledby="admin-session-title" hidden>
-        <p id="admin-session-title"><strong>Sessione Admin ripristinata.</strong> Per pubblicare modifiche o usare l’importazione AI, riattiva temporaneamente i token inserendo la password Admin.</p>
+        <p id="admin-session-title"><strong>Credenziali Admin non disponibili.</strong> Inserisci la password Admin per ripristinare la sessione.</p>
         <form id="admin-reauth-form" class="admin-reauth-form">
           <label for="admin-reauth-password">Password Admin
             <input id="admin-reauth-password" type="password" autocomplete="current-password" required>
@@ -951,6 +1050,7 @@
               </div>
               <p id="admin-recipe-count" class="recipe-count"></p>
               <div id="admin-recipe-list" class="admin-recipe-list"></div>
+              <button id="admin-load-more-recipes-button" class="secondary results-more-button" type="button" hidden></button>
             </div>
 
             <form id="recipe-form" class="recipe-editor" hidden>
@@ -1081,8 +1181,8 @@
   <script>
     'use strict';
 
-    // I segreti non vengono mai scritti in storage, cookie o DOM: vivono solo in RAM.
-    // sessionStorage contiene esclusivamente il ruolo della sessione, mai PAT o API key.
+    // I segreti vivono in RAM e, per mantenere la sessione fino al logout, solo cifrati
+    // in IndexedDB con una chiave Web Crypto non esportabile. localStorage/sessionStorage contengono il ruolo.
     const CONFIG_PATH = 'config.json';
     const DEFAULT_CATALOG_PATH = 'datasets/catalog.json';
     const RECIPE_MEDIA_PATH = 'datasets/recipe-media.json';
@@ -1100,11 +1200,15 @@
     const AI_MAX_INGREDIENT_TOTAL_BYTES = 40 * 1024 * 1024;
     const AI_MAX_RECIPE_FILES = 6;
     const AI_MAX_RECIPE_TOTAL_BYTES = 80 * 1024 * 1024;
+    const RECIPE_BATCH_SIZE = 100;
     const SESSION_ROLE_KEY = 'ricettario-session-role-v2';
     const READER_SESSION_KEY = 'ricettario-reader-session-v1';
+    const SESSION_SECRETS_DB = 'ricettario-session-secrets-v1';
+    const SESSION_SECRETS_STORE = 'sessions';
+    const SESSION_LOGOUT_KEY = 'ricettario-session-logout-v1';
     const THEME_STORAGE_KEY = 'ricettario-theme-v1';
     const THEME_IDS = new Set(['classic', 'mediterranean', 'apple', 'magic']);
-    const THEME_COLORS = { classic: '#f5f5f7', mediterranean: '#f6f0e8', apple: '#f5f5f7', magic: '#eee4d0' };
+    const THEME_COLORS = { classic: '#f5f5f7', mediterranean: '#f6f0e8', apple: '#f2f2f7', magic: '#eee4d0' };
     const RECIPE_PAGE_STYLES = ['notebook', 'scrapbook', 'herbarium', 'index'];
     const KDF_ITERATIONS = 120000;
     const textEncoder = new TextEncoder();
@@ -1130,7 +1234,8 @@
     let selectedIngredientRecipeId = null;
     let readerSearchMode = 'manual';
     let editingRecipeId = null;
-    let session = { role: null, token: null, llmKey: null };
+    let session = { role: null, token: null, llmKey: null, viewerId: null };
+    let sessionGeneration = 0;
     let ingredientFiles = [];
     let recipeImportFiles = [];
     let detectedIngredients = [];
@@ -1163,12 +1268,12 @@
     function storedTheme() {
       try {
         const theme = localStorage.getItem(THEME_STORAGE_KEY);
-        return THEME_IDS.has(theme) ? theme : 'mediterranean';
-      } catch { return 'mediterranean'; }
+        return THEME_IDS.has(theme) ? theme : 'magic';
+      } catch { return 'magic'; }
     }
 
     function applyTheme(theme, { persist = true } = {}) {
-      const nextTheme = THEME_IDS.has(theme) ? theme : 'mediterranean';
+      const nextTheme = THEME_IDS.has(theme) ? theme : 'magic';
       document.documentElement.dataset.theme = nextTheme;
       document.querySelectorAll('.theme-select').forEach((select) => { select.value = nextTheme; });
       document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[nextTheme]);
@@ -1180,14 +1285,25 @@
     }
 
     function storedSessionRole() {
+      let role = null;
       try {
-        const role = sessionStorage.getItem(SESSION_ROLE_KEY);
+        role = localStorage.getItem(SESSION_ROLE_KEY);
+      } catch { /* Prova sessionStorage. */ }
+      if (role === 'reader' || role === 'admin') return role;
+      try {
+        role = sessionStorage.getItem(SESSION_ROLE_KEY);
         if (role === 'reader' || role === 'admin') return role;
-        return sessionStorage.getItem(READER_SESSION_KEY) === 'active' ? 'reader' : null;
-      } catch { return null; }
+        if (localStorage.getItem(READER_SESSION_KEY) === 'active' || sessionStorage.getItem(READER_SESSION_KEY) === 'active') return 'reader';
+      } catch { /* Storage non disponibile. */ }
+      return null;
     }
 
     function rememberSessionRole(role) {
+      try {
+        localStorage.setItem(SESSION_ROLE_KEY, role);
+        if (role === 'reader') localStorage.setItem(READER_SESSION_KEY, 'active');
+        else localStorage.removeItem(READER_SESSION_KEY);
+      } catch { /* Prova sessionStorage come fallback. */ }
       try {
         sessionStorage.setItem(SESSION_ROLE_KEY, role);
         if (role === 'reader') sessionStorage.setItem(READER_SESSION_KEY, 'active');
@@ -1197,9 +1313,223 @@
 
     function clearSessionRole() {
       try {
+        localStorage.removeItem(SESSION_ROLE_KEY);
+        localStorage.removeItem(READER_SESSION_KEY);
+      } catch { /* Storage non disponibile. */ }
+      try {
         sessionStorage.removeItem(SESSION_ROLE_KEY);
         sessionStorage.removeItem(READER_SESSION_KEY);
       } catch { /* Storage non disponibile. */ }
+    }
+
+    function sessionSecretsScope() {
+      return `${window.location.origin}${new URL('./', window.location.href).pathname}`;
+    }
+
+    function hasSessionLogoutMarker() {
+      const scope = sessionSecretsScope();
+      let marked = false;
+      try { marked ||= localStorage.getItem(SESSION_LOGOUT_KEY) === scope; } catch { /* Prova sessionStorage. */ }
+      try { marked ||= sessionStorage.getItem(SESSION_LOGOUT_KEY) === scope; } catch { /* Storage non disponibile. */ }
+      return marked;
+    }
+
+    function markSessionLoggedOut() {
+      const scope = sessionSecretsScope();
+      try { localStorage.setItem(SESSION_LOGOUT_KEY, scope); } catch { /* IndexedDB verrà comunque cancellato. */ }
+      try { sessionStorage.setItem(SESSION_LOGOUT_KEY, scope); } catch { /* IndexedDB verrà comunque cancellato. */ }
+    }
+
+    function clearSessionLogoutMarker() {
+      try { localStorage.removeItem(SESSION_LOGOUT_KEY); } catch { /* Preferenza non disponibile. */ }
+      try { sessionStorage.removeItem(SESSION_LOGOUT_KEY); } catch { /* Preferenza non disponibile. */ }
+    }
+
+    function openSessionSecretsDatabase() {
+      return new Promise((resolve, reject) => {
+        if (!window.indexedDB) {
+          reject(new Error('IndexedDB non disponibile.'));
+          return;
+        }
+        const request = indexedDB.open(SESSION_SECRETS_DB, 1);
+        request.onupgradeneeded = () => {
+          const database = request.result;
+          if (!database.objectStoreNames.contains(SESSION_SECRETS_STORE)) {
+            database.createObjectStore(SESSION_SECRETS_STORE, { keyPath: 'scope' });
+          }
+        };
+        request.onsuccess = () => {
+          request.result.onversionchange = () => request.result.close();
+          resolve(request.result);
+        };
+        request.onerror = () => reject(request.error || new Error('Impossibile aprire IndexedDB.'));
+        request.onblocked = () => reject(new Error('IndexedDB è bloccato da un’altra scheda.'));
+      });
+    }
+
+    async function readRememberedSessionRecord() {
+      const database = await openSessionSecretsDatabase();
+      try {
+        return await new Promise((resolve, reject) => {
+          const transaction = database.transaction(SESSION_SECRETS_STORE, 'readonly');
+          const request = transaction.objectStore(SESSION_SECRETS_STORE).get(sessionSecretsScope());
+          request.onsuccess = () => resolve(request.result || null);
+          request.onerror = () => reject(request.error || new Error('Impossibile leggere la sessione.'));
+          transaction.onabort = () => reject(transaction.error || new Error('Lettura della sessione interrotta.'));
+        });
+      } finally {
+        database.close();
+      }
+    }
+
+    async function writeRememberedSessionRecord(record) {
+      const database = await openSessionSecretsDatabase();
+      try {
+        await new Promise((resolve, reject) => {
+          const transaction = database.transaction(SESSION_SECRETS_STORE, 'readwrite');
+          transaction.objectStore(SESSION_SECRETS_STORE).put(record);
+          transaction.oncomplete = resolve;
+          transaction.onerror = () => reject(transaction.error || new Error('Impossibile salvare la sessione.'));
+          transaction.onabort = () => reject(transaction.error || new Error('Salvataggio della sessione interrotto.'));
+        });
+      } finally {
+        database.close();
+      }
+    }
+
+    async function clearRememberedSessionSecrets() {
+      try {
+        const database = await openSessionSecretsDatabase();
+        try {
+          await new Promise((resolve, reject) => {
+            const transaction = database.transaction(SESSION_SECRETS_STORE, 'readwrite');
+            transaction.objectStore(SESSION_SECRETS_STORE).delete(sessionSecretsScope());
+            transaction.oncomplete = resolve;
+            transaction.onerror = () => reject(transaction.error || new Error('Impossibile cancellare la sessione.'));
+            transaction.onabort = () => reject(transaction.error || new Error('Cancellazione della sessione interrotta.'));
+          });
+        } finally {
+          database.close();
+        }
+        return true;
+      } catch (error) {
+        console.warn('Segreti di sessione persistenti non cancellati:', error);
+        return false;
+      }
+    }
+
+    async function sessionConfigFingerprint(role, viewerId = null, config = appConfig) {
+      const repository = config?.repository || {};
+      const fingerprintInput = role === 'admin' ? {
+        role,
+        crypto: config?.crypto || null,
+        aiCrypto: config?.ai?.crypto || null,
+        aiProvider: config?.ai?.provider || null,
+        repository: {
+          owner: repository.owner || null,
+          repo: repository.repo || null,
+          branch: repository.branch || 'main',
+          catalogPath: repository.catalogPath || DEFAULT_CATALOG_PATH
+        }
+      } : {
+        role,
+        viewerId,
+        viewerPassword: (config?.readOnlyPasswords || []).find((entry) => entry.id === viewerId) || null,
+        viewerCrypto: config?.ai?.readerCrypto?.[viewerId] || null,
+        aiProvider: config?.ai?.provider || null
+      };
+      const digest = await crypto.subtle.digest('SHA-256', textEncoder.encode(JSON.stringify(fingerprintInput)));
+      return bytesToBase64Url(new Uint8Array(digest));
+    }
+
+    async function persistSessionSecrets(role, viewerId = null) {
+      if (!crypto?.subtle || !window.indexedDB) return false;
+      if (role === 'admin' && !session.token) return false;
+      if (role === 'admin' && appConfig?.ai?.crypto && !session.llmKey) return false;
+      if (role === 'reader' && (!session.llmKey || !viewerId)) return false;
+      try {
+        const generation = sessionGeneration;
+        const writeId = randomId();
+        const scope = sessionSecretsScope();
+        const fingerprint = await sessionConfigFingerprint(role, viewerId);
+        const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const additionalData = textEncoder.encode(`${scope}\n${fingerprint}`);
+        const plaintext = textEncoder.encode(JSON.stringify({
+          token: role === 'admin' ? session.token : null,
+          llmKey: session.llmKey || null
+        }));
+        const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData }, key, plaintext);
+        if (generation !== sessionGeneration) return false;
+        await writeRememberedSessionRecord({
+          scope,
+          writeId,
+          role,
+          viewerId,
+          fingerprint,
+          key,
+          iv: bytesToBase64Url(iv),
+          ciphertext: bytesToBase64Url(new Uint8Array(ciphertext))
+        });
+        if (generation !== sessionGeneration) {
+          const currentRecord = await readRememberedSessionRecord();
+          if (currentRecord?.writeId === writeId) await clearRememberedSessionSecrets();
+          return false;
+        }
+        clearSessionLogoutMarker();
+        return true;
+      } catch (error) {
+        console.warn('Segreti di sessione non ripristinabili dopo un refresh:', error);
+        return false;
+      }
+    }
+
+    async function restoreRememberedSessionSecrets(role) {
+      if (hasSessionLogoutMarker()) {
+        await clearRememberedSessionSecrets();
+        return null;
+      }
+      let record;
+      try {
+        record = await readRememberedSessionRecord();
+      } catch (error) {
+        console.warn('Segreti di sessione persistenti non disponibili:', error);
+        return null;
+      }
+      if (!record || record.role !== role) return null;
+      try {
+        const viewerId = role === 'reader' ? record.viewerId : null;
+        const scope = sessionSecretsScope();
+        const fingerprint = await sessionConfigFingerprint(role, viewerId);
+        if (record.scope !== scope || record.fingerprint !== fingerprint || record.key?.extractable !== false) {
+          await clearRememberedSessionSecrets();
+          return null;
+        }
+        const additionalData = textEncoder.encode(`${scope}\n${fingerprint}`);
+        const plaintext = await crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv: base64ToBytes(record.iv), additionalData },
+          record.key,
+          base64ToBytes(record.ciphertext)
+        );
+        const credentials = JSON.parse(textDecoder.decode(plaintext));
+        if (role === 'admin' && (typeof credentials.token !== 'string' || !credentials.token.trim())) throw new Error('PAT della sessione assente.');
+        if (role === 'admin' && appConfig.ai?.crypto && (typeof credentials.llmKey !== 'string' || !credentials.llmKey.trim())) {
+          throw new Error('Chiave AI della sessione assente.');
+        }
+        if (role === 'reader' && (typeof credentials.llmKey !== 'string' || !credentials.llmKey.trim())) {
+          throw new Error('Chiave AI della sessione assente.');
+        }
+        return {
+          token: typeof credentials.token === 'string' ? credentials.token.trim() : null,
+          llmKey: typeof credentials.llmKey === 'string' ? credentials.llmKey : null,
+          viewerId,
+          fingerprint
+        };
+      } catch (error) {
+        console.warn('Segreti di sessione cifrati non più leggibili:', error);
+        await clearRememberedSessionSecrets();
+        return null;
+      }
     }
 
     function randomId() {
@@ -1447,7 +1777,11 @@
       if (options.body) headers['Content-Type'] = 'application/json';
       const response = await fetch(endpoint, { method, headers, body: options.body ? JSON.stringify(options.body) : undefined });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.message || `GitHub API: HTTP ${response.status}`);
+      if (!response.ok) {
+        const error = new Error(data.message || `GitHub API: HTTP ${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
       return data;
     }
 
@@ -2474,6 +2808,7 @@
         if (session.role === 'reader') {
           const reader = await verifyReaderPassword(password);
           if (!reader) throw new Error('Password viewer errata.');
+          session.viewerId = reader.id;
           const payload = appConfig.ai.readerCrypto?.[reader.id];
           if (!payload) throw new Error('La chiave Gemini non è associata a questa password viewer. L’Admin deve reinserirla nella scheda Password lettori.');
           session.llmKey = (await decryptSecret(password, payload)).trim();
@@ -2488,8 +2823,10 @@
         throw new Error('Password Admin errata oppure API key AI non decifrabile.');
       }
       if (!session.llmKey) throw new Error('API key AI vuota.');
+      const persisted = await persistSessionSecrets(session.role, session.role === 'reader' ? session.viewerId : null);
       updateAiImportControls();
       updateIngredientSearchControls();
+      return persisted;
     }
 
     async function analyzeIngredientPhotos() {
@@ -2549,8 +2886,8 @@
     function requestIngredientAiUnlock() {
       const isReader = session.role === 'reader';
       $('#ingredient-ai-unlock-copy').textContent = isReader
-        ? 'Inserisci la password viewer usata per accedere. La chiave Gemini resta solo nella memoria di questa scheda e non abilita funzioni Admin.'
-        : 'Inserisci la password Admin per decifrare la chiave Gemini. La chiave resta solo nella memoria di questa scheda.';
+        ? 'Inserisci la password viewer usata per accedere. La chiave viene conservata cifrata nel browser fino al logout e non abilita funzioni Admin.'
+        : 'Inserisci la password Admin per decifrare la chiave Gemini. La sessione viene conservata cifrata nel browser fino al logout.';
       $('#ingredient-ai-password-label').firstChild.textContent = isReader ? 'Password viewer' : 'Password Admin';
       $('#ingredient-ai-unlock').hidden = false;
       $('#ingredient-ai-password').focus();
@@ -2859,18 +3196,24 @@
       filter.value = sourceCatalog.some((source) => source.id === selected) ? selected : '';
     }
 
-    function renderRecipes() {
+    function renderRecipes({ append = false } = {}) {
       const queryText = $('#search-input').value;
       const category = $('#category-filter').value;
       const sourceId = $('#source-filter').value;
       const { query, matches } = searchRecipes(recipeDataset, queryText, category, sourceId);
       const list = $('#recipe-list');
-      list.replaceChildren();
-      matches.forEach((recipe) => renderRecipeResult(recipe, list));
+      const start = append ? list.childElementCount : 0;
+      if (!append) list.replaceChildren();
+      const end = Math.min(matches.length, start + RECIPE_BATCH_SIZE);
+      matches.slice(start, end).forEach((recipe) => renderRecipeResult(recipe, list));
       const queryLabel = searchQueryLabel(query);
       $('#recipe-count').textContent = queryLabel
-        ? `${matches.length} risultati per ${queryLabel}`
-        : `${matches.length} di ${recipeDataset.length} ricette`;
+        ? `${end < matches.length ? `${end} di ${matches.length}` : matches.length} risultati per ${queryLabel}`
+        : `${end} di ${recipeDataset.length} ricette`;
+      const moreButton = $('#load-more-recipes-button');
+      const remaining = matches.length - end;
+      moreButton.hidden = remaining <= 0;
+      if (remaining > 0) moreButton.textContent = `Mostra altre ${Math.min(RECIPE_BATCH_SIZE, remaining)} ricette (${remaining} rimanenti)`;
       $('#no-results').hidden = matches.length > 0;
       $('#clear-search-button').hidden = !queryText.trim();
       const selected = matches.find((recipe) => recipe.id === selectedRecipeId);
@@ -2936,6 +3279,7 @@
 
     function scheduleRecipeSearch() {
       clearTimeout(recipeSearchTimer);
+      $('#load-more-recipes-button').hidden = true;
       recipeSearchTimer = setTimeout(() => {
         recipeSearchTimer = null;
         renderRecipes();
@@ -3127,14 +3471,16 @@
       filter.value = categories.includes(selected) ? selected : '';
     }
 
-    function renderAdminRecipeList() {
+    function renderAdminRecipeList({ append = false } = {}) {
       const container = $('#admin-recipe-list');
       if (!container) return;
       const queryText = $('#admin-recipe-search').value;
       const category = $('#admin-recipe-category').value;
       const { matches } = searchRecipes(recipeDataset, queryText, category);
-      container.replaceChildren();
-      matches.forEach((recipe) => {
+      const start = append ? container.childElementCount : 0;
+      if (!append) container.replaceChildren();
+      const end = Math.min(matches.length, start + RECIPE_BATCH_SIZE);
+      matches.slice(start, end).forEach((recipe) => {
         const row = document.createElement('div');
         row.className = 'admin-recipe-row';
         row.dataset.id = recipe.id;
@@ -3162,7 +3508,13 @@
         row.appendChild(actions);
         container.appendChild(row);
       });
-      $('#admin-recipe-count').textContent = `${matches.length} di ${recipeDataset.length} ricette`;
+      $('#admin-recipe-count').textContent = queryText || category
+        ? `${end} di ${matches.length} risultati`
+        : `${end} di ${recipeDataset.length} ricette`;
+      const moreButton = $('#admin-load-more-recipes-button');
+      const remaining = matches.length - end;
+      moreButton.hidden = remaining <= 0;
+      if (remaining > 0) moreButton.textContent = `Mostra altre ${Math.min(RECIPE_BATCH_SIZE, remaining)} ricette (${remaining} rimanenti)`;
     }
 
     function createSectionEditor(section = { title: 'Nuova sezione', type: 'text', items: [], sections: [] }) {
@@ -3276,6 +3628,10 @@
       renderSourceList();
     }
 
+    function setReaderContentReadyStatus() {
+      setStatus($('#content-status'), `Ricette: ${flattenSourceDatasets().length} ricette da ${sourceCatalog.length} fonti.`, 'accent');
+    }
+
     async function loadAdminSourceCatalog() {
       catalogPath = configuredCatalogPath();
       setStatus($('#recipe-admin-status'), `Caricamento del catalogo fonti da GitHub…`);
@@ -3296,6 +3652,7 @@
       populateAllSourceSelectors();
       renderSourceList();
       setAdminSource(adminSourceId);
+      setReaderContentReadyStatus();
       setStatus($('#recipe-admin-status'), `Fonti caricate: ${sourceCatalog.length} · ${flattenSourceDatasets().length} ricette.`, 'ok');
     }
 
@@ -3319,7 +3676,7 @@
       ensureUniqueRecipeIds();
       applyReaderDatasets();
       if (session.role === 'admin' && sourceCatalog.length) setAdminSource(adminSourceId || sourceCatalog[0].id);
-      setStatus(status, `Dataset caricati: ${flattenSourceDatasets().length} ricette da ${sourceCatalog.length} fonti.`, 'ok');
+      setReaderContentReadyStatus();
     }
 
     function renderAccessRows() {
@@ -3365,8 +3722,6 @@
       $('#role-badge').textContent = role === 'admin' ? 'Amministratore' : 'Sola lettura';
       $('#show-admin-button').hidden = !isAdmin;
       if (role === 'admin') {
-        const repository = detectRepository();
-        $('#repository-badge').textContent = `${repository.owner}/${repository.repo}`;
         accessRows = (appConfig.readOnlyPasswords || []).map((entry) => ({ ...entry }));
         renderAccessRows();
         populateAllSourceSelectors();
@@ -3409,7 +3764,10 @@
       $('#admin-session-notice').hidden = true;
       updateAiImportControls();
       updateIngredientSearchControls();
-      setStatus($('#admin-reauth-status'), 'Funzioni Admin riattivate fino al prossimo refresh.', 'ok');
+      const persisted = await persistSessionSecrets('admin');
+      setStatus($('#admin-reauth-status'), persisted
+        ? 'Sessione Admin ripristinabile fino al logout.'
+        : 'Sessione Admin attiva. Questo browser non può conservarla dopo un refresh.', persisted ? 'ok' : 'error');
     }
 
     function switchAdminPanel(panelName) {
@@ -3438,6 +3796,7 @@
       if (!session.role) return;
       document.querySelectorAll('.settings-menu[open]').forEach((menu) => { menu.open = false; });
       applyReaderDatasets();
+      setReaderContentReadyStatus();
       setReaderSearchMode(readerSearchMode, { focus: false });
       adminView.hidden = true;
       readerView.hidden = false;
@@ -3448,7 +3807,10 @@
       }
     }
 
-    function logout() {
+    async function logout() {
+      sessionGeneration += 1;
+      markSessionLoggedOut();
+      await clearRememberedSessionSecrets();
       document.querySelectorAll('.settings-menu[open]').forEach((menu) => { menu.open = false; });
       clearIngredientSearch();
       readerSearchMode = 'manual';
@@ -3456,7 +3818,7 @@
       aiModels = [];
       $('#recipe-model-picker').hidden = true;
       setStatus($('#recipe-model-status'), '');
-      session = { role: null, token: null, llmKey: null };
+      session = { role: null, token: null, llmKey: null, viewerId: null };
       updatePageTitle();
       clearSessionRole();
       recipeDataset = [];
@@ -3508,6 +3870,7 @@
 
     loginForm.addEventListener('submit', async (event) => {
       event.preventDefault();
+      sessionGeneration += 1;
       loginButton.disabled = true;
       setStatus($('#login-status'), 'Verifica in corso…');
       let authStage = 'reader';
@@ -3515,6 +3878,9 @@
         const password = loginPassword.value;
         const reader = await verifyReaderPassword(password);
         if (reader) {
+          markSessionLoggedOut();
+          await clearRememberedSessionSecrets();
+          session = { role: 'reader', token: null, llmKey: null, viewerId: reader.id };
           const readerCrypto = appConfig.ai?.readerCrypto?.[reader.id];
           if (readerCrypto) {
             try {
@@ -3528,6 +3894,9 @@
           unlock('reader');
           await loadReaderContent();
           rememberSessionRole('reader');
+          if (session.llmKey && !(await persistSessionSecrets('reader', reader.id))) {
+            setStatus($('#ingredient-ai-status'), 'Chiave AI sbloccata, ma questo browser non può conservarla dopo un refresh.', 'error');
+          }
           return;
         }
 
@@ -3562,8 +3931,12 @@
         authStage = 'github-recipes';
         await loadAdminSourceCatalog();
         rememberSessionRole('admin');
+        const persisted = await persistSessionSecrets('admin');
+        if (!persisted) {
+          setStatus($('#recipe-admin-status'), 'Sessione attiva. Questo browser non può conservarla dopo un refresh.', 'error');
+        }
       } catch (error) {
-        session = { role: null, token: null, llmKey: null };
+        session = { role: null, token: null, llmKey: null, viewerId: null };
         let message = error.message || 'Errore sconosciuto.';
         if (authStage === 'github-config') {
           message = `PAT, repository o branch non accessibili: ${message}`;
@@ -3607,6 +3980,7 @@
     $('#manual-search-mode-button').addEventListener('click', () => setReaderSearchMode('manual', { focus: true }));
     $('#ingredient-search-mode-button').addEventListener('click', () => setReaderSearchMode('ingredients', { focus: true }));
     $('#search-input').addEventListener('input', scheduleRecipeSearch);
+    $('#load-more-recipes-button').addEventListener('click', () => renderRecipes({ append: true }));
     $('#category-filter').addEventListener('change', renderRecipes);
     $('#clear-search-button').addEventListener('click', () => {
       clearTimeout(recipeSearchTimer);
@@ -3705,9 +4079,10 @@
       const button = $('#ingredient-ai-unlock-button');
       button.disabled = true;
       setStatus($('#ingredient-ai-status'), 'Sblocco dell’analisi AI…');
+      let persistedSession = false;
       try {
         try {
-          await unlockIngredientAi($('#ingredient-ai-password').value);
+          persistedSession = await unlockIngredientAi($('#ingredient-ai-password').value);
         } catch (error) {
           session.llmKey = null;
           updateAiImportControls();
@@ -3725,7 +4100,9 @@
             setStatus($('#ingredient-ai-status'), `${error.message} Puoi riprovare senza reinserire la password.`, 'error');
           }
         } else {
-          setStatus($('#ingredient-ai-status'), 'Analisi AI sbloccata per questa scheda.', 'ok');
+          setStatus($('#ingredient-ai-status'), persistedSession
+            ? 'Analisi AI sbloccata e sessione salvata fino al logout.'
+            : 'Analisi AI sbloccata, ma questo browser non può conservarla dopo un refresh.', persistedSession ? 'ok' : 'error');
         }
       } catch (error) {
         setStatus($('#ingredient-ai-status'), error.message, 'error');
@@ -3809,6 +4186,7 @@
     });
 
     $('#admin-recipe-search').addEventListener('input', renderAdminRecipeList);
+    $('#admin-load-more-recipes-button').addEventListener('click', () => renderAdminRecipeList({ append: true }));
     $('#admin-recipe-category').addEventListener('change', renderAdminRecipeList);
     $('#source-filter').addEventListener('change', renderRecipes);
     $('#admin-source-select').addEventListener('change', () => {
@@ -4162,43 +4540,169 @@
       }
     });
 
-    window.addEventListener('pagehide', () => {
-      session.token = null;
-      session.llmKey = null;
-      if (session.role === 'admin') {
-        $('#admin-session-notice').hidden = false;
-        setStatus($('#admin-reauth-status'), 'Token rimossi dalla memoria dopo il refresh o la chiusura della pagina.');
-        updateAiImportControls();
+    function waitForServiceWorkerActivation(worker) {
+      if (!worker || worker.state === 'activated' || worker.state === 'redundant') return Promise.resolve();
+      return new Promise((resolve) => {
+        const timeout = setTimeout(finish, 4000);
+        function finish() {
+          clearTimeout(timeout);
+          worker.removeEventListener('statechange', checkState);
+          resolve();
+        }
+        function checkState() {
+          if (worker.state === 'activated' || worker.state === 'redundant') finish();
+        }
+        worker.addEventListener('statechange', checkState);
+        checkState();
+      });
+    }
+
+    function waitForServiceWorkerControl() {
+      if (navigator.serviceWorker.controller) return Promise.resolve();
+      return new Promise((resolve) => {
+        const timeout = setTimeout(finish, 3000);
+        function finish() {
+          clearTimeout(timeout);
+          navigator.serviceWorker.removeEventListener('controllerchange', finish);
+          resolve();
+        }
+        navigator.serviceWorker.addEventListener('controllerchange', finish, { once: true });
+      });
+    }
+
+    function settleWithin(promise, milliseconds) {
+      return new Promise((resolve) => {
+        let settled = false;
+        let timeout;
+        const finish = (value) => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timeout);
+          resolve(value);
+        };
+        timeout = setTimeout(() => finish(null), milliseconds);
+        Promise.resolve(promise).then(finish, () => finish(null));
+      });
+    }
+
+    async function prepareOfflineSupport() {
+      if (!('serviceWorker' in navigator)) return;
+      try {
+        const previousController = navigator.serviceWorker.controller;
+        const registration = await settleWithin(navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }), 5000);
+        if (!registration) return;
+        if (previousController) {
+          await settleWithin(registration.update(), 3500);
+        }
+        await waitForServiceWorkerActivation(registration.installing);
+        const readyRegistration = await settleWithin(navigator.serviceWorker.ready, 5000);
+        if (!readyRegistration) return;
+        if (!navigator.serviceWorker.controller || (previousController && registration.active !== previousController)) {
+          await waitForServiceWorkerControl();
+        }
+      } catch (error) {
+        console.warn('Service worker non disponibile:', error);
       }
-      updateIngredientSearchControls();
-    });
+    }
+
+    // Il service worker migliora l’uso offline, ma il suo aggiornamento non deve bloccare l’avvio.
+    void prepareOfflineSupport();
 
     (async function init() {
       try {
         appConfig = await loadPublicConfig();
         const savedRole = storedSessionRole();
         if (savedRole === 'reader') {
+          const rememberedReader = await restoreRememberedSessionSecrets('reader');
+          session = {
+            role: 'reader',
+            token: null,
+            llmKey: rememberedReader?.llmKey || null,
+            viewerId: rememberedReader?.viewerId || null
+          };
           unlock('reader');
           try {
             await loadReaderContent();
           } catch (error) {
             clearSessionRole();
-            logout();
-            setStatus($('#login-status'), error.message, 'error');
-          }
-        } else if (savedRole === 'admin') {
-          unlock('admin', { restored: true });
-          try {
-            await loadReaderContent();
-            setStatus($('#recipe-admin-status'), 'Sessione Admin ripristinata. Riattiva le funzioni Admin per pubblicare o importare.', 'ok');
-            $('#admin-reauth-password').focus();
-          } catch (error) {
-            clearSessionRole();
-            logout();
+            await logout();
             setStatus($('#login-status'), error.message, 'error');
           }
         } else {
-          setStatus($('#login-status'), 'Pronto.');
+          const remembered = await restoreRememberedSessionSecrets('admin');
+          if (remembered) {
+            session = { role: 'admin', token: remembered.token, llmKey: remembered.llmKey, viewerId: null };
+            unlock('admin');
+            rememberSessionRole('admin');
+            try {
+              const latestConfigFile = await githubGetFile(CONFIG_PATH);
+              const latestConfig = JSON.parse(latestConfigFile.text);
+              if (await sessionConfigFingerprint('admin', null, latestConfig) !== remembered.fingerprint) {
+                appConfig = latestConfig;
+                configSha = latestConfigFile.sha;
+                session = { role: 'admin', token: null, llmKey: null, viewerId: null };
+                await clearRememberedSessionSecrets();
+                unlock('admin', { restored: true });
+                try {
+                  await loadReaderContent();
+                } catch (offlineError) {
+                  setStatus($('#content-status'), `Ricettario offline non disponibile: ${offlineError.message}`, 'error');
+                }
+                setStatus($('#recipe-admin-status'), 'La configurazione è cambiata. Inserisci la password Admin per riattivare la sessione.', 'error');
+                $('#admin-reauth-password').focus();
+              } else {
+                appConfig = latestConfig;
+                configSha = latestConfigFile.sha;
+                const configuredModel = String(appConfig.ai?.model || '').trim();
+                aiModel = /^gemini-[a-z0-9.-]+$/i.test(configuredModel) ? configuredModel : AI_DEFAULT_MODEL;
+                unlock('admin');
+                await loadAdminSourceCatalog();
+                setStatus($('#recipe-admin-status'), 'Sessione Admin ripristinata.', 'ok');
+              }
+            } catch (error) {
+              if (error.status === 401) {
+                session = { role: 'admin', token: null, llmKey: null, viewerId: null };
+                await clearRememberedSessionSecrets();
+                unlock('admin', { restored: true });
+                try {
+                  await loadReaderContent();
+                } catch (offlineError) {
+                  setStatus($('#content-status'), `Ricettario offline non disponibile: ${offlineError.message}`, 'error');
+                }
+                setStatus($('#recipe-admin-status'), 'GitHub non accetta più le credenziali salvate. Inserisci la password Admin per ripristinare la sessione.', 'error');
+                $('#admin-reauth-password').focus();
+              } else {
+                try {
+                  await loadReaderContent();
+                  setStatus($('#recipe-admin-status'), 'Connessione a GitHub non disponibile. Ricettario locale caricato; la sessione Admin resta attiva.', 'ok');
+                } catch (offlineError) {
+                  setStatus($('#content-status'), `Ricettario offline non disponibile: ${offlineError.message}`, 'error');
+                  setStatus($('#recipe-admin-status'), `Impossibile caricare il catalogo: ${error.message}`, 'error');
+                }
+              }
+            }
+          } else if (savedRole === 'admin') {
+            unlock('admin', { restored: true });
+            try {
+              await loadReaderContent();
+              setStatus($('#recipe-admin-status'), 'Inserisci la password Admin per ripristinare la sessione.', 'ok');
+              $('#admin-reauth-password').focus();
+            } catch (error) {
+              setStatus($('#content-status'), error.message, 'error');
+              setStatus($('#recipe-admin-status'), 'Sessione Admin senza credenziali. Inserisci la password per ripristinarla.', 'error');
+              $('#admin-reauth-password').focus();
+            }
+          } else {
+            const rememberedReader = await restoreRememberedSessionSecrets('reader');
+            if (rememberedReader) {
+              session = { role: 'reader', token: null, llmKey: rememberedReader.llmKey, viewerId: rememberedReader.viewerId };
+              rememberSessionRole('reader');
+              unlock('reader');
+              await loadReaderContent();
+            } else {
+              setStatus($('#login-status'), 'Pronto.');
+            }
+          }
         }
       } catch (error) {
         loginButton.disabled = true;
@@ -4206,12 +4710,6 @@
         $('#setup-hint').hidden = false;
       }
     }());
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch((error) => console.warn('Service worker non disponibile:', error));
-      });
-    }
   </script>
 </body>
 </html>

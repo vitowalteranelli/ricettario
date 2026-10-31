@@ -51,10 +51,11 @@ risposta e apre una bozza nel form esistente. La ricetta
 non viene mai pubblicata senza revisione e salvataggio manuale.
 
 La chiave usata per importare ricette viene decifrata nella sessione Admin; per
-la ricerca visuale è decifrata dalla password viewer associata. La chiave non
-viene salvata in localStorage, cookie o sessionStorage. Chi conosce una password
-viewer può usare la chiave Gemini dal browser; usa una chiave dedicata, con
-quota e limiti di spesa ridotti.
+la ricerca visuale è decifrata dalla password viewer associata. PAT e chiave
+Gemini vengono conservati nel browser solo cifrati in IndexedDB, con una chiave
+Web Crypto non esportabile, e cancellati al logout. Il codice della stessa
+origine può comunque usarli mentre la sessione è attiva: usa una chiave Gemini
+dedicata, con quota e limiti di spesa ridotti.
 Il prompt e lo schema non sono segreti e possono essere modificati e pubblicati
 indipendentemente dal codice.
 
@@ -69,11 +70,11 @@ Prima della ricerca l’elenco è sempre modificabile: controlla, correggi o
 aggiungi gli ingredienti riconosciuti.
 
 I viewer usano la propria password di accesso: questa decifra la chiave Gemini
-per la ricerca visuale e non concede accesso al pannello Admin. Dopo un refresh,
-il ruolo viewer viene ripristinato ma la chiave va sbloccata di nuovo, perché
-password e chiave non vengono conservate. Se la chiave è già presente nella
-scheda, non viene richiesta una seconda volta. La chiave e le fotografie restano
-solo nella memoria della scheda e non vengono salvate nel dataset o nel browser.
+per la ricerca visuale e non concede accesso al pannello Admin. Il ruolo e la
+chiave cifrata vengono ripristinati dopo refresh e riapertura; la password non
+viene conservata. Logout o una modifica della configurazione richiedono un nuovo
+accesso. Le fotografie restano solo nella memoria della scheda e non vengono
+salvate nel dataset o nel browser.
 
 Il ranking delle ricette è locale: per ogni ingrediente conta in quante ricette
 compare nel catalogo complessivo; meno ricette lo contengono, maggiore è la sua
@@ -144,35 +145,37 @@ Poi apri `http://localhost:8000/index.html` e verifica:
   dettagli; dopo la creazione, l’ID e il percorso dataset restano stabili;
 - con Gemini configurato, la password viewer sblocca la chiave per la ricerca
   visuale, mentre l’importazione di ricette resta una funzione Admin;
-- il selettore **Tema** alterna tra il tema Mediterraneo (predefinito) e quello
-  Classico e conserva la preferenza solo nel browser;
+- **Antichi sapori** è il tema predefinito; il selettore **Tema** offre anche
+  Mediterraneo, Classico ed Essenziale e conserva la scelta nel browser;
 - gestione password lettori continua a funzionare;
 - con una configurazione AI valida, foto e PDF compilano una bozza ricetta;
 - una bozza AI mostra gli eventuali warning e richiede revisione manuale;
 - la ricerca per ingredienti usa la password viewer, mostra l’elenco
-  riconosciuto e ordina le ricette; dopo un refresh la chiave va sbloccata di
-  nuovo;
+  riconosciuto e ordina le ricette; dopo un refresh la sessione e la chiave si
+  ripristinano senza chiedere di nuovo la password;
 - dopo logout il contenuto scompare.
 
-Per i lettori, dopo il primo accesso la sessione viene ricordata solo nella scheda
-corrente tramite `sessionStorage`: un refresh non richiede nuovamente la password,
-mentre la chiusura della scheda la cancella. Anche l’area Admin viene ripristinata
-dopo un refresh, ma il PAT e la API key vengono rimossi dalla RAM: il pannello
-mostra il dataset pubblico e richiede nuovamente la password Admin solo quando
-serve pubblicare, aggiornare le password lettore o usare l’importazione AI.
+La sessione viewer e quella Admin restano attive fino al logout. Dopo refresh o
+riapertura dell’app, i segreti vengono decifrati in RAM dal browser e l’Admin può
+continuare a pubblicare e usare l’importazione AI senza reinserire la password.
+Se IndexedDB non è disponibile, i segreti non si decifrano o la configurazione
+cambia, l’app richiede nuovamente la password.
 Nelle configurazioni già esistenti, reinserisci una volta la password di ciascun
 viewer dalla scheda **Password lettori** per abilitarne la ricerca visuale. Né il
-PAT né la API key vengono mai salvati nel browser.
+PAT né la API key vengono salvati in chiaro nel browser.
 
 ## Installazione come web app
 
 Su GitHub Pages, aprendo il sito da un browser compatibile, il ricettario può
 essere installato nella schermata Home o tra le applicazioni grazie a
-`manifest.webmanifest` e `sw.js`. Il service worker memorizza solo la shell
-statica dell’app; `config.json`, `datasets/`, i prompt e le API esterne restano
-sempre esclusi dalla cache. Dopo una pubblicazione Admin, le nuove ricette sono
-disponibili al successivo refresh o alla riapertura dell’app: non è previsto un
-aggiornamento istantaneo mentre la schermata resta aperta.
+`manifest.webmanifest` e `sw.js`. Dopo aver aperto l’app almeno una volta con
+connessione, il service worker conserva la shell, `config.json` con i segreti
+cifrati, il catalogo e i dataset. Online li richiede prima alla rete e aggiorna
+la copia locale; offline usa l’ultima versione scaricata. Per questo, dopo una
+pubblicazione Admin, un refresh connesso aggiorna il contenuto anche nella
+cache offline. Ricerca e lettura funzionano offline; Gemini, le operazioni
+GitHub e il caricamento delle immagini remote richiedono la connessione. Prompt
+e risposte delle API esterne non vengono memorizzati.
 
 Se il token è valido ma il push fallisce, controlla owner, repository, branch e
 permesso `Contents: Read and write`. Un conflitto GitHub richiede di usare
@@ -185,7 +188,8 @@ JSON indicato in `config.json` (di default `datasets/catalog.json`) e tutti i
 dataset delle fonti elencate. La password lettore verifica solo gli hash locali e
 non tenta mai di decifrare il PAT. La password Admin decifra il PAT in RAM e
 abilita le API GitHub Contents per caricare/salvare file e aggiornare gli hash
-lettore.
+lettore; la sessione cifrata nel browser consente di ripristinare queste funzioni
+fino al logout.
 
 Per un dominio `github.io`, owner e repository vengono derivati da hostname e
 pathname. Su un dominio custom compilali nei campi Owner/Repository di

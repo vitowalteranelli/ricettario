@@ -19,6 +19,11 @@
       "path": "datasets/1080-recetas-cocina-es-it.json",
       "author": "Simone Ortega",
       "description": "Ricettario bilingue spagnolo-italiano di Simone Ortega; testo originale e traduzione affiancati"
+    },
+    {
+      "id": "famiglia-anelli",
+      "label": "Famiglia Anelli",
+      "path": "datasets/famiglia-anelli.json"
     }
   ]
 }
