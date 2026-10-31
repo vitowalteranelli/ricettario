@@ -70,7 +70,6 @@
     .reader-brand-kicker { margin:0 0 .15rem; color:var(--accent); font-size:.68rem; font-weight:850; letter-spacing:.16em; line-height:1; text-transform:uppercase; }
     .reader-brand h1 { position:relative; display:inline-block; margin:0; color:var(--ink); font:800 clamp(2rem,5vw,2.8rem)/.95 var(--brand-font); letter-spacing:-.045em; }
     .reader-brand h1::after { display:block; width:2.5rem; height:3px; margin-top:.42rem; border-radius:999px; background:linear-gradient(90deg,var(--accent),var(--accent-secondary)); content:""; }
-    .reader-brand .badge { margin-top:.42rem; }
     .muted { color:var(--muted); }
     .status { min-height:1.5em; color:var(--muted); font-family:var(--brand-font); }
     .status.error { color:var(--danger); }
@@ -357,7 +356,7 @@
       --shadow-strong:#59432b38;
       --accent-shadow:#8c3f3830;
       --media-bg:#dfcfb0;
-      --handwriting-font:Noteworthy,"Bradley Hand","Segoe Print","Comic Sans MS",cursive;
+      --handwriting-font:"Dancing Script",Noteworthy,"Bradley Hand","Segoe Print","Comic Sans MS",cursive;
       --heading-font:var(--handwriting-font);
       --brand-font:var(--handwriting-font);
       --olive:#657151;
@@ -487,7 +486,6 @@
       #reader-view > .topbar .reader-brand-mark { width:2.35rem; height:2.35rem; border-radius:12px; }
       #reader-view > .topbar .reader-brand-kicker { display:none; }
       #reader-view > .topbar .reader-brand h1 { font-size:1.45rem; }
-      #reader-view > .topbar .reader-brand .badge { margin:.2rem 0 0; font-size:.68rem; }
       #reader-view > .card { min-height:calc(100vh - 4rem); min-height:calc(100svh - 4rem); padding:.75rem 1rem calc(7rem + env(safe-area-inset-bottom)); border:0; border-radius:0; background:transparent; box-shadow:none; }
       #admin-view { display:flex; min-height:100vh; min-height:100svh; flex-direction:column; gap:0; margin:0; padding:0 1rem calc(5.8rem + env(safe-area-inset-bottom)); border:0; border-radius:0; box-shadow:none; }
       [data-theme="mediterranean"] #admin-view { border-radius:0; }
@@ -562,7 +560,6 @@
       main { width:100%; }
       #reader-view > .topbar .reader-brand-mark { width:2.1rem; height:2.1rem; }
       #reader-view > .topbar .reader-brand h1 { font-size:1.3rem; }
-      #reader-view > .topbar .reader-brand .badge { font-size:.62rem; }
       .reader-search-mode-button { gap:.3rem; font-size:.8rem; }
       .reader-search-mode-icon { width:1rem; height:1rem; }
       .admin-tab svg { width:1.1rem; height:1.1rem; }
@@ -582,7 +579,7 @@
     [data-theme="apple"] .recipe-result,[data-theme="apple"] .ingredient-recipe-result { border-radius:16px; }
     [data-theme="apple"] .recipe-media { border-radius:18px; }
     [data-theme="apple"] .admin-session-notice { border-color:var(--line); border-left-color:var(--accent); background:var(--card); box-shadow:0 8px 24px var(--shadow); }
-    [data-theme="magic"] body { background-color:var(--bg); background-image:radial-gradient(ellipse at 12% 8%,#fff8e9 0,transparent 32rem),radial-gradient(circle at 1px 1px,#7055360b .6px,transparent .9px); background-size:auto,8px 8px; color:var(--ink); font-family:var(--handwriting-font); font-size-adjust:.4; letter-spacing:0; }
+    [data-theme="magic"] body { background-color:var(--bg); background-image:radial-gradient(ellipse at 12% 8%,#fff8e9 0,transparent 32rem),radial-gradient(circle at 1px 1px,#7055360b .6px,transparent .9px); background-size:auto,8px 8px; color:var(--ink); font-family:var(--handwriting-font); font-size-adjust:.44; letter-spacing:0; }
     [data-theme="magic"] h1,[data-theme="magic"] h2,[data-theme="magic"] h3,[data-theme="magic"] h4,[data-theme="magic"] legend { font-family:var(--heading-font); letter-spacing:-.015em; }
     [data-theme="magic"] button,[data-theme="magic"] input,[data-theme="magic"] textarea,[data-theme="magic"] select { font-family:var(--handwriting-font); }
     [data-theme="magic"] body * { font-family:var(--handwriting-font) !important; }
@@ -780,8 +777,7 @@
       [data-theme="magic"] .recipe-card[data-page-style="scrapbook"] .recipe-media.is-magic-pasted { transform:none; }
     }
     @media (min-width:761px) and (hover:hover) and (pointer:fine) {
-      [data-theme="magic"] { --handwriting-font:"Dancing Script",Noteworthy,"Bradley Hand","Segoe Print","Comic Sans MS",cursive; }
-      [data-theme="magic"] body { font-size-adjust:.44; }
+      [data-theme="magic"] body { font-size-adjust:.484; }
     }
   </style>
   <script>
@@ -824,7 +820,6 @@
           <div>
             <p class="reader-brand-kicker">Ricette di famiglia</p>
             <h1>Ricettario</h1>
-            <span id="role-badge" class="badge"></span>
           </div>
         </div>
         <div class="actions">
@@ -3773,7 +3768,6 @@
       readerView.hidden = isAdmin;
       adminView.hidden = !isAdmin;
       $('#admin-session-notice').hidden = !(isAdmin && restored);
-      $('#role-badge').textContent = role === 'admin' ? 'Amministratore' : 'Sola lettura';
       $('#show-admin-button').hidden = !isAdmin;
       if (role === 'admin') {
         accessRows = (appConfig.readOnlyPasswords || []).map((entry) => ({ ...entry }));
