@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ricettario-shell-v6';
+const CACHE_NAME = 'ricettario-shell-v8';
 const OFFLINE_DATA_CACHE_NAME = 'ricettario-offline-data-v1';
 const ACTIVE_CACHE_NAMES = [CACHE_NAME, OFFLINE_DATA_CACHE_NAME];
 const SHELL_FILES = [

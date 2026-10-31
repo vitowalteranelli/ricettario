@@ -2,9 +2,9 @@
   "version": 1,
   "sources": [
     {
-      "id": "cbt-pirotta",
-      "label": "CBT Pirotta",
-      "path": "datasets/cbt-pirotta.json"
+      "id": "famiglia-anelli",
+      "label": "Famiglia Anelli",
+      "path": "datasets/famiglia-anelli.json"
     },
     {
       "id": "ricette-regionali",
@@ -14,16 +14,16 @@
       "description": "La cucina regionale italiana in oltre 5000 ricette"
     },
     {
+      "id": "cbt-pirotta",
+      "label": "CBT",
+      "path": "datasets/cbt-pirotta.json"
+    },
+    {
       "id": "1080-recetas-cocina",
-      "label": "1080 recetas de cocina (ES / IT)",
+      "label": "Ricette spagnole",
       "path": "datasets/1080-recetas-cocina-es-it.json",
       "author": "Simone Ortega",
       "description": "Ricettario bilingue spagnolo-italiano di Simone Ortega; testo originale e traduzione affiancati"
-    },
-    {
-      "id": "famiglia-anelli",
-      "label": "Famiglia Anelli",
-      "path": "datasets/famiglia-anelli.json"
     }
   ]
 }

@@ -186,12 +186,7 @@
     .recipe-detail-content { border:1px solid var(--line); border-radius:12px; padding:clamp(1rem,2vw,1.5rem); background:var(--card); }
     .recipe-detail-content .recipe-card { border:0; padding:0; }
     .recipe-media { position:relative; aspect-ratio:16/8; overflow:hidden; margin:0 0 1.35rem; border-radius:16px; background:var(--media-bg); box-shadow:0 8px 24px var(--shadow-strong); }
-    .recipe-media::after { position:absolute; inset:35% 0 0; background:linear-gradient(180deg,transparent,#17212bb8); content:""; pointer-events:none; }
     .recipe-media img { display:block; width:100%; height:100%; object-fit:cover; }
-    .recipe-media figcaption { position:absolute; right:0; bottom:0; left:0; z-index:1; padding:2rem .9rem .7rem; color:#fff; font-size:.75rem; line-height:1.35; }
-    .recipe-media figcaption a { color:inherit; text-decoration:underline; text-underline-offset:.15em; }
-    .recipe-media-label { font-weight:800; }
-    .recipe-media.is-suggested { border:1px solid var(--warning-line); }
     .recipe-card { border:1px solid var(--line); border-radius:12px; padding:1.25rem; background:var(--card); }
     .recipe-card h2 { color:var(--accent); margin:.2rem 0 .25rem; }
     .recipe-card h3 { color:var(--accent); margin:.2rem 0 .25rem; }
@@ -598,6 +593,7 @@
     [data-theme="magic"] .recipe-result,[data-theme="magic"] .ingredient-recipe-result { border-radius:9px 15px 10px 13px; background:var(--card); }
     [data-theme="magic"] .recipe-result.has-image,[data-theme="magic"] .ingredient-recipe-result.has-image { grid-template-columns:5.25rem minmax(0,1fr); grid-template-areas:"image meta" "image title" "image summary"; align-items:center; }
     [data-theme="magic"] .recipe-result-image { display:block; grid-area:image; width:5.25rem; height:5.25rem; border:4px solid #fff8e9; border-radius:5px 12px 6px 10px; box-shadow:0 3px 8px var(--shadow-strong); object-fit:cover; }
+    [data-theme="magic"] .recipe-result-meta { font-size:.9rem; font-weight:500; letter-spacing:0; text-transform:none; }
     [data-theme="magic"] .recipe-result.has-image .recipe-result-meta,[data-theme="magic"] .ingredient-recipe-result.has-image .ingredient-recipe-result-meta { grid-area:meta; }
     [data-theme="magic"] .recipe-result.has-image .recipe-result-title,[data-theme="magic"] .ingredient-recipe-result.has-image .ingredient-recipe-result-title { grid-area:title; }
     [data-theme="magic"] .recipe-result.has-image .recipe-result-preview,[data-theme="magic"] .ingredient-recipe-result.has-image .ingredient-recipe-result-missing { grid-area:summary; }
@@ -607,7 +603,7 @@
     [data-theme="magic"] .recipe-card h3,[data-theme="magic"] .recipe-card h4 { color:#72523b; }
     [data-theme="magic"] .recipe-card h4 { font-family:var(--handwriting-font); font-size:1.08rem; letter-spacing:0; }
     [data-theme="magic"] .recipe-category { display:inline-block; margin-bottom:.35rem; padding:.18rem .55rem; border:1px solid #cbb287; border-radius:999px 8px 999px 8px; color:#657151; font-family:var(--handwriting-font); font-size:.95rem; font-weight:700; letter-spacing:0; text-transform:none; }
-    [data-theme="magic"] .recipe-source-note { font-style:italic; }
+    [data-theme="magic"] .recipe-source-note { color:#8a7050; font-size:.9rem; font-style:italic; }
     [data-theme="magic"] .recipe-media { border:8px solid #fffaf0; border-radius:5px 13px 7px 12px; box-shadow:0 8px 18px #59432b30; }
     [data-theme="magic"] .recipe-media img { filter:saturate(.92) contrast(.98); }
     [data-theme="magic"] .recipe-note { border-left-color:var(--accent-secondary); border-radius:0 10px 10px 0; background:#f3e6ca; font-family:var(--handwriting-font); font-size:1.08rem; line-height:1.65; }
@@ -720,6 +716,67 @@
       [data-theme="apple"] .ingredient-search-panel,[data-theme="apple"] .ingredient-stage,[data-theme="apple"] .ingredient-inventory,[data-theme="apple"] .ingredient-results,[data-theme="apple"] .admin-panel { padding:.9rem; border-radius:18px; }
       [data-theme="apple"] .recipe-detail-content { padding:1rem; border-radius:19px; }
       [data-theme="apple"] .admin-tabs { top:calc(.35rem + env(safe-area-inset-top)); }
+    }
+    [data-theme="magic"] .recipe-media.is-magic-pasted {
+      position:relative;
+      display:grid;
+      width:min(100%,48rem);
+      aspect-ratio:auto;
+      overflow:visible;
+      margin:1.8rem auto 2rem;
+      padding:.55rem .55rem .18rem;
+      border:1px solid #d4c19d;
+      border-radius:4px 6px 3px 5px;
+      background:#fffaf0;
+      box-shadow:0 2px 4px #59432b12,0 10px 18px #59432b2e;
+    }
+    [data-theme="magic"] .recipe-media.is-magic-pasted img {
+      width:100%;
+      height:auto;
+      aspect-ratio:16/8;
+      border:0;
+      clip-path:polygon(.4% 1%,12% .4%,23% 1.1%,36% .3%,49% .9%,62% .2%,75% 1%,88% .35%,99.5% .8%,99% 18%,99.7% 33%,99% 49%,99.8% 66%,99% 82%,99.5% 99%,84% 98.8%,69% 99.6%,54% 98.9%,39% 99.7%,24% 99%,10% 99.6%,.5% 99%,.8% 81%,.2% 65%,.9% 47%,.2% 28%);
+      filter:saturate(.92) contrast(.98);
+      object-fit:cover;
+    }
+    [data-theme="magic"] .recipe-media.is-magic-pasted::before,
+    [data-theme="magic"] .recipe-media.is-magic-pasted::after {
+      position:absolute;
+      z-index:2;
+      top:-.58rem;
+      width:4.25rem;
+      height:1.25rem;
+      border:1px solid #bda77970;
+      background:linear-gradient(110deg,#e1cd9ca8,#f1e3bcce 48%,#dfc995a8);
+      box-shadow:0 1px 2px #59432b20;
+      content:"";
+      pointer-events:none;
+    }
+    [data-theme="magic"] .recipe-media.is-magic-pasted::before {
+      left:17%;
+      clip-path:polygon(1% 5%,97% 0,100% 12%,96% 96%,4% 100%);
+      transform:rotate(-6deg);
+    }
+    [data-theme="magic"] .recipe-media.is-magic-pasted::after {
+      right:17%;
+      bottom:auto;
+      left:auto;
+      inset-block-end:auto;
+      clip-path:polygon(0 8%,96% 0,100% 92%,4% 100%);
+      transform:rotate(5deg);
+    }
+    [data-theme="magic"] .recipe-card[data-page-style="notebook"] .recipe-media.is-magic-pasted { transform:rotate(.35deg); }
+    [data-theme="magic"] .recipe-card[data-page-style="scrapbook"] .recipe-media.is-magic-pasted { transform:rotate(-.65deg); }
+    [data-theme="magic"] .recipe-card[data-page-style="herbarium"] .recipe-media.is-magic-pasted { transform:rotate(.2deg); }
+    [data-theme="magic"] .recipe-card[data-page-style="index"] .recipe-media.is-magic-pasted { transform:rotate(-.3deg); }
+    [data-theme="magic"] .recipe-result-image {
+      clip-path:polygon(2% 1%,48% 2%,98% 0,99% 48%,97% 99%,52% 98%,1% 100%,0 53%);
+      transform:rotate(-1.3deg);
+    }
+    @media (max-width:760px) {
+      [data-theme="magic"] .recipe-media.is-magic-pasted { width:100%; margin:1.3rem auto 1.7rem; padding:.4rem .4rem .15rem; }
+      [data-theme="magic"] .recipe-media.is-magic-pasted::before,[data-theme="magic"] .recipe-media.is-magic-pasted::after { width:3.2rem; height:1rem; top:-.48rem; }
+      [data-theme="magic"] .recipe-card[data-page-style="scrapbook"] .recipe-media.is-magic-pasted { transform:none; }
     }
   </style>
   <script>
@@ -1692,6 +1749,15 @@
       return sourceById(sourceId)?.label || sourceId || 'Fonte sconosciuta';
     }
 
+    function cookbookLabel(value) {
+      const label = String(value || '');
+      if (label && label === label.toLocaleUpperCase('it')) {
+        const sentenceCase = label.toLocaleLowerCase('it');
+        return sentenceCase.charAt(0).toLocaleUpperCase('it') + sentenceCase.slice(1);
+      }
+      return label;
+    }
+
     function flattenSourceDatasets() {
       return sourceCatalog.flatMap((source) => sourceDatasets.get(source.id)?.recipes || []);
     }
@@ -1727,11 +1793,8 @@
           alt: String(media.alt || '').trim(),
           credit: String(media.credit || '').trim(),
           license: String(media.license || '').trim(),
-          licenseUrl: safeHttpUrl(media.licenseUrl),
-          sourceUrl: safeHttpUrl(media.sourceUrl),
           provider: String(media.provider || '').trim(),
-          matchType: media.matchType === 'suggested' ? 'suggested' : 'curated',
-          caption: String(media.caption || '').trim()
+          matchType: media.matchType === 'suggested' ? 'suggested' : 'curated'
         }];
       }).filter(Boolean);
       return new Map(entries);
@@ -2674,7 +2737,7 @@
         });
         label.appendChild(checkbox);
         const text = document.createElement('span');
-        text.textContent = `${category} (${count})`;
+        text.textContent = `${cookbookLabel(category)} (${count})`;
         label.appendChild(text);
         options.appendChild(label);
       });
@@ -3032,40 +3095,24 @@
     }
 
     function createRecipeMediaFigure(recipe, media) {
+      const magicTheme = document.documentElement.dataset.theme === 'magic';
       const figure = document.createElement('figure');
-      figure.className = `recipe-media${media.matchType === 'suggested' ? ' is-suggested' : ''}`;
+      figure.className = `recipe-media${magicTheme ? ' is-magic-pasted' : ''}`;
 
       const image = document.createElement('img');
       image.src = media.imageUrl;
-      image.alt = media.alt || `Immagine illustrativa di ${recipe.title}`;
+      const description = magicTheme && media.matchType === 'suggested'
+        ? `Fotografia d’archivio associata alla ricetta ${recipe.title}`
+        : media.alt || `Immagine illustrativa di ${recipe.title}`;
+      const license = media.license && !/^da verificare$/i.test(media.license) ? media.license : '';
+      const photoCredit = [media.credit, media.provider, license].filter(Boolean).join(' · ');
+      image.alt = photoCredit
+        ? `${description.replace(/[.?!]+$/, '')}. Credito fotografico: ${photoCredit}.`
+        : description;
       image.loading = 'lazy';
       image.decoding = 'async';
       image.addEventListener('error', () => figure.remove(), { once: true });
       figure.appendChild(image);
-
-      const caption = document.createElement('figcaption');
-      const label = document.createElement('span');
-      label.className = 'recipe-media-label';
-      label.textContent = media.matchType === 'suggested'
-        ? 'Foto suggerita' : 'Immagine illustrativa';
-      caption.appendChild(label);
-
-      if (media.caption) caption.appendChild(document.createTextNode(` · ${media.caption}`));
-      const attribution = [media.provider, media.credit, media.license].filter(Boolean).join(' · ');
-      if (attribution) {
-        caption.appendChild(document.createTextNode(' · '));
-        if (media.sourceUrl) {
-          const link = document.createElement('a');
-          link.href = media.sourceUrl;
-          link.target = '_blank';
-          link.rel = 'noopener noreferrer';
-          link.textContent = attribution;
-          caption.appendChild(link);
-        } else {
-          caption.appendChild(document.createTextNode(attribution));
-        }
-      }
-      figure.appendChild(caption);
       return figure;
     }
 
@@ -3110,7 +3157,7 @@
 
       const category = document.createElement('div');
       category.className = 'recipe-category';
-      category.textContent = recipe.category || 'Senza categoria';
+      category.textContent = cookbookLabel(recipe.category || 'Senza categoria');
       card.appendChild(category);
 
       const title = document.createElement('h2');
@@ -3120,7 +3167,9 @@
 
       const source = document.createElement('p');
       source.className = 'recipe-source-note';
-      source.textContent = `Fonte: ${sourceLabel(recipe.sourceId)}`;
+      source.textContent = document.documentElement.dataset.theme === 'magic'
+        ? `Dal quaderno: ${sourceLabel(recipe.sourceId)}`
+        : `Fonte: ${sourceLabel(recipe.sourceId)}`;
       card.appendChild(source);
 
       if (recipe.subcategory) {
@@ -3160,7 +3209,7 @@
       result.setAttribute('aria-current', recipe.id === selectedRecipeId ? 'true' : 'false');
       const meta = document.createElement('span');
       meta.className = 'recipe-result-meta';
-      meta.textContent = [recipe.category || 'Senza categoria', recipe.subcategory, sourceCatalog.length > 1 ? sourceLabel(recipe.sourceId) : ''].filter(Boolean).join(' · ');
+      meta.textContent = [cookbookLabel(recipe.category || 'Senza categoria'), cookbookLabel(recipe.subcategory), sourceCatalog.length > 1 ? sourceLabel(recipe.sourceId) : ''].filter(Boolean).join(' · ');
       result.appendChild(meta);
 
       const title = document.createElement('span');
@@ -3184,7 +3233,7 @@
       const categories = [...new Set(recipeDataset.map((recipe) => recipe.category).filter(Boolean))]
         .sort((left, right) => left.localeCompare(right, 'it'));
       filter.replaceChildren(new Option('Tutte', ''));
-      categories.forEach((category) => filter.add(new Option(category, category)));
+      categories.forEach((category) => filter.add(new Option(cookbookLabel(category), category)));
     }
 
     function populateSourceFilter() {
