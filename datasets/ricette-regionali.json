@@ -5912,17 +5912,37 @@
       "title": "Fallone",
       "category": "PANI, FOCACCE, TORTE",
       "subcategory": "",
+      "tags": ["pane", "farina di mais", "Umbria"],
       "sections": [
         {
-          "title": "Trascrizione",
-          "type": "text",
+          "title": "Ingredienti",
+          "type": "unordered",
           "items": [
-            "Impasto di farina di mais, poca farina di grano e acqua tiepida; a forma di filone; si inforna sopra fette di cavolo."
+            "500 g di farina di mais",
+            "250 g circa di pasta di pane già lievitata",
+            "Acqua bollente e altra acqua tiepida, quanto basta",
+            "Un pizzico di sale",
+            "2 foglie grandi di verza o cavolo",
+            "Qualche chicco di uva passa, facoltativo"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Preparazione",
+          "type": "ordered",
+          "items": [
+            "Versa l’acqua bollente sulla farina di mais e mescola fino a ottenere un impasto morbido. Lascialo intiepidire.",
+            "Unisci la pasta di pane e il sale. Impasta bene, aggiungendo poca acqua tiepida se serve: il composto deve restare morbido. Se gradita, incorpora l’uva passa.",
+            "Copri e lascia lievitare al caldo finché l’impasto è gonfio.",
+            "Forma un filone oppure dividilo in due pagnotte e adagialo sulle foglie di verza.",
+            "Cuoci in forno preriscaldato a 200 °C per circa 35–45 minuti, finché il fallone è cotto e dorato. In forno a legna, cuocilo sulle foglie di cavolo come da tradizione."
           ],
           "sections": []
         }
       ],
-      "notes": [],
+      "notes": [
+        "Le dosi seguono una variante tradizionale umbra; tempi e temperatura del forno domestico sono indicativi."
+      ],
       "sourceId": "ricette-regionali",
       "sourcePage": 51,
       "sourcePageEnd": 51,
