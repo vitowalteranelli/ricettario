@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ricettario-shell-v8';
+const CACHE_NAME = 'ricettario-shell-v9';
 const OFFLINE_DATA_CACHE_NAME = 'ricettario-offline-data-v1';
 const ACTIVE_CACHE_NAMES = [CACHE_NAME, OFFLINE_DATA_CACHE_NAME];
 const SHELL_FILES = [
@@ -6,6 +6,7 @@ const SHELL_FILES = [
   './index.html',
   './manifest.webmanifest',
   './favicon.svg',
+  './fonts/DancingScript-Regular.ttf',
   './icons/icon-192.svg',
   './icons/icon-512.svg'
 ];

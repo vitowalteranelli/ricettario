@@ -11,6 +11,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Ricettario">
   <style>
+    @font-face { font-family:"Dancing Script"; src:url("./fonts/DancingScript-Regular.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
     :root { color-scheme:light; --bg:#f4f6f8; --card:#fff; --ink:#17212b; --muted:#647383; --accent:#b7352c; --accent-secondary:#e0a22b; --accent-soft:#fff7f5; --line:#d9e0e7; --ok:#176b43; --danger:#a12222; --danger-soft:#fbe8e8; --surface-muted:#e9eef2; --surface-soft:#fbfcfd; --warning-bg:#fff9e9; --warning-line:#e7c98d; --input-bg:#fff; --overlay:#fffffff2; --shadow:#17212b0d; --shadow-strong:#17212b12; --accent-shadow:#b7352c33; --media-bg:#e8ecef; --heading-font:system-ui,-apple-system,"Segoe UI",sans-serif; --brand-font:Georgia,"Times New Roman",serif; --olive:var(--muted); }
     [data-theme="mediterranean"] { --bg:#f5eee4; --card:#fffaf3; --ink:#30251f; --muted:#77695d; --accent:#b44b35; --accent-secondary:#c68b32; --accent-soft:#f8e8dc; --line:#e5d5c5; --ok:#426d50; --danger:#9d4035; --danger-soft:#f8e4de; --surface-muted:#eee3d7; --surface-soft:#fcf7f0; --warning-bg:#fff4d9; --warning-line:#d9ae62; --input-bg:#fffdf9; --overlay:#fffaf3f2; --shadow:#6f4b321c; --shadow-strong:#6f4b3230; --accent-shadow:#b44b3538; --media-bg:#dec7ad; --heading-font:Georgia,"Times New Roman",serif; --olive:#657151; }
     [data-theme="mediterranean"] body { background-image:radial-gradient(circle at 12% 8%,#fff8ee99,transparent 28rem),linear-gradient(135deg,#f8f1e8,#f1e6d8); }
@@ -581,7 +582,7 @@
     [data-theme="apple"] .recipe-result,[data-theme="apple"] .ingredient-recipe-result { border-radius:16px; }
     [data-theme="apple"] .recipe-media { border-radius:18px; }
     [data-theme="apple"] .admin-session-notice { border-color:var(--line); border-left-color:var(--accent); background:var(--card); box-shadow:0 8px 24px var(--shadow); }
-    [data-theme="magic"] body { background-color:var(--bg); background-image:radial-gradient(ellipse at 12% 8%,#fff8e9 0,transparent 32rem),radial-gradient(circle at 1px 1px,#7055360b .6px,transparent .9px); background-size:auto,8px 8px; color:var(--ink); font-family:var(--handwriting-font); letter-spacing:0; }
+    [data-theme="magic"] body { background-color:var(--bg); background-image:radial-gradient(ellipse at 12% 8%,#fff8e9 0,transparent 32rem),radial-gradient(circle at 1px 1px,#7055360b .6px,transparent .9px); background-size:auto,8px 8px; color:var(--ink); font-family:var(--handwriting-font); font-size-adjust:.4; letter-spacing:0; }
     [data-theme="magic"] h1,[data-theme="magic"] h2,[data-theme="magic"] h3,[data-theme="magic"] h4,[data-theme="magic"] legend { font-family:var(--heading-font); letter-spacing:-.015em; }
     [data-theme="magic"] button,[data-theme="magic"] input,[data-theme="magic"] textarea,[data-theme="magic"] select { font-family:var(--handwriting-font); }
     [data-theme="magic"] body * { font-family:var(--handwriting-font) !important; }
@@ -777,6 +778,10 @@
       [data-theme="magic"] .recipe-media.is-magic-pasted { width:100%; margin:1.3rem auto 1.7rem; padding:.4rem .4rem .15rem; }
       [data-theme="magic"] .recipe-media.is-magic-pasted::before,[data-theme="magic"] .recipe-media.is-magic-pasted::after { width:3.2rem; height:1rem; top:-.48rem; }
       [data-theme="magic"] .recipe-card[data-page-style="scrapbook"] .recipe-media.is-magic-pasted { transform:none; }
+    }
+    @media (min-width:761px) and (hover:hover) and (pointer:fine) {
+      [data-theme="magic"] { --handwriting-font:"Dancing Script",Noteworthy,"Bradley Hand","Segoe Print","Comic Sans MS",cursive; }
+      [data-theme="magic"] body { font-size-adjust:.44; }
     }
   </style>
   <script>
