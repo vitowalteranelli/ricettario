@@ -45,6 +45,43 @@
           "sections": []
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-pizza-e-focacce-panzerotti",
+      "sourceId": "famiglia-anelli",
+      "title": "Panzerotti",
+      "category": "Lievitati",
+      "subcategory": "Pizza e focacce",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "1 kg FARINA",
+            "1 LIEVITO DI BIRRA",
+            "100 g OLIO D'OLIVA",
+            "1 cucchiaino SALE",
+            "1 cucchiaino ZUCCHERO",
+            "ACQUA CALDA"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "LIEVITAZIONE: 1 ORA,",
+            "POI FORMARE LE PALLINE"
+          ],
+          "sections": []
+        }
+      ]
     }
   ]
 }
