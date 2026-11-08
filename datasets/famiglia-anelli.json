@@ -496,6 +496,173 @@
           "sections": []
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-panzerotti-panzerotti-massa",
+      "sourceId": "famiglia-anelli",
+      "title": "Panzerotti Massa",
+      "category": "Lievitati",
+      "subcategory": "Panzerotti",
+      "tags": [
+        "Panzerotti",
+        "Ricetta manoscritta"
+      ],
+      "notes": [
+        "La pagina contiene più versioni della ricetta di diverse persone (Barbara, Zia Maria)."
+      ],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Barbara",
+          "type": "unordered",
+          "items": [
+            "7:3 farina/semola",
+            "1 kg farina",
+            "1 lievito birra",
+            "100 gr olio",
+            "1 cucchiaino zucchero",
+            "Acqua calda - Fare lievitare 1 h. Poi formare palline."
+          ],
+          "sections": []
+        },
+        {
+          "title": "Zia Maria",
+          "type": "unordered",
+          "items": [
+            "2 kg farina",
+            "1 kg semola",
+            "1 lievito (su 1,5 kg)",
+            "sale",
+            "acqua minerale effervescente",
+            "lievitazione 4 h.",
+            "2 lieviti -> lievitazione 2 h."
+          ],
+          "sections": []
+        },
+        {
+          "title": "Barbara (seconda versione)",
+          "type": "group",
+          "items": [],
+          "sections": [
+            {
+              "title": "Ingredienti",
+              "type": "unordered",
+              "items": [
+                "300 farina",
+                "300 semola",
+                "320 acqua tiepida",
+                "30 olio oliva",
+                "10 zucchero",
+                "10 sale fino",
+                "1/2 busta patate disidratate",
+                "1 lievito birra"
+              ],
+              "sections": []
+            },
+            {
+              "title": "Procedimento",
+              "type": "ordered",
+              "items": [
+                "Fare sciogliere lievito e zucchero in acqua",
+                "Solo alla fine sale sciolto in poca acqua",
+                "Fare riposare 30'",
+                "Fare palline di 3 cm",
+                "Fare lievitare 1h coperte da canovaccio"
+              ],
+              "sections": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-pizza-massa-per-pizza",
+      "sourceId": "famiglia-anelli",
+      "title": "Massa per pizza",
+      "category": "Lievitati",
+      "subcategory": "Pizza",
+      "tags": [],
+      "notes": [
+        "La pagina contiene due ricette distinte: 'Massa per pizze' (principale in alto) e 'Massa per pizze 2' (in basso). È stata estratta la ricetta principale in alto."
+      ],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "Farina di tipo 1 900 gr.",
+            "lievito di birra 3 gr.",
+            "acqua fredda 630 gr.",
+            "sale 30 gr.",
+            "olio q.b.",
+            "farina di semola q.b."
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "Farina in ciotola, sbricioliamo il lievito, mescoliamo, versiamo acqua con movimenti dal basso verso alto",
+            "uniamo sale, facciamo una pallina e mettiamo in una ciotola di vetro spennellata di olio.",
+            "Copriamo impasto con pellicola trasparente, fare lievitare 1h a temperatura ambiente.",
+            "Poi mettere 20 h in frigo.",
+            "Poi preriscaldiamo il forno, mettiamo al massimo.",
+            "Versiamo sulla spianatoia semola abbondante e lavoriamo per ottenere pizze (no col mattarello)",
+            "Mettere in teglie calde, condire e cuocere per 8-10'"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-pizza-massa-per-pizza-2",
+      "sourceId": "famiglia-anelli",
+      "title": "Massa per pizza 2",
+      "category": "Lievitati",
+      "subcategory": "Pizza",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "300 gr. farina 0",
+            "200 gr. farina manitoba",
+            "400 gr. acqua temperatura ambiente",
+            "3 gr. lievito di birra o 1.5 gr. di birra secco",
+            "1 cucchiaio olio",
+            "11 gr. sale",
+            "1/2 cucchiaino zucchero"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "Miscelare metà farina + 1/2 lievito secco + zucchero + acqua. Mescolare con cucchiaio, poi liev. temp. 22° 6-8 h (forno spento luce accesa)",
+            "Deve triplicare. Poi su un piano",
+            "lavoraro mettete farina rimasta + lievito,",
+            "lavorare per 10', quando non attacca più sul piano di lavoro aggiungere olio e sale",
+            "Aggiungere farina se la richiede",
+            "Fare lievitare ancora 1 h."
+          ],
+          "sections": []
+        }
+      ]
     }
   ]
 }
