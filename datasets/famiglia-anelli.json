@@ -1163,6 +1163,219 @@
           "sections": []
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-pizza-pizza-rustica",
+      "sourceId": "famiglia-anelli",
+      "title": "Pizza rustica",
+      "category": "Lievitati",
+      "subcategory": "Pizza",
+      "tags": [],
+      "notes": [
+        "lievito istantaneo"
+      ],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti e preparazione",
+          "type": "unordered",
+          "items": [
+            "farina 180 gr.",
+            "uova 3",
+            "latte parz. scr. 100 gr.",
+            "olio 100 gr.",
+            "1 bustina lievito istantaneo per pizze",
+            "300 gr. funghi misti saltati",
+            "prezzemolo scamorza",
+            "forno 180° 20'"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-plum-cake-salato-zucchine-prosciutto-cotto",
+      "sourceId": "famiglia-anelli",
+      "title": "Plum cake salato zucchine prosciutto cotto",
+      "category": "Lievitati",
+      "subcategory": "",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "200 gr farina",
+            "100 acqua",
+            "100 olio semi girasole",
+            "2 zucchine",
+            "100 gr prosciutto cotto",
+            "100 gr scamorza",
+            "3 uova",
+            "1 bustina lievito istantaneo",
+            "sale olio oliva"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "unordered",
+          "items": [
+            "zucchine a dadini rosolare",
+            "ciotola: uova, sale, farina",
+            "olio di semi, acqua -> zucchine",
+            "prosciutto scamorza in ultimo",
+            "lievito",
+            "forno caldo 180° 50'"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--antipasti-rustici-plum-cake-salato-prosciutto-cotto-olive-e-scamorza",
+      "sourceId": "famiglia-anelli",
+      "title": "Plum cake salato Prosciutto cotto, olive e scamorza",
+      "category": "Antipasti",
+      "subcategory": "Rustici",
+      "tags": [
+        "salato",
+        "plumcake salato",
+        "ricetta manoscritta"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "300 farina",
+            "3 uova",
+            "100 latte",
+            "100 olio semi",
+            "100 cotto",
+            "100 scamorza",
+            "20 g olive verdi",
+            "sale pepe",
+            "1 bustina lievito"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "montare uova sale pepe + latte + olio a filo poi farina lievito prosciutto olive scamorza.",
+            "Forno preriscaldato 180° 40'"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--antipasti-torte-salate-torta-salata-yogurt-7-vasetti",
+      "sourceId": "famiglia-anelli",
+      "title": "Torta salata yogurt 7 vasetti",
+      "category": "Antipasti",
+      "subcategory": "Torte salate",
+      "tags": [
+        "torta salata",
+        "yogurt"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "3 uova",
+            "1 vasetto yogurt",
+            "1 vasetto latte 150",
+            "1 vasetto olio semi 130",
+            "3 vasetti farina 270",
+            "1 bustina lievito istantaneo"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Ripieno",
+          "type": "unordered",
+          "items": [
+            "120 prosciutto cotto",
+            "200 piselli cotti",
+            "150 scamorza",
+            "1 carota",
+            "1 zucchina sale pepe"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "Con una frusta lavorare yogurt + olio + latte.",
+            "Poi aggiungere farina setacciata con lievito poi sale, pepe, piselli, prosciutto, scamorza, zucchina e carota tagliata a julienne",
+            "Forno 180° statico 40'"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--torte-salate-torta-morbida-salata",
+      "sourceId": "famiglia-anelli",
+      "title": "Torta morbida salata",
+      "category": "Torte salate",
+      "subcategory": "",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "3 uova",
+            "20 gr sale",
+            "pepe",
+            "100 ml olio semi",
+            "120 ml latte",
+            "non meno 220 gr farina",
+            "1 bustina lievito torte salate",
+            "prosciutto, funghi, scamorza"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "Mescolare con le fruste",
+            "aggiungere non meno 220 gr farina, 1 bustina lievito torte salate, pancetta funghi scamorza",
+            "cuocere in teglia su carta forno 180° 35'"
+          ],
+          "sections": []
+        }
+      ]
     }
   ]
 }
