@@ -360,6 +360,142 @@
           "sections": []
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-focacce-focaccia-con-le-patate-mamma",
+      "sourceId": "famiglia-anelli",
+      "title": "Focaccia con le patate (mamma)",
+      "category": "Lievitati",
+      "subcategory": "Focacce",
+      "tags": [
+        "focaccia",
+        "patate",
+        "mamma"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "800 gr farina",
+            "1 patata grande 200 gr.",
+            "1 pizzico zucchero",
+            "olio un po'",
+            "sale grosso 1 cucchiaino",
+            "acqua tiepida",
+            "1/2 lievito"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "text",
+          "items": [
+            "si lavora, si integlia, impasto molle e appiccicoso",
+            "Si fa riposare 2 h.",
+            "si mettono sopra pomodori, olive, capperi, mortadella, mozzarella, origano.",
+            "forno 250° x 20'"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--pane-e-lievitati-calzone-zia-graziella",
+      "sourceId": "famiglia-anelli",
+      "title": "Calzone zia Graziella",
+      "category": "Pane e Lievitati",
+      "subcategory": "",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "Farina 1 kg",
+            "Acqua tiepida 500 ml",
+            "Margarina 80 gr.",
+            "Sale 20 gr. 1 cucchiaio",
+            "Zucchero 1 cucchiaino",
+            "1 lievito di birra"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Preparazione",
+          "type": "text",
+          "items": [
+            "fare lievitare 1 h."
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-pizze-massa-pizza-rustica",
+      "sourceId": "famiglia-anelli",
+      "title": "Massa Pizza rustica",
+      "category": "Lievitati",
+      "subcategory": "Pizze",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "500 g farina",
+            "100 ml latte",
+            "200 ml acqua tiepida",
+            "1 lievito",
+            "10 g zucchero 1 cucchiaino",
+            "20 g sale 2 cucchiaini"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--preparazioni-di-base-impasti-base-pasta-brise",
+      "sourceId": "famiglia-anelli",
+      "title": "Pasta brisè",
+      "category": "Preparazioni di base",
+      "subcategory": "Impasti base",
+      "tags": [],
+      "notes": [
+        "15\" in frigo prima di stenderla."
+      ],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "500 gr farina",
+            "250 burro o margarina",
+            "2 pizzichi sale",
+            "100-120 ml acqua ghiacciata"
+          ],
+          "sections": []
+        }
+      ]
     }
   ]
 }
