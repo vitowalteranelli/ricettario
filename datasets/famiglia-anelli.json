@@ -258,6 +258,108 @@
           "sections": []
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--bevande-liquori-liquore-anice",
+      "sourceId": "famiglia-anelli",
+      "title": "Liquore anice",
+      "category": "Bevande",
+      "subcategory": "Liquori",
+      "tags": [],
+      "notes": [
+        "parte dell'acqua può essere sostituita con panna."
+      ],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "anice e semi di finocchio",
+            "500 ml alcool",
+            "400 acqua",
+            "300 zucchero",
+            "1 bottiglietta aroma anice"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Preparazione",
+          "type": "text",
+          "items": [
+            "Mettere in infusione anice e semi di finocchio per 10 giorni in 500 ml alcool."
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--liquori-e-bevande-liquori-dolci-liquore-cioccolato",
+      "sourceId": "famiglia-anelli",
+      "title": "Liquore cioccolato",
+      "category": "Liquori e Bevande",
+      "subcategory": "Liquori dolci",
+      "tags": [],
+      "notes": [
+        "(barbone)",
+        "(o latte 250 + panna 250)",
+        "(o 100 cacao + 100 cioccolato fondente) grattugiato -"
+      ],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "1 lt latte",
+            "500 zucchero",
+            "150 cacao amaro",
+            "100 ml alcool"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Preparazione",
+          "type": "ordered",
+          "items": [
+            "Fare bollire latte, zucchero e cacao",
+            "Fare raffreddare aggiungere alcool filtrare",
+            "una volta finito conservare in frigo"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--bevande-liquori-liquore-caffe",
+      "sourceId": "famiglia-anelli",
+      "title": "Liquore caffè",
+      "category": "Bevande",
+      "subcategory": "Liquori",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "caffè 450",
+            "zucchero 450",
+            "alcol 250"
+          ],
+          "sections": []
+        }
+      ]
     }
   ]
 }
