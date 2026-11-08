@@ -160,6 +160,104 @@
           "sections": []
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--liquidi-e-bevande-liquori-crema-al-cedro",
+      "sourceId": "famiglia-anelli",
+      "title": "Crema al cedro",
+      "category": "Liquidi e Bevande",
+      "subcategory": "Liquori",
+      "tags": [
+        "cedro",
+        "liquore",
+        "ricetta manoscritta"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "8 cedri macerati in alcol per 4 gg.",
+            "Fare bollire 2,5 litri latte fresco per 3 volte,",
+            "Filtrare (aggiungere 2 kg di zucchero) raffreddare poi aggiungere 1 litro alcol.",
+            "In freezer"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--dolci-e-desserts-liquori-e-creme-crema-limoni",
+      "sourceId": "famiglia-anelli",
+      "title": "Crema limoni",
+      "category": "Dolci e Desserts",
+      "subcategory": "Liquori e Creme",
+      "tags": [],
+      "notes": [
+        "Limoncello ADA: Limoni 8 Alcol 500ml - Latte intero 500 Panna 500 Zucchero 800 - Vaniglia 1 baccello"
+      ],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "Buccia 3 limoni in infusione 3 gg con 300 ml alcol.",
+            "Poi sciogliere 800 zucchero + 1 lt latte + 100 ml panna.",
+            "Fare raffreddare poi unire."
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--bevande-liquori-liquore-liquirizia-margherita",
+      "sourceId": "famiglia-anelli",
+      "title": "Liquore liquirizia (margherita)",
+      "category": "Bevande",
+      "subcategory": "Liquori",
+      "tags": [
+        "liquore",
+        "liquirizia",
+        "fatto in casa"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "1 lt H2O",
+            "1 kg zucchero",
+            "250 gr liquirizia",
+            "800 alcool"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "miscelare bene zucchero e liquirizia in polvere,",
+            "poi aggiungere piano piano acqua continuamente e mescolare,",
+            "mettere sul fuoco, e continuando a mescolare fare bollire 5'",
+            "a freddo aggiungere alcool"
+          ],
+          "sections": []
+        }
+      ]
     }
   ]
 }
