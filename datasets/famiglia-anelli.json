@@ -776,6 +776,305 @@
           "sections": []
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-focaccia-focaccia",
+      "sourceId": "famiglia-anelli",
+      "title": "Focaccia",
+      "category": "Lievitati",
+      "subcategory": "Focaccia",
+      "tags": [
+        "focaccia",
+        "lievitati",
+        "varianti"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Barbara",
+          "type": "group",
+          "items": [],
+          "sections": [
+            {
+              "title": "Ingredienti",
+              "type": "unordered",
+              "items": [
+                "300 gr farina",
+                "300 gr semola rimacinata",
+                "20 ml olio oliva",
+                "10 gr zucchero",
+                "10 gr sale",
+                "1 cubetto lievito birra",
+                "50 gr patate disidratate",
+                "acqua calda q.b."
+              ],
+              "sections": []
+            },
+            {
+              "title": "Procedimento",
+              "type": "ordered",
+              "items": [
+                "l' impasto deve essere molto molle e appiccicoso.",
+                "Versare in teglia per crescere 1 h."
+              ],
+              "sections": []
+            }
+          ]
+        },
+        {
+          "title": "Ada",
+          "type": "group",
+          "items": [],
+          "sections": [
+            {
+              "title": "Ingredienti",
+              "type": "unordered",
+              "items": [
+                "- 400 gr farina",
+                "- 300 acqua",
+                "- 2 cucchiai olio",
+                "- 1 cucchiaino sale",
+                "- 1/2 lievito"
+              ],
+              "sections": []
+            }
+          ]
+        },
+        {
+          "title": "Focaccia barese",
+          "type": "group",
+          "items": [],
+          "sections": [
+            {
+              "title": "Ingredienti",
+              "type": "unordered",
+              "items": [
+                "Farina 250 gr",
+                "Semola 250 gr.",
+                "Patate lesse fredde 15 gr.",
+                "6 cucchiai olio",
+                "1 lievito birra e 4 gr lievito disidratato",
+                "1 cucchiaino sale (15 gr)",
+                "1 cucchiaino raso zucchero",
+                "300 ml acqua tiepida, lievitare 1 h."
+              ],
+              "sections": []
+            },
+            {
+              "title": "Procedimento",
+              "type": "ordered",
+              "items": [
+                "Miscelare le farine",
+                "prelevare 100 gr in una ciotola con lievito e 100 gr acqua tiepida",
+                "Formare un panetto coprire con pellicola e fare lievitare",
+                "in forno spento 26° per circa 2 h.",
+                "Poi unire resto mischiare",
+                "sale zucchero olio piano piano alla fine.",
+                "fare lievitare per 3 h.",
+                "Poi mettere in teglia.",
+                "forno 200° . 25'-30'"
+              ],
+              "sections": []
+            }
+          ]
+        },
+        {
+          "title": "Integrato",
+          "type": "group",
+          "items": [],
+          "sections": [
+            {
+              "title": "Ingredienti",
+              "type": "unordered",
+              "items": [
+                "Farina 300 gr",
+                "Semola 200 gr.",
+                "Acqua tiepida 350",
+                "patate 100 gr",
+                "olio 50 ml",
+                "lievito madre 200",
+                "cipolle e capperi"
+              ],
+              "sections": []
+            },
+            {
+              "title": "Procedimento",
+              "type": "ordered",
+              "items": [
+                "lievitare 8-12 h a temp. ambiente",
+                "forno 250° x 20'",
+                "con mani unte di olio, sotto si puo mettere cipolle tagliate a fettine sottili che poi si caramella.",
+                "poi condire con pomodorini sale olio origano olive.",
+                "Fare lievitare 2 h, la focaccia deve raddoppiare di volume.",
+                "Poi forno statico, 200° per 15'",
+                "poi seleziona grill per 5'"
+              ],
+              "sections": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--antipasti-lievitati-pettole",
+      "sourceId": "famiglia-anelli",
+      "title": "Pettole",
+      "category": "Antipasti",
+      "subcategory": "Lievitati",
+      "tags": [
+        "fritto",
+        "tradizionale"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "Farina 400 gr.",
+            "320 acqua",
+            "sale 10 gr.",
+            "lievito 3 gr. di birra disidratato"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-salati-pan-brioches",
+      "sourceId": "famiglia-anelli",
+      "title": "Pan Brioches",
+      "category": "Lievitati",
+      "subcategory": "Salati",
+      "tags": [
+        "pan brioches",
+        "varianti",
+        "rustico"
+      ],
+      "notes": [
+        "dose per 3 grandi."
+      ],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Variante I",
+          "type": "group",
+          "items": [],
+          "sections": [
+            {
+              "title": "Ingredienti",
+              "type": "unordered",
+              "items": [
+                "400 gr farina Manitoba",
+                "150 gr. farina 00",
+                "250 ml latte",
+                "50 gr olio oliva",
+                "1 lievito",
+                "1 uovo",
+                "1 cucchiaio zucchero",
+                "1 cucchiaino sale",
+                "1 uovo per spennellare sopra."
+              ],
+              "sections": []
+            },
+            {
+              "title": "Procedimento",
+              "type": "ordered",
+              "items": [
+                "impastare e fare lievitare q.b.",
+                "stendere - farcire a piacere - arrotolare - spennellare con uovo",
+                "forno 180° 30'"
+              ],
+              "sections": []
+            },
+            {
+              "title": "Farcitura",
+              "type": "text",
+              "items": [
+                "pomodorini tonno capperi",
+                "wurstel sottiletta",
+                "prosciutto mozzarella",
+                "speck scamorza",
+                "tonno mascarpone o maionese"
+              ],
+              "sections": []
+            }
+          ]
+        },
+        {
+          "title": "Variante II",
+          "type": "group",
+          "items": [],
+          "sections": [
+            {
+              "title": "Ingredienti",
+              "type": "unordered",
+              "items": [
+                "300 gr farina",
+                "2 uova",
+                "3 cucchiai olio",
+                "3 cucchiai zucchero",
+                "1 patata lessa",
+                "1/2 lievito birra"
+              ],
+              "sections": []
+            },
+            {
+              "title": "Procedimento",
+              "type": "ordered",
+              "items": [
+                "lievita 1 h",
+                "poi stende",
+                "farcisce",
+                "arrotola",
+                "spennella",
+                "in forno"
+              ],
+              "sections": []
+            }
+          ]
+        },
+        {
+          "title": "Variante III",
+          "type": "group",
+          "items": [],
+          "sections": [
+            {
+              "title": "Ingredienti",
+              "type": "unordered",
+              "items": [
+                "300 gr farina",
+                "3 cucchiai olio",
+                "3 cucchiai zucchero",
+                "1 uovo",
+                "1 bicchiere latte caldo",
+                "1 panetto lievito birra."
+              ],
+              "sections": []
+            },
+            {
+              "title": "Procedimento",
+              "type": "ordered",
+              "items": [
+                "farcire poi fare lievitare 3h.",
+                "forno 180° 15'"
+              ],
+              "sections": []
+            }
+          ]
+        }
+      ]
     }
   ]
 }
