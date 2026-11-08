@@ -82,6 +82,84 @@
           "sections": []
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--liquori-ovos-vovos",
+      "sourceId": "famiglia-anelli",
+      "title": "Ovos Vovòs",
+      "category": "Liquori",
+      "subcategory": "",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "3 tuorli d'uovo",
+            "450 ml latte",
+            "200 zucchero",
+            "150 alcol",
+            "100 marsala",
+            "essenza vaniglia"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Preparazione",
+          "type": "ordered",
+          "items": [
+            "battere tuorli, metà zucchero, vaniglia",
+            "A parte fare bollire metà zucchero + latte",
+            "Quando diventa tiepido unire tutto con alcol e marsala."
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--bevande-liquori-liquore-di-limone",
+      "sourceId": "famiglia-anelli",
+      "title": "Liquore di limone",
+      "category": "Bevande",
+      "subcategory": "Liquori",
+      "tags": [
+        "limone",
+        "liquore",
+        "fatto in casa"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "3 limoni non trattati",
+            "500 ml alcool",
+            "500 ml acqua",
+            "500 g zucchero"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Preparazione",
+          "type": "ordered",
+          "items": [
+            "Mettere 3 limoni non trattati in infusione per 3 gg. in 500 ml alcool",
+            "Fare bollire 500 ml acqua e 500 g zucchero",
+            "Fare raffreddare poi unire all'alcool"
+          ],
+          "sections": []
+        }
+      ]
     }
   ]
 }
