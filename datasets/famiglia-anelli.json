@@ -663,6 +663,119 @@
           "sections": []
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--dolci-plumcake-plum-cake-alla-zucca",
+      "sourceId": "famiglia-anelli",
+      "title": "Plum Cake alla zucca",
+      "category": "Dolci",
+      "subcategory": "Plumcake",
+      "tags": [
+        "zucca",
+        "plumcake",
+        "dolce"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "220 gr zucca",
+            "250 farina",
+            "3 uova",
+            "1 bustina lievito istantaneo",
+            "80 gr olio di semi",
+            "80 gr latte",
+            "150 pancetta",
+            "Sale pepe"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "Frullare zucca con olio. Poi in ciotola mescolare con uova e latte.",
+            "Poi unire farina lievito sale pepe pancetta.",
+            "Rivestire stampo con carta forno. Versare impasto.",
+            "Forno statico preriscaldato a 180° per 45'"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--lievitati-e-sostituti-impasti-base-massa-per-calzone-senza-lievito",
+      "sourceId": "famiglia-anelli",
+      "title": "Massa per calzone senza lievito",
+      "category": "Lievitati e sostituti",
+      "subcategory": "Impasti base",
+      "tags": [
+        "senza lievito",
+        "base"
+      ],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "300 farina",
+            "60 olio oliva",
+            "1 pizzico zucchero",
+            "1 cucchiaino sale",
+            "130 acqua tiepida"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "Formare una pagnotta , pellicola trasparente , riposo 30'"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--focacce-calzone-cipolla-ripieno",
+      "sourceId": "famiglia-anelli",
+      "title": "Calzone cipolla ripieno",
+      "category": "Focacce",
+      "subcategory": "",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "800 gr sponsali",
+            "uva passa 2 cucchiaini",
+            "30 olive denocciolate",
+            "acciughe sotto sale",
+            "olio",
+            "sale",
+            "pepe",
+            "7 pomodori"
+          ],
+          "sections": []
+        }
+      ]
     }
   ]
 }
