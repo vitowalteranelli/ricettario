@@ -1075,6 +1075,94 @@
           ]
         }
       ]
+    },
+    {
+      "id": "famiglia-anelli--panificati-pane-pane-altamura",
+      "sourceId": "famiglia-anelli",
+      "title": "Pane Altamura",
+      "category": "Panificati",
+      "subcategory": "Pane",
+      "tags": [],
+      "notes": [],
+      "region": null,
+      "sourceRegion": null,
+      "regionSource": null,
+      "geographicReferences": [],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "1 kg farina semola",
+            "600 acqua",
+            "lievito 20 gr. 1 panetto",
+            "sale 25 gr."
+          ],
+          "sections": []
+        },
+        {
+          "title": "Procedimento",
+          "type": "ordered",
+          "items": [
+            "Sciogliere lievito in acqua tiepida, aggiungere farina sale alla fine",
+            "In forno spento con luce accesa per 3 h.",
+            "Poi lavorare di nuovo, sbatterlo incorda? toglianda?.",
+            "carta forno semola sopra e sotto, dare forma al pane. Incisioni sopra. Rimettere in forno a lievitare per 90'",
+            "Cuocere 220 per 10' poi a 200 per 25'"
+          ],
+          "sections": []
+        }
+      ]
+    },
+    {
+      "id": "famiglia-anelli--panificati-pane-pane-pugliese",
+      "sourceId": "famiglia-anelli",
+      "title": "Pane Pugliese",
+      "category": "Panificati",
+      "subcategory": "Pane",
+      "tags": [
+        "Le Ricette Granoro",
+        "Pane Pugliese",
+        "Semola Rimacinata"
+      ],
+      "notes": [
+        "La semola rimacinata Granoro si caratterizza per il tipico colore giallo e la granulometria sottile.",
+        "E' consigliata da sola o in miscela con la farina \"00\" per la preparazione di pasta fresca come lasagne, tagliolini, orecchiette pugliesi o per paste ripiene come ravioli e tortellini. Ideale anche per la pasta fresca all'uovo, pane, pizze e focacce. Ottima per rendere dorate e croccanti le fritture."
+      ],
+      "region": "Puglia",
+      "sourceRegion": "Puglia",
+      "regionSource": null,
+      "geographicReferences": [
+        "Pugliese",
+        "Puglia"
+      ],
+      "sections": [
+        {
+          "title": "Ingredienti",
+          "type": "unordered",
+          "items": [
+            "1kg di Semola Rimacinata Granoro",
+            "650g di acqua tiepida",
+            "13g di lievito di birra",
+            "20g di sale fino",
+            "1 cucchiaino di miele"
+          ],
+          "sections": []
+        },
+        {
+          "title": "Preparazione",
+          "type": "ordered",
+          "items": [
+            "Sciogliere il lievito in 100g d'acqua con un cucchiaino di miele, aggiungerlo alla semola rimacinata Granoro ed impastare aggiungendo via via dell'altra acqua ed il sale sciolto con gli ultimi 50g di acqua.",
+            "Terminato l'impasto, trasferirlo in un cestino foderato con un canovaccio e spolverato con della semola.",
+            "Fare una croce sulla parte superiore e coprire. Lasciare riposare per circa 2 ore finchè non triplica il suo volume.",
+            "A questo punto versare l'impasto in una teglia larga rivestita con carta forno e praticare dei tagli obliqui sulla superficie.",
+            "Scaldare il forno alla massima temperatura, poi infornare il pane e portare la temperatura a 200°.",
+            "Lasciar cuocere per circa 30-40 minuti e gli ultimi 5 minuti con la porta del forno socchiusa."
+          ],
+          "sections": []
+        }
+      ]
     }
   ]
 }
