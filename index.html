@@ -1006,6 +1006,7 @@
               <div id="ingredient-source-options" class="ingredient-category-options"></div>
             </div>
             <div id="ingredient-recipe-list" class="ingredient-recipe-list"></div>
+            <button id="load-more-ingredient-recipes-button" class="secondary" type="button" hidden>Mostra altre ricette</button>
             <p id="ingredient-no-results" class="status" hidden>Nessuna ricetta ha ingredienti riconosciuti sufficienti. Prova ad aggiungere o correggere una voce.</p>
           </div>
           <div id="ingredient-model-picker" class="ingredient-model-picker" hidden>
@@ -1400,6 +1401,9 @@
     let catalogDirty = false;
     let selectedRecipeId = null;
     let selectedIngredientRecipeId = null;
+    let recipeDetailReturnScrollY = 0;
+    let ingredientDetailReturnScrollY = 0;
+    const recipeSearchFieldsCache = new WeakMap();
     let readerSearchMode = 'manual';
     let editingRecipeId = null;
     let session = { role: null, token: null, llmKey: null, viewerId: null };
@@ -3132,14 +3136,19 @@
       });
     }
 
-    function renderIngredientRecipeResults() {
-      closeIngredientRecipeDetail({ focus: false });
-      renderIngredientCategoryFilter();
-      renderIngredientSourceFilter();
+    function renderIngredientRecipeResults({ append = false } = {}) {
+      if (!append) {
+        closeIngredientRecipeDetail({ focus: false });
+        renderIngredientCategoryFilter();
+        renderIngredientSourceFilter();
+      }
       const container = $('#ingredient-recipe-list');
-      container.replaceChildren();
+      const start = append ? container.childElementCount : 0;
+      if (!append) container.replaceChildren();
       const visibleResults = visibleIngredientSearchResults();
-      visibleResults.forEach((entry) => {
+      const batchSize = readerRecipeBatchSize();
+      const end = Math.min(visibleResults.length, start + batchSize);
+      visibleResults.slice(start, end).forEach((entry) => {
         const result = document.createElement('button');
         result.type = 'button';
         result.className = 'ingredient-recipe-result';
@@ -3166,8 +3175,12 @@
       });
       $('#ingredient-results').hidden = false;
       $('#ingredient-results-count').textContent = visibleResults.length
-        ? `${visibleResults.length}${visibleResults.length !== ingredientSearchResults.length ? ` di ${ingredientSearchResults.length}` : ''} risultati ordinati per ingredienti rari e copertura`
+        ? `${end} mostrati su ${visibleResults.length} risultati${visibleResults.length !== ingredientSearchResults.length ? ` filtrati da ${ingredientSearchResults.length}` : ''} · ordinati per ingredienti rari e copertura`
         : '';
+      const moreButton = $('#load-more-ingredient-recipes-button');
+      const remaining = visibleResults.length - end;
+      moreButton.hidden = remaining <= 0;
+      if (remaining > 0) moreButton.textContent = `Mostra altre ${Math.min(batchSize, remaining)} ricette (${remaining} rimanenti)`;
       $('#ingredient-no-results').hidden = visibleResults.length > 0;
     }
 
@@ -3184,6 +3197,7 @@
     }
 
     function showIngredientRecipeDetail(recipe) {
+      ingredientDetailReturnScrollY = window.scrollY;
       selectedIngredientRecipeId = recipe.id;
       const detail = $('#ingredient-recipe-detail');
       const content = $('#ingredient-recipe-detail-content');
@@ -3202,9 +3216,16 @@
       $('#ingredient-recipe-detail').hidden = true;
       $('#ingredient-recipe-detail-content').replaceChildren();
       if (focus) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         if (window.matchMedia('(pointer: fine)').matches) $('#find-ingredient-recipes-button').focus({ preventScroll: true });
       }
+    }
+
+    function restoreWindowScrollImmediately(top) {
+      const root = document.documentElement;
+      const previousBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
+      window.scrollTo({ top, behavior: 'auto' });
+      requestAnimationFrame(() => { root.style.scrollBehavior = previousBehavior; });
     }
 
     async function unlockIngredientAi(password) {
@@ -3340,7 +3361,9 @@
     }
 
     function recipeSearchFields(recipe) {
-      return [
+      const cachedFields = recipeSearchFieldsCache.get(recipe);
+      if (cachedFields) return cachedFields;
+      const fields = [
         { text: normalizeSearchText(recipe.title), weight: 100 },
         { text: normalizeSearchText(recipe.tags?.join(' ')), weight: 80 },
         { text: normalizeSearchText(recipe.category), weight: 65 },
@@ -3348,6 +3371,8 @@
         { text: normalizeSearchText(recipe.notes?.join(' ')), weight: 35 },
         { text: normalizeSearchText((recipe.sections || []).map(sectionSearchText).join(' ')), weight: 20 }
       ].map((field) => ({ ...field, tokens: field.text ? field.text.split(' ') : [] }));
+      recipeSearchFieldsCache.set(recipe, fields);
+      return fields;
     }
 
     function termMatchKind(field, term) {
@@ -3369,17 +3394,17 @@
         score += 3000 + (bestField?.weight || 0);
       });
       for (const term of query.terms) {
-        const matchingFields = fields
-          .map((field) => ({ field, kind: termMatchKind(field, term) }))
-          .filter((match) => match.kind)
-          .sort((left, right) => {
-            const kindWeight = { exact: 300, prefix: 200, partial: 100 };
-            return kindWeight[right.kind] - kindWeight[left.kind] || right.field.weight - left.field.weight;
-          });
-        if (!matchingFields.length) return -1;
-        const best = matchingFields[0];
-        const kindWeight = { exact: 300, prefix: 200, partial: 100 };
-        score += kindWeight[best.kind] + best.field.weight + Math.min(matchingFields.length, 3) * 3;
+        let bestWeight = 0;
+        let matchingFieldCount = 0;
+        fields.forEach((field) => {
+          const kind = termMatchKind(field, term);
+          if (!kind) return;
+          matchingFieldCount += 1;
+          const kindWeight = kind === 'exact' ? 300 : kind === 'prefix' ? 200 : 100;
+          bestWeight = Math.max(bestWeight, kindWeight + field.weight);
+        });
+        if (!matchingFieldCount) return -1;
+        score += bestWeight + Math.min(matchingFieldCount, 3) * 3;
       }
       return score;
     }
@@ -3388,22 +3413,23 @@
       const query = parseSearchQuery(queryText);
       const selectedCategories = new Set(Array.isArray(categories) ? categories : categories ? [categories] : []);
       const selectedSources = new Set(Array.isArray(sourceIds) ? sourceIds : sourceIds ? [sourceIds] : []);
-      const entries = dataset.map((recipe, index) => ({
-        recipe,
-        index,
-        fields: recipeSearchFields(recipe)
-      }));
-      const matches = entries.map((entry) => ({
-        recipe: entry.recipe,
-        index: entry.index,
-        score: (!selectedCategories.size || selectedCategories.has(entry.recipe.category))
-          && (!selectedSources.size || selectedSources.has(entry.recipe.sourceId))
-          ? recipeSearchScore(entry, query)
-          : -1
-      }))
-        .filter((entry) => entry.score >= 0)
-        .sort((left, right) => right.score - left.score || left.index - right.index)
-        .map((entry) => entry.recipe);
+      const hasQuery = query.phrases.length > 0 || query.terms.length > 0;
+      const matches = [];
+      const scoredMatches = [];
+      dataset.forEach((recipe, index) => {
+        if (selectedCategories.size && !selectedCategories.has(recipe.category)) return;
+        if (selectedSources.size && !selectedSources.has(recipe.sourceId)) return;
+        if (!hasQuery) {
+          matches.push(recipe);
+          return;
+        }
+        const score = recipeSearchScore({ fields: recipeSearchFields(recipe) }, query);
+        if (score >= 0) scoredMatches.push({ recipe, index, score });
+      });
+      if (hasQuery) {
+        scoredMatches.sort((left, right) => right.score - left.score || left.index - right.index);
+        scoredMatches.forEach((entry) => matches.push(entry.recipe));
+      }
       return { query, matches };
     }
 
@@ -3631,6 +3657,10 @@
       );
     }
 
+    function readerRecipeBatchSize() {
+      return window.matchMedia('(max-width:760px)').matches ? 40 : RECIPE_BATCH_SIZE;
+    }
+
     function renderRecipes({ append = false } = {}) {
       const queryText = $('#search-input').value;
       const categories = selectedReaderFilterValues('category-filter-options');
@@ -3642,8 +3672,9 @@
       $('#clear-reader-filters-button').disabled = !hasFilters;
       const list = $('#recipe-list');
       const start = append ? list.childElementCount : 0;
+      const batchSize = readerRecipeBatchSize();
       if (!append) list.replaceChildren();
-      const end = Math.min(matches.length, start + RECIPE_BATCH_SIZE);
+      const end = Math.min(matches.length, start + batchSize);
       matches.slice(start, end).forEach((recipe) => renderRecipeResult(recipe, list));
       const queryLabel = searchQueryLabel(query);
       $('#recipe-count').textContent = queryLabel
@@ -3652,7 +3683,7 @@
       const moreButton = $('#load-more-recipes-button');
       const remaining = matches.length - end;
       moreButton.hidden = remaining <= 0;
-      if (remaining > 0) moreButton.textContent = `Mostra altre ${Math.min(RECIPE_BATCH_SIZE, remaining)} ricette (${remaining} rimanenti)`;
+      if (remaining > 0) moreButton.textContent = `Mostra altre ${Math.min(batchSize, remaining)} ricette (${remaining} rimanenti)`;
       $('#no-results').hidden = matches.length > 0;
       $('#clear-search-button').hidden = !queryText.trim();
       const selected = matches.find((recipe) => recipe.id === selectedRecipeId);
@@ -3666,6 +3697,7 @@
     }
 
     function showRecipeDetail(recipe) {
+      recipeDetailReturnScrollY = window.scrollY;
       selectedRecipeId = recipe.id;
       const content = $('#recipe-detail-content');
       content.replaceChildren();
@@ -3689,12 +3721,13 @@
     }
 
     function closeRecipeDetail({ focus = true } = {}) {
+      const wasOpen = selectedRecipeId !== null;
       selectedRecipeId = null;
       readerView.classList.remove('showing-recipe-detail');
       $('#recipe-detail').hidden = true;
       $('#recipe-detail-content').replaceChildren();
+      if (wasOpen) restoreWindowScrollImmediately(recipeDetailReturnScrollY);
       if (focus) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         if (window.matchMedia('(pointer: fine)').matches) $('#search-input').focus({ preventScroll: true });
       }
     }
@@ -4493,7 +4526,7 @@
     $('#back-to-ingredient-results-button').addEventListener('click', () => {
       closeIngredientRecipeDetail({ focus: false });
       $('#ingredient-results').hidden = false;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      restoreWindowScrollImmediately(ingredientDetailReturnScrollY);
       if (window.matchMedia('(pointer: fine)').matches) $('#find-ingredient-recipes-button').focus({ preventScroll: true });
     });
     function handleIngredientFiles(selectedFiles, input = null) {
@@ -4651,6 +4684,7 @@
       }
     });
     $('#find-ingredient-recipes-button').addEventListener('click', findIngredientRecipes);
+    $('#load-more-ingredient-recipes-button').addEventListener('click', () => renderIngredientRecipeResults({ append: true }));
     $('#ingredient-recipe-list').addEventListener('click', (event) => {
       const result = event.target.closest('.ingredient-recipe-result');
       if (!result) return;
