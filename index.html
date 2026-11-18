@@ -853,6 +853,11 @@
       [data-theme="apple"] input:not([type="checkbox"]):not([type="radio"]),[data-theme="apple"] select { min-height:3.35rem; }
       [data-theme="apple"] textarea { min-height:190px; }
     }
+    .install-banner { position:fixed; z-index:1000; bottom:1rem; left:1rem; right:1rem; max-width:32rem; margin:auto; padding:1rem; border:1px solid var(--line); border-radius:16px; background:var(--card); color:var(--ink); box-shadow:0 5px 24px #0004; }
+    .install-banner[hidden] { display:none; }
+    .install-banner .install-close { position:absolute; top:.35rem; right:.5rem; margin:0; border:0; background:transparent; color:inherit; font-size:1.5rem; line-height:1; cursor:pointer; }
+    .install-banner #install-message { display:block; padding-right:2rem; }
+    .install-banner button { margin:.5rem .5rem 0 0; }
   </style>
   <script>
     try {
@@ -867,6 +872,11 @@
   </script>
 </head>
 <body>
+  <aside id="install-banner" class="install-banner" hidden aria-label="Installa Ricettario">
+    <button type="button" id="install-dismiss" class="install-close" aria-label="Chiudi suggerimento di installazione">&times;</button>
+    <span id="install-message">Installa Ricettario per aprirlo dalla schermata iniziale.</span>
+    <div><button type="button" id="install-button">Installa</button></div>
+  </aside>
   <main>
     <section id="login-view" class="card login-card" aria-labelledby="login-title">
       <div class="login-brand" aria-label="Ricettario">
@@ -3196,7 +3206,8 @@
         : 'Nessuna ricetta compatibile con gli ingredienti indicati.');
     }
 
-    function showIngredientRecipeDetail(recipe) {
+    function showIngredientRecipeDetail(recipe, fromHistory = false) {
+      if (!fromHistory) history.pushState({ ricettarioDetail: 'ingredient', id: recipe.id }, '');
       ingredientDetailReturnScrollY = window.scrollY;
       selectedIngredientRecipeId = recipe.id;
       const detail = $('#ingredient-recipe-detail');
@@ -3696,7 +3707,8 @@
       }
     }
 
-    function showRecipeDetail(recipe) {
+    function showRecipeDetail(recipe, fromHistory = false) {
+      if (!fromHistory) history.pushState({ ricettarioDetail: 'recipe', id: recipe.id }, '');
       recipeDetailReturnScrollY = window.scrollY;
       selectedRecipeId = recipe.id;
       const content = $('#recipe-detail-content');
@@ -4522,13 +4534,61 @@
       const recipe = recipeDataset.find((item) => item.id === result.dataset.recipeId);
       if (recipe) showRecipeDetail(recipe);
     });
-    $('#back-to-results-button').addEventListener('click', () => closeRecipeDetail());
+    $('#back-to-results-button').addEventListener('click', () => {
+      if (history.state?.ricettarioDetail === 'recipe') history.back();
+      else closeRecipeDetail();
+    });
     $('#back-to-ingredient-results-button').addEventListener('click', () => {
+      if (history.state?.ricettarioDetail === 'ingredient') { history.back(); return; }
       closeIngredientRecipeDetail({ focus: false });
       $('#ingredient-results').hidden = false;
       restoreWindowScrollImmediately(ingredientDetailReturnScrollY);
       if (window.matchMedia('(pointer: fine)').matches) $('#find-ingredient-recipes-button').focus({ preventScroll: true });
     });
+    window.addEventListener('popstate', (event) => {
+      const state = event.state;
+      if (state?.ricettarioDetail && !readerView.hidden) {
+        const recipe = recipeDataset.find((item) => item.id === state.id);
+        if (recipe) {
+          if (state.ricettarioDetail === 'ingredient') showIngredientRecipeDetail(recipe, true);
+          else showRecipeDetail(recipe, true);
+          return;
+        }
+      }
+      if (selectedRecipeId !== null) closeRecipeDetail({ focus: false });
+      if (selectedIngredientRecipeId !== null) {
+        closeIngredientRecipeDetail({ focus: false });
+        $('#ingredient-results').hidden = false;
+        restoreWindowScrollImmediately(ingredientDetailReturnScrollY);
+      }
+    });
+
+    const installBanner = $('#install-banner');
+    let installPrompt = null;
+    const isInstalled = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      installPrompt = event;
+      if (!isInstalled() && !sessionStorage.getItem('install-dismissed')) installBanner.hidden = false;
+    });
+    if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !isInstalled() && !sessionStorage.getItem('install-dismissed')) {
+      $('#install-message').textContent = 'Per installare Ricettario, apri Condividi e scegli “Aggiungi alla schermata Home”.';
+      $('#install-button').hidden = true;
+      installBanner.hidden = false;
+    }
+    $('#install-button').addEventListener('click', async () => {
+      if (!installPrompt) return;
+      const prompt = installPrompt;
+      installPrompt = null;
+      installBanner.hidden = true;
+      await prompt.prompt();
+    });
+    $('#install-dismiss').addEventListener('click', () => {
+      sessionStorage.setItem('install-dismissed', '1');
+      installBanner.hidden = true;
+    });
+    window.addEventListener('appinstalled', () => { installPrompt = null; installBanner.hidden = true; });
+
     function handleIngredientFiles(selectedFiles, input = null) {
       try {
         appendIngredientFiles(selectedFiles);
