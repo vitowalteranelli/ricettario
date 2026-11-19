@@ -4488,19 +4488,31 @@
     ['#category-filter-options', '#source-filter-options'].forEach((selector) => {
       $(selector).addEventListener('change', renderRecipes);
     });
-    ['category-filter-group', 'source-filter-group'].forEach((groupId) => {
+    const readerFilterGroups = ['category-filter-group', 'source-filter-group'];
+    function closeReaderFilter(group, { focus = false, fromHistory = false } = {}) {
+      group.open = false;
+      if (focus) group.querySelector('summary').focus();
+      if (!fromHistory && history.state?.ricettarioFilter === group.id) history.back();
+    }
+    readerFilterGroups.forEach((groupId) => {
       const group = $(`#${groupId}`);
-      group.addEventListener('toggle', () => {
-        if (!group.open) return;
-        const otherGroupId = groupId === 'category-filter-group' ? 'source-filter-group' : 'category-filter-group';
-        $(`#${otherGroupId}`).open = false;
+      group.querySelector('summary').addEventListener('click', (event) => {
+        event.preventDefault();
+        if (group.open) {
+          closeReaderFilter(group);
+          return;
+        }
+        const otherGroup = document.querySelector('.reader-filter-group[open]');
+        if (otherGroup) otherGroup.open = false;
+        group.open = true;
+        const state = { ...history.state, ricettarioFilter: groupId };
+        if (otherGroup && history.state?.ricettarioFilter === otherGroup.id) history.replaceState(state, '');
+        else history.pushState(state, '');
       });
     });
     document.querySelectorAll('[data-close-filter]').forEach((button) => {
       button.addEventListener('click', () => {
-        const group = $(`#${button.dataset.closeFilter}`);
-        group.open = false;
-        group.querySelector('summary').focus();
+        closeReaderFilter($(`#${button.dataset.closeFilter}`), { focus: true });
       });
     });
     $('#clear-reader-filters-button').addEventListener('click', () => {
@@ -4511,15 +4523,14 @@
     });
     document.addEventListener('pointerdown', (event) => {
       document.querySelectorAll('.reader-filter-group[open]').forEach((group) => {
-        if (!group.contains(event.target)) group.open = false;
+        if (!group.contains(event.target) && !event.target.closest('.reader-filter-group')) closeReaderFilter(group);
       });
     });
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;
       const openGroup = document.querySelector('.reader-filter-group[open]');
       if (!openGroup) return;
-      openGroup.open = false;
-      openGroup.querySelector('summary').focus();
+      closeReaderFilter(openGroup, { focus: true });
     });
     $('#clear-search-button').addEventListener('click', () => {
       clearTimeout(recipeSearchTimer);
@@ -4547,6 +4558,10 @@
     });
     window.addEventListener('popstate', (event) => {
       const state = event.state;
+      readerFilterGroups.forEach((groupId) => {
+        $(`#${groupId}`).open = !readerView.hidden && state?.ricettarioFilter === groupId;
+      });
+      if (state?.ricettarioFilter && !readerView.hidden) return;
       if (state?.ricettarioDetail && !readerView.hidden) {
         const recipe = recipeDataset.find((item) => item.id === state.id);
         if (recipe) {
