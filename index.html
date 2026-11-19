@@ -1384,6 +1384,19 @@
     const ADMIN_VIEW_KEY = 'ricettario-admin-view-v1';
     const ADMIN_PANEL_KEY = 'ricettario-admin-panel-v1';
     const READER_UI_KEY = 'ricettario-reader-ui-v1';
+    const INGREDIENT_UI_KEY = 'ricettario-ingredient-ui-v1';
+    const ADMIN_DRAFT_KEY = 'ricettario-admin-draft-v1';
+    const ADMIN_DRAFT_DB = 'ricettario-admin-drafts-v1';
+    const ADMIN_EDITOR_KEY = 'ricettario-admin-editor-v1';
+    let adminEditorRestored = false;
+    let adminDraftRestored = false;
+    let adminDraftConflict = false;
+    let adminDraftWrite = Promise.resolve();
+    let fileDraftWrite = Promise.resolve();
+    let fileDraftRestored = false;
+    let pendingLocalWrites = 0;
+    let localWriteFailed = false;
+    let activeAiRequests = 0;
     let readerUiRestored = false;
     const READER_SESSION_KEY = 'ricettario-reader-session-v1';
     const SESSION_SECRETS_DB = 'ricettario-session-secrets-v1';
@@ -2095,6 +2108,8 @@
     }
 
     async function requestGeminiContent(model, request) {
+      activeAiRequests += 1;
+      try {
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
       let response;
       try {
@@ -2116,6 +2131,9 @@
         throw error;
       }
       return result;
+      } finally {
+        activeAiRequests -= 1;
+      }
     }
 
     function fileKey(file) {
@@ -2400,7 +2418,7 @@
     }
 
     async function showAiModelPicker(error, ui = INGREDIENT_MODEL_UI) {
-      $(ui.pickerId).hidden = false;
+      if ($(ui.pickerId).hidden) navigateWithinApp(() => { $(ui.pickerId).hidden = false; });
       $(ui.errorId).textContent = error?.httpStatus
         ? `Il modello ha restituito un errore HTTP ${error.httpStatus}. Puoi scegliere un altro modello compatibile e riprovare.`
         : 'Il modello selezionato ha restituito un errore. Puoi scegliere un altro modello compatibile e riprovare.';
@@ -2462,6 +2480,7 @@
       const totalSize = files.reduce((total, file) => total + file.size, 0);
       if (totalSize > AI_MAX_INGREDIENT_TOTAL_BYTES) throw new Error('Le foto selezionate superano complessivamente 40 MB.');
       ingredientFiles = files;
+      saveSelectedFiles();
       invalidateIngredientResults();
       renderIngredientFiles();
       updateIngredientSearchControls();
@@ -2475,6 +2494,7 @@
       const totalSize = files.reduce((total, file) => total + file.size, 0);
       if (totalSize > AI_MAX_RECIPE_TOTAL_BYTES) throw new Error('I file selezionati superano complessivamente 80 MB.');
       recipeImportFiles = files;
+      saveSelectedFiles();
       renderRecipeImportFiles();
       updateAiImportControls();
     }
@@ -2697,10 +2717,11 @@
       updateVlmCameraFlashControl();
     }
 
-    function closeVlmCamera() {
+    function closeVlmCamera({ fromHistory = false } = {}) {
       const dialog = $('#vlm-camera-dialog');
       stopVlmCamera();
       if (dialog.open) dialog.close();
+      if (!fromHistory && history.state?.ricettarioCamera) history.back();
     }
 
     async function refreshVlmCameraDevices() {
@@ -2832,6 +2853,7 @@
       $('#vlm-camera-status').textContent = 'Richiesta accesso alla fotocamera…';
       renderCameraCount();
       dialog.showModal();
+      history.pushState({ ...history.state, ricettarioCamera: true }, '');
       if (shouldUseNativeCameraByDefault() || !navigator.mediaDevices?.getUserMedia) {
         openNativeCameraCapture();
         return;
@@ -2859,6 +2881,31 @@
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', .9));
       if (!blob) throw new Error('Impossibile acquisire la foto.');
       await showCameraCrop(blob);
+    }
+
+    function saveIngredientUi() {
+      try {
+        sessionStorage.setItem(INGREDIENT_UI_KEY, JSON.stringify({
+          ingredients: detectedIngredients,
+          searched: !$('#ingredient-results').hidden || selectedIngredientRecipeId !== null,
+          categories: [...ingredientSelectedCategories],
+          sources: [...ingredientSelectedSources]
+        }));
+      } catch { /* Preferenza non disponibile. */ }
+    }
+
+    function restoreIngredientUi() {
+      try {
+        const saved = JSON.parse(sessionStorage.getItem(INGREDIENT_UI_KEY) || '{}');
+        detectedIngredients = Array.isArray(saved.ingredients) ? saved.ingredients : [];
+        renderIngredientInventory();
+        if (saved.searched && detectedIngredients.length) {
+          ingredientSearchResults = rankRecipesByIngredients(detectedIngredients).slice(0, 500);
+          ingredientSelectedCategories = new Set(Array.isArray(saved.categories) ? saved.categories : []);
+          ingredientSelectedSources = new Set(Array.isArray(saved.sources) ? saved.sources : []);
+          renderIngredientRecipeResults();
+        }
+      } catch { /* Usa la ricerca vuota. */ }
     }
 
     function invalidateIngredientResults() {
@@ -2911,6 +2958,7 @@
           invalidateIngredientResults();
           detectedIngredients.splice(index, 1);
           renderIngredientInventory();
+          saveIngredientUi();
           updateIngredientSearchControls();
         });
         actions.appendChild(remove);
@@ -2934,6 +2982,7 @@
       invalidateIngredientResults();
       detectedIngredients.push({ name: '', canonicalName: '', quantity: '', confidence: 1, evidence: 'Inserito manualmente.' });
       renderIngredientInventory();
+      saveIngredientUi();
       $('#ingredient-list .ingredient-row:last-child .ingredient-name')?.focus();
     }
 
@@ -3095,6 +3144,7 @@
           if (checkbox.checked) ingredientSelectedCategories.add(category);
           else ingredientSelectedCategories.delete(category);
           renderIngredientRecipeResults();
+          saveIngredientUi();
         });
         label.appendChild(checkbox);
         const text = document.createElement('span');
@@ -3133,6 +3183,7 @@
           if (checkbox.checked) ingredientSelectedSources.add(sourceId);
           else ingredientSelectedSources.delete(sourceId);
           renderIngredientRecipeResults();
+          saveIngredientUi();
         });
         label.appendChild(checkbox);
         const text = document.createElement('span');
@@ -3205,13 +3256,14 @@
       ingredientSearchResults = rankRecipesByIngredients(detectedIngredients).slice(0, 500);
       renderIngredientInventory();
       renderIngredientRecipeResults();
+      saveIngredientUi();
       setStatus($('#ingredient-ai-status'), ingredientSearchResults.length
         ? `Trovate ${ingredientSearchResults.length} ricette compatibili.`
         : 'Nessuna ricetta compatibile con gli ingredienti indicati.');
     }
 
     function showIngredientRecipeDetail(recipe, fromHistory = false) {
-      if (!fromHistory) history.pushState({ ricettarioDetail: 'ingredient', id: recipe.id }, '');
+      if (!fromHistory) history.pushState({ ...history.state, ricettarioDetail: 'ingredient', id: recipe.id }, '');
       ingredientDetailReturnScrollY = window.scrollY;
       selectedIngredientRecipeId = recipe.id;
       const detail = $('#ingredient-recipe-detail');
@@ -3299,6 +3351,7 @@
       ingredientSearchResults = [];
       renderIngredientInventory();
       $('#ingredient-results').hidden = true;
+      saveIngredientUi();
       const messages = [...detection.warnings, ...detection.uncertainFields.map((field) => `Verifica: ${field}`)];
       setStatus($('#ingredient-ai-status'), messages.length
         ? `Analisi completata con avvertenze: ${messages.join(' · ')}`
@@ -3307,8 +3360,10 @@
 
     function clearIngredientSearch() {
       ingredientFiles = [];
+      saveSelectedFiles();
       detectedIngredients = [];
       invalidateIngredientResults();
+      saveIngredientUi();
       ingredientFrequency = null;
       $('#ingredient-photo-input').value = '';
       $('#ingredient-file-input').value = '';
@@ -3331,7 +3386,7 @@
         ? 'Inserisci la password viewer usata per accedere. La chiave viene conservata cifrata nel browser fino al logout e non abilita funzioni Admin.'
         : 'Inserisci la password Admin per decifrare la chiave Gemini. La sessione viene conservata cifrata nel browser fino al logout.';
       $('#ingredient-ai-password-label').firstChild.textContent = isReader ? 'Password viewer' : 'Password Admin';
-      $('#ingredient-ai-unlock').hidden = false;
+      if ($('#ingredient-ai-unlock').hidden) navigateWithinApp(() => { $('#ingredient-ai-unlock').hidden = false; });
       $('#ingredient-ai-password').focus();
     }
 
@@ -3712,7 +3767,7 @@
     }
 
     function showRecipeDetail(recipe, fromHistory = false) {
-      if (!fromHistory) history.pushState({ ricettarioDetail: 'recipe', id: recipe.id }, '');
+      if (!fromHistory) history.pushState({ ...history.state, ricettarioDetail: 'recipe', id: recipe.id }, '');
       recipeDetailReturnScrollY = window.scrollY;
       selectedRecipeId = recipe.id;
       const content = $('#recipe-detail-content');
@@ -3935,7 +3990,8 @@
         : 'L’ID e il percorso file verranno creati dal nome.';
     }
 
-    function openSourceEditor(source = null) {
+    function openSourceEditor(source = null, fromNavigation = false) {
+      if (!fromNavigation) { navigateWithinApp(() => openSourceEditor(source, true)); return; }
       sourceEditingId = source?.id || null;
       $('#source-form-title').textContent = source ? 'Modifica fonte' : 'Nuova fonte';
       $('#source-label').value = source?.label || '';
@@ -3947,12 +4003,14 @@
         : 'L’ID e il percorso file verranno creati dal nome.';
       $('#source-form').hidden = false;
       setStatus($('#source-editor-status'), '');
+      saveAdminEditors();
       $('#source-label').focus();
     }
 
     function closeSourceEditor() {
       sourceEditingId = null;
       $('#source-form').hidden = true;
+      saveAdminEditors();
       setStatus($('#source-editor-status'), '');
     }
 
@@ -4116,7 +4174,8 @@
       return { title, type: fieldset.querySelector('.section-type').value, items, sections: children };
     }
 
-    function openRecipeEditor(recipe, mode = 'edit') {
+    function openRecipeEditor(recipe, mode = 'edit', fromNavigation = false) {
+      if (!fromNavigation) { navigateWithinApp(() => openRecipeEditor(recipe, mode, true)); return; }
       $('#recipe-form').reset();
       const draft = recipe ? JSON.parse(JSON.stringify(recipe)) : defaultRecipe();
       if (mode === 'duplicate') {
@@ -4139,6 +4198,7 @@
       sections.replaceChildren();
       (draft.sections || []).forEach((section) => sections.appendChild(createSectionEditor(section)));
       $('#recipe-form').hidden = false;
+      saveAdminEditors();
       setStatus($('#recipe-editor-status'), '');
     }
 
@@ -4160,6 +4220,7 @@
             $(`#${id}`).querySelectorAll('input[type="checkbox"]').forEach((input) => { input.checked = selected.has(input.value); });
           });
           setReaderSearchMode(saved.mode);
+          restoreIngredientUi();
         } catch { /* Usa i filtri predefiniti. */ }
       }
       renderRecipes();
@@ -4175,6 +4236,158 @@
 
     function updateReaderSearchLabel(totalRecipes) {
       $('#search-label').textContent = `Cerca tra ${new Intl.NumberFormat('it-IT').format(totalRecipes)} ricette`;
+    }
+
+    function editorSectionSnapshot(fieldset) {
+      return {
+        title: fieldset.querySelector('.section-title').value,
+        type: fieldset.querySelector('.section-type').value,
+        items: fieldset.querySelector('.section-items').value.split('\n'),
+        sections: [...fieldset.querySelector('.section-children').children].map(editorSectionSnapshot)
+      };
+    }
+
+    function saveAdminEditors() {
+      if (session.role !== 'admin' || !adminEditorRestored) return;
+      try {
+        const fields = ['recipe-title', 'recipe-source', 'recipe-category', 'recipe-subcategory', 'recipe-tags', 'recipe-notes', 'recipe-region', 'recipe-geographic-references', 'source-label', 'source-author', 'source-description', 'recipe-commit-message', 'source-commit-message', 'admin-recipe-search', 'admin-recipe-category'];
+        const values = Object.fromEntries(fields.map((id) => [id, $(`#${id}`).value]));
+        sessionStorage.setItem(ADMIN_EDITOR_KEY, JSON.stringify({ values, adminSourceId, editingRecipeId, sourceEditingId,
+          recipeOpen: !$('#recipe-form').hidden, sourceOpen: !$('#source-form').hidden,
+          recipeSourceDisabled: $('#recipe-source').disabled,
+          sections: [...$('#section-editor-list').children].map(editorSectionSnapshot),
+          importOpen: document.querySelector('.recipe-import-panel').open,
+          readers: accessRows.map((entry, index) => ({ ...entry, label: $('#reader-password-list').querySelectorAll('[data-field="label"]')[index]?.value ?? entry.label })) }));
+      } catch (error) {
+        localWriteFailed = true;
+        console.error('Bozza del modulo non salvata.', error);
+        setStatus($('#recipe-admin-status'), 'Impossibile conservare la bozza dopo il refresh.', 'error');
+      }
+    }
+
+    function restoreAdminEditors() {
+      if (adminEditorRestored || session.role !== 'admin') return;
+      adminEditorRestored = true;
+      try {
+        const saved = JSON.parse(sessionStorage.getItem(ADMIN_EDITOR_KEY) || 'null');
+        if (!saved) return;
+        if (sourceById(saved.adminSourceId)) setAdminSource(saved.adminSourceId);
+        if (Array.isArray(saved.readers)) { accessRows = saved.readers; renderAccessRows(); }
+        editingRecipeId = saved.editingRecipeId || null;
+        sourceEditingId = saved.sourceEditingId || null;
+        Object.entries(saved.values || {}).forEach(([id, value]) => { const field = document.getElementById(id); if (field) field.value = value; });
+        $('#recipe-source').disabled = Boolean(saved.recipeSourceDisabled);
+        $('#recipe-form-title').textContent = editingRecipeId ? 'Modifica ricetta' : 'Nuova ricetta';
+        $('#source-form-title').textContent = sourceEditingId ? 'Modifica fonte' : 'Nuova fonte';
+        $('#section-editor-list').replaceChildren(...(saved.sections || []).map(createSectionEditor));
+        $('#recipe-form').hidden = !saved.recipeOpen;
+        $('#source-form').hidden = !saved.sourceOpen;
+        document.querySelector('.recipe-import-panel').open = Boolean(saved.importOpen);
+        updateSourceFormPath();
+        renderAdminRecipeList();
+        if (!readerView.hidden) applyReaderDatasets();
+      } catch (error) { console.error('Bozza del modulo non ripristinata.', error); }
+    }
+
+    function adminDraftId() {
+      let id = sessionStorage.getItem(ADMIN_DRAFT_KEY);
+      if (!id) {
+        id = randomId();
+        sessionStorage.setItem(ADMIN_DRAFT_KEY, id);
+      }
+      return id;
+    }
+
+    function adminDraftTransaction(mode, operation) {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(ADMIN_DRAFT_DB, 1);
+        request.onupgradeneeded = () => request.result.createObjectStore('drafts');
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          const db = request.result;
+          const transaction = db.transaction('drafts', mode);
+          const result = operation(transaction.objectStore('drafts'));
+          transaction.oncomplete = () => { db.close(); resolve(result?.result); };
+          transaction.onerror = transaction.onabort = () => { db.close(); reject(transaction.error); };
+        };
+      });
+    }
+
+    function saveSelectedFiles() {
+      if (!fileDraftRestored || !session.role) return;
+      try {
+        const id = `${adminDraftId()}:files`;
+        const files = { ingredients: ingredientFiles.slice(), recipes: recipeImportFiles.slice() };
+        pendingLocalWrites += 1;
+        fileDraftWrite = fileDraftWrite.then(() => adminDraftTransaction('readwrite', (store) => store.put(files, id)))
+          .catch((error) => { localWriteFailed = true; console.error(error); setStatus($('#content-status'), 'Impossibile conservare i file selezionati dopo il refresh.', 'error'); })
+          .finally(() => { pendingLocalWrites -= 1; });
+      } catch (error) { console.error(error); }
+    }
+
+    async function restoreSelectedFiles() {
+      if (fileDraftRestored) return;
+      fileDraftRestored = true;
+      try {
+        const id = sessionStorage.getItem(ADMIN_DRAFT_KEY);
+        if (!id) return;
+        const files = await adminDraftTransaction('readonly', (store) => store.get(`${id}:files`));
+        if (!files) return;
+        ingredientFiles = Array.isArray(files.ingredients) ? files.ingredients : [];
+        recipeImportFiles = Array.isArray(files.recipes) ? files.recipes : [];
+        renderIngredientFiles();
+        renderRecipeImportFiles();
+        updateIngredientSearchControls();
+        updateAiImportControls();
+      } catch (error) { console.error('File selezionati non ripristinati.', error); }
+    }
+
+    function saveAdminDraft() {
+      if (session.role !== 'admin' || !adminDraftRestored || adminDraftConflict) return;
+      try {
+        const id = adminDraftId();
+        const draft = structuredClone({ catalogSha, catalogDirty, sourceCatalog, adminSourceId,
+          entries: [...sourceDatasets.values()].filter((entry) => entry.recipeDirty || entry.metadataDirty || !entry.sha) });
+        pendingLocalWrites += 1;
+        adminDraftWrite = adminDraftWrite.then(() => adminDraftTransaction('readwrite', (store) => store.put(draft, id)))
+          .catch((error) => { localWriteFailed = true; console.error(error); setStatus($('#recipe-admin-status'), 'Impossibile conservare le modifiche locali dopo il refresh.', 'error'); })
+          .finally(() => { pendingLocalWrites -= 1; });
+      } catch (error) {
+        localWriteFailed = true;
+        console.error(error);
+        setStatus($('#recipe-admin-status'), 'Impossibile conservare le modifiche locali dopo il refresh.', 'error');
+      }
+    }
+
+    async function restoreAdminDraft() {
+      if (adminDraftRestored || session.role !== 'admin') return;
+      adminDraftRestored = true;
+      try {
+        const id = sessionStorage.getItem(ADMIN_DRAFT_KEY);
+        if (!id) return;
+        const draft = await adminDraftTransaction('readonly', (store) => store.get(id));
+        if (!draft || (!draft.catalogDirty && !draft.entries?.length)) return;
+        const conflict = draft.catalogDirty && draft.catalogSha !== catalogSha || draft.entries.some((entry) => {
+          const current = sourceDatasets.get(entry.source.id);
+          return current ? current.sha !== entry.sha : Boolean(entry.sha);
+        });
+        if (conflict) {
+          adminDraftConflict = true;
+          setStatus($('#recipe-admin-status'), 'Le modifiche locali non sono state ripristinate: i dati su GitHub sono cambiati. La bozza locale è ancora conservata.', 'error');
+          return;
+        }
+        if (draft.catalogDirty) { sourceCatalog = draft.sourceCatalog; catalogDirty = true; }
+        draft.entries.forEach((entry) => sourceDatasets.set(entry.source.id, entry));
+        adminSourceId = draft.adminSourceId || adminSourceId;
+        populateAllSourceSelectors();
+        renderSourceList();
+        setAdminSource(adminSourceId);
+        if (!readerView.hidden) applyReaderDatasets();
+        setStatus($('#recipe-admin-status'), 'Modifiche locali non pubblicate ripristinate.', 'ok');
+      } catch (error) {
+        console.error(error);
+        setStatus($('#recipe-admin-status'), 'Impossibile ripristinare le modifiche locali.', 'error');
+      }
     }
 
     async function loadAdminSourceCatalog() {
@@ -4197,12 +4410,15 @@
       populateAllSourceSelectors();
       renderSourceList();
       setAdminSource(adminSourceId);
+      await restoreAdminDraft();
+      restoreAdminEditors();
+      await restoreSelectedFiles();
       if (!readerView.hidden) {
         applyReaderDatasets();
         restoreReaderHistory();
       }
       setReaderContentReadyStatus();
-      setStatus($('#recipe-admin-status'), `Fonti caricate: ${sourceCatalog.length} · ${flattenSourceDatasets().length} ricette.`, 'ok');
+      if (!adminDraftConflict) setStatus($('#recipe-admin-status'), `Fonti caricate: ${sourceCatalog.length} · ${flattenSourceDatasets().length} ricette.`, 'ok');
     }
 
     // Il lettore carica il catalogo e tutti i dataset soltanto dopo lo sblocco della UI.
@@ -4223,6 +4439,7 @@
       }));
       sourceDatasets = new Map(entries);
       ensureUniqueRecipeIds();
+      await restoreSelectedFiles();
       applyReaderDatasets();
       if (session.role === 'admin' && sourceCatalog.length) setAdminSource(adminSourceId || sourceCatalog[0].id);
       if (!readerView.hidden) {
@@ -4288,6 +4505,11 @@
       }
       updateAiImportControls();
       updateIngredientSearchControls();
+      const state = history.state;
+      if (state?.ricettarioView) {
+        document.querySelectorAll('.settings-menu').forEach((menu, index) => { menu.open = index === state.ricettarioSettings; });
+        if (state.ricettarioIngredientUnlock) $('#ingredient-ai-unlock').hidden = false;
+      }
     }
 
     async function reactivateAdminSecrets(password) {
@@ -4375,8 +4597,20 @@
         sessionStorage.removeItem(ADMIN_VIEW_KEY);
         sessionStorage.removeItem(ADMIN_PANEL_KEY);
         sessionStorage.removeItem(READER_UI_KEY);
+        sessionStorage.removeItem(INGREDIENT_UI_KEY);
+        sessionStorage.removeItem(ADMIN_EDITOR_KEY);
+        const draftId = sessionStorage.getItem(ADMIN_DRAFT_KEY);
+        if (draftId) {
+          void adminDraftWrite.then(() => adminDraftTransaction('readwrite', (store) => store.delete(draftId))).catch(console.error);
+          void fileDraftWrite.then(() => adminDraftTransaction('readwrite', (store) => store.delete(`${draftId}:files`))).catch(console.error);
+        }
+        sessionStorage.removeItem(ADMIN_DRAFT_KEY);
       } catch { /* Preferenza non disponibile. */ }
       readerUiRestored = false;
+      fileDraftRestored = false;
+      adminDraftRestored = false;
+      adminDraftConflict = false;
+      adminEditorRestored = false;
       sessionGeneration += 1;
       if (history.state?.ricettarioDetail || history.state?.ricettarioFilter) history.replaceState(null, '');
       markSessionLoggedOut();
@@ -4549,10 +4783,43 @@
       });
     });
     applyTheme(storedTheme(), { persist: false });
-    $('#show-reader-button').addEventListener('click', showReaderView);
-    $('#show-admin-button').addEventListener('click', showAdminView);
-    $('#manual-search-mode-button').addEventListener('click', () => setReaderSearchMode('manual', { focus: true }));
-    $('#ingredient-search-mode-button').addEventListener('click', () => setReaderSearchMode('ingredients', { focus: true }));
+    function navigationSnapshot() {
+      return {
+        ricettarioView: adminView.hidden ? 'reader' : 'admin',
+        ricettarioPanel: document.querySelector('[data-admin-tab].active')?.dataset.adminTab || 'recipes',
+        ricettarioMode: readerSearchMode,
+        ricettarioDetail: !readerView.hidden ? (selectedRecipeId !== null ? 'recipe' : selectedIngredientRecipeId !== null ? 'ingredient' : null) : null,
+        id: !readerView.hidden ? (selectedRecipeId || selectedIngredientRecipeId || null) : null,
+        ricettarioFilter: null,
+        ricettarioCamera: false,
+        ricettarioRecipeEditor: !$('#recipe-form').hidden,
+        ricettarioSourceEditor: !$('#source-form').hidden,
+        ricettarioImport: document.querySelector('.recipe-import-panel').open,
+        ricettarioIngredientUnlock: !$('#ingredient-ai-unlock').hidden,
+        ricettarioIngredientModel: !$('#ingredient-model-picker').hidden,
+        ricettarioRecipeModel: !$('#recipe-model-picker').hidden,
+        ricettarioSettings: [...document.querySelectorAll('.settings-menu')].findIndex((menu) => menu.open)
+      };
+    }
+    function navigateWithinApp(action) {
+      history.replaceState({ ...history.state, ...navigationSnapshot() }, '');
+      action();
+      history.pushState({ ...history.state, ...navigationSnapshot() }, '');
+    }
+    document.querySelectorAll('.settings-menu, .recipe-import-panel').forEach((panel) => {
+      panel.querySelector('summary').addEventListener('click', (event) => {
+        event.preventDefault();
+        navigateWithinApp(() => { panel.open = !panel.open; });
+      });
+    });
+    $('#show-reader-button').addEventListener('click', () => navigateWithinApp(showReaderView));
+    $('#show-admin-button').addEventListener('click', () => navigateWithinApp(showAdminView));
+    $('#manual-search-mode-button').addEventListener('click', () => {
+      if (readerSearchMode !== 'manual') navigateWithinApp(() => setReaderSearchMode('manual', { focus: true }));
+    });
+    $('#ingredient-search-mode-button').addEventListener('click', () => {
+      if (readerSearchMode !== 'ingredients') navigateWithinApp(() => setReaderSearchMode('ingredients', { focus: true }));
+    });
     $('#search-input').addEventListener('input', () => { saveReaderUi(); scheduleRecipeSearch(); });
     $('#random-recipe-button').addEventListener('click', showRandomRecipe);
     $('#load-more-recipes-button').addEventListener('click', () => renderRecipes({ append: true }));
@@ -4631,6 +4898,26 @@
     });
     window.addEventListener('popstate', (event) => {
       const state = event.state;
+      if (state?.ricettarioView && session.role) {
+        $('#recipe-form').hidden = !state.ricettarioRecipeEditor;
+        $('#source-form').hidden = !state.ricettarioSourceEditor;
+        document.querySelector('.recipe-import-panel').open = Boolean(state.ricettarioImport);
+        $('#ingredient-ai-unlock').hidden = !state.ricettarioIngredientUnlock;
+        $('#ingredient-model-picker').hidden = !state.ricettarioIngredientModel;
+        $('#recipe-model-picker').hidden = !state.ricettarioRecipeModel;
+        document.querySelectorAll('.settings-menu').forEach((menu, index) => { menu.open = index === state.ricettarioSettings; });
+        saveAdminEditors();
+        if (state.ricettarioView === 'admin' && session.role === 'admin') {
+          if (adminView.hidden) showAdminView();
+          switchAdminPanel(state.ricettarioPanel || 'recipes');
+        } else {
+          if (readerView.hidden) showReaderView();
+          setReaderSearchMode(state.ricettarioMode);
+        }
+      }
+      if ($('#vlm-camera-dialog').open && !state?.ricettarioCamera) {
+        closeVlmCamera({ fromHistory: true });
+      }
       readerFilterGroups.forEach((groupId) => {
         $(`#${groupId}`).open = !readerView.hidden && state?.ricettarioFilter === groupId;
       });
@@ -4649,6 +4936,13 @@
         $('#ingredient-results').hidden = false;
         restoreWindowScrollImmediately(ingredientDetailReturnScrollY);
       }
+    });
+
+    window.addEventListener('beforeunload', (event) => {
+      const pendingPassword = [...document.querySelectorAll('#reader-password-list input[data-field="password"]')].some((input) => input.value);
+      if (!pendingPassword && !$('#vlm-camera-dialog').open && !pendingLocalWrites && !localWriteFailed && !activeAiRequests) return;
+      event.preventDefault();
+      event.returnValue = '';
     });
 
     const installBanner = $('#install-banner');
@@ -4785,7 +5079,16 @@
     });
     $('#ingredient-clear-button').addEventListener('click', clearIngredientSearch);
     $('#add-ingredient-button').addEventListener('click', addManualIngredient);
-    $('#ingredient-list').addEventListener('input', invalidateIngredientResults);
+    $('#ingredient-list').addEventListener('input', () => {
+      invalidateIngredientResults();
+      detectedIngredients = [...$('#ingredient-list').querySelectorAll('.ingredient-row')].map((row, index) => ({
+        ...(detectedIngredients[index] || {}),
+        name: row.querySelector('.ingredient-name').value,
+        canonicalName: row.querySelector('.ingredient-name').value,
+        quantity: row.querySelector('.ingredient-quantity').value
+      }));
+      saveIngredientUi();
+    });
     $('#ingredient-model-select').addEventListener('change', () => {
       const select = $('#ingredient-model-select');
       if (!select.value) return;
@@ -4858,18 +5161,29 @@
       }
     });
 
+    ['recipe-form', 'source-form', 'admin-recipes-panel', 'admin-sources-panel', 'access-form'].forEach((id) => {
+      const panel = $(`#${id}`);
+      panel.addEventListener('input', saveAdminEditors);
+      panel.addEventListener('change', saveAdminEditors);
+      panel.addEventListener('click', () => setTimeout(saveAdminEditors, 0));
+    });
+    document.querySelector('.recipe-import-panel').addEventListener('toggle', saveAdminEditors);
+
     $('#admin-recipe-search').addEventListener('input', renderAdminRecipeList);
     $('#admin-load-more-recipes-button').addEventListener('click', () => renderAdminRecipeList({ append: true }));
     $('#admin-recipe-category').addEventListener('change', renderAdminRecipeList);
     $('#admin-source-select').addEventListener('change', () => {
       try {
         setAdminSource($('#admin-source-select').value);
+        saveAdminEditors();
       } catch (error) {
         setStatus($('#recipe-admin-status'), error.message, 'error');
       }
     });
     document.querySelectorAll('[data-admin-tab]').forEach((tab) => {
-      tab.addEventListener('click', () => switchAdminPanel(tab.dataset.adminTab));
+      tab.addEventListener('click', () => {
+        if (!tab.classList.contains('active')) navigateWithinApp(() => switchAdminPanel(tab.dataset.adminTab));
+      });
     });
 
     $('#add-recipe-button').addEventListener('click', () => {
@@ -4883,7 +5197,7 @@
 
     $('#add-source-button').addEventListener('click', () => openSourceEditor());
     $('#source-label').addEventListener('input', updateSourceFormPath);
-    $('#cancel-source-button').addEventListener('click', closeSourceEditor);
+    $('#cancel-source-button').addEventListener('click', () => navigateWithinApp(closeSourceEditor));
     $('#source-list').addEventListener('click', (event) => {
       const button = event.target.closest('button[data-action="edit-source"]');
       if (!button) return;
@@ -4922,6 +5236,7 @@
           $('#source-path').textContent = `ID: ${source.id} · file: ${source.path}`;
         }
         catalogDirty = true;
+        saveAdminDraft();
         populateAllSourceSelectors();
         renderSourceList();
         setAdminSource(adminSourceId, { closeEditor: false });
@@ -4954,6 +5269,7 @@
     $('#recipe-camera-button').addEventListener('click', () => { void openVlmCamera('recipe'); });
     $('#recipe-clear-files-button').addEventListener('click', () => {
       recipeImportFiles = [];
+      saveSelectedFiles();
       $('#recipe-source-file').value = '';
       $('#recipe-file-input').value = '';
       $('#recipe-pdf-input').value = '';
@@ -5088,6 +5404,7 @@
         }
         entry.recipes.splice(recipeIndex, 1);
         entry.recipeDirty = true;
+        saveAdminDraft();
         if (editingRecipeId === recipe.id) $('#recipe-form').hidden = true;
         populateCategoryFilter();
         populateAdminCategoryFilter();
@@ -5133,6 +5450,7 @@
           if (sourceId !== adminSourceId) setAdminSource(sourceId, { closeEditor: false });
         }
         target.recipeDirty = true;
+        saveAdminDraft();
         editingRecipeId = recipe.id;
         populateCategoryFilter();
         populateAdminCategoryFilter();
@@ -5144,17 +5462,19 @@
       }
     });
 
-    $('#cancel-recipe-button').addEventListener('click', () => {
-      editingRecipeId = null;
+    $('#cancel-recipe-button').addEventListener('click', () => navigateWithinApp(() => {
       $('#recipe-form').hidden = true;
+      saveAdminEditors();
       setStatus($('#recipe-editor-status'), '');
-    });
+    }));
 
     $('#reload-recipes-button').addEventListener('click', async () => {
       try {
         $('#recipe-form').hidden = true;
         editingRecipeId = null;
         await loadAdminSourceCatalog();
+        saveAdminDraft();
+        saveAdminEditors();
       } catch (error) {
         setStatus($('#recipe-admin-status'), error.message, 'error');
       }
@@ -5176,6 +5496,7 @@
         entry.sha = result.content?.sha || entry.sha;
         entry.recipeDirty = false;
         entry.metadataDirty = false;
+        saveAdminDraft();
         recipeFileSha = entry.sha;
         setStatus($('#recipe-admin-status'), `Dataset ${entry.source.label} pubblicato e commit creato.`, 'ok');
       } catch (error) {
@@ -5187,6 +5508,8 @@
       try {
         closeSourceEditor();
         await loadAdminSourceCatalog();
+        saveAdminDraft();
+        saveAdminEditors();
       } catch (error) {
         setStatus($('#source-admin-status'), error.message, 'error');
       }
@@ -5211,11 +5534,13 @@
           const result = await githubPutFile(entry.path, payload, entry.sha, message);
           entry.sha = result.content?.sha || entry.sha;
           entry.metadataDirty = false;
+          saveAdminDraft();
         }
         const catalogPayload = JSON.stringify({ version: 1, sources: sourceCatalog }, null, 2) + '\n';
         const result = await githubPutFile(catalogPath, catalogPayload, catalogSha, message);
         catalogSha = result.content?.sha || catalogSha;
         catalogDirty = false;
+        saveAdminDraft();
         renderSourceList();
         populateAllSourceSelectors();
         setAdminSource(adminSourceId, { closeEditor: false });
@@ -5228,6 +5553,7 @@
     $('#add-reader-button').addEventListener('click', () => {
       accessRows.push({ id: randomId(), label: '', iterations: KDF_ITERATIONS });
       renderAccessRows();
+      saveAdminEditors();
       $('#reader-password-list input[data-field="password"]:last-of-type')?.focus();
     });
 
@@ -5236,6 +5562,7 @@
       if (!button) return;
       accessRows.splice(Number(button.dataset.index), 1);
       renderAccessRows();
+      saveAdminEditors();
     });
 
     // Le password nuove vengono hashate nel browser prima del PUT di config.json.
@@ -5275,6 +5602,7 @@
         appConfig = nextConfig;
         accessRows = nextReaders.map((entry) => ({ ...entry }));
         renderAccessRows();
+        saveAdminEditors();
         const viewersWithoutAi = aiConfigured ? nextReaders.filter((entry) => !nextReaderCrypto[entry.id]).length : 0;
         setStatus(status, viewersWithoutAi
           ? `Password lettori aggiornate. Reinserisci le password di ${viewersWithoutAi} viewer per abilitarli alla ricerca visuale.`
