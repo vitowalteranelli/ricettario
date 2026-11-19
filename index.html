@@ -1383,6 +1383,8 @@
     const SESSION_ROLE_KEY = 'ricettario-session-role-v2';
     const ADMIN_VIEW_KEY = 'ricettario-admin-view-v1';
     const ADMIN_PANEL_KEY = 'ricettario-admin-panel-v1';
+    const READER_UI_KEY = 'ricettario-reader-ui-v1';
+    let readerUiRestored = false;
     const READER_SESSION_KEY = 'ricettario-reader-session-v1';
     const SESSION_SECRETS_DB = 'ricettario-session-secrets-v1';
     const SESSION_SECRETS_STORE = 'sessions';
@@ -3725,6 +3727,23 @@
       });
     }
 
+    function restoreReaderHistory() {
+      const state = history.state;
+      if (state?.ricettarioFilter && ['category-filter-group', 'source-filter-group'].includes(state.ricettarioFilter)) {
+        $(`#${state.ricettarioFilter}`).open = true;
+      }
+      if (!state?.ricettarioDetail) return;
+      const recipe = recipeDataset.find((item) => item.id === state.id);
+      if (!recipe) return;
+      if (state.ricettarioDetail === 'ingredient') {
+        setReaderSearchMode('ingredients');
+        showIngredientRecipeDetail(recipe, true);
+      } else if (state.ricettarioDetail === 'recipe') {
+        setReaderSearchMode('manual');
+        showRecipeDetail(recipe, true);
+      }
+    }
+
     function showRandomRecipe() {
       const categories = selectedReaderFilterValues('category-filter-options');
       const sourceIds = selectedReaderFilterValues('source-filter-options');
@@ -3751,6 +3770,7 @@
       const ingredientsActive = nextMode === 'ingredients';
       const changed = readerSearchMode !== nextMode;
       readerSearchMode = nextMode;
+      if (readerUiRestored) saveReaderUi();
       $('#ingredient-search-panel').hidden = !ingredientsActive;
       $('#manual-search-view').hidden = ingredientsActive;
       $('#manual-search-mode-button').setAttribute('aria-pressed', String(!ingredientsActive));
@@ -3770,6 +3790,17 @@
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (!ingredientsActive) $('#search-input').focus();
       }
+    }
+
+    function saveReaderUi() {
+      try {
+        sessionStorage.setItem(READER_UI_KEY, JSON.stringify({
+          query: $('#search-input').value,
+          categories: selectedReaderFilterValues('category-filter-options'),
+          sources: selectedReaderFilterValues('source-filter-options'),
+          mode: readerSearchMode
+        }));
+      } catch { /* Preferenza non disponibile. */ }
     }
 
     function scheduleRecipeSearch() {
@@ -4119,6 +4150,18 @@
       updateReaderSearchLabel(recipeDataset.length);
       populateAllSourceSelectors();
       populateCategoryFilter();
+      if (!readerUiRestored) {
+        readerUiRestored = true;
+        try {
+          const saved = JSON.parse(sessionStorage.getItem(READER_UI_KEY) || '{}');
+          $('#search-input').value = typeof saved.query === 'string' ? saved.query : '';
+          [['category-filter-options', saved.categories], ['source-filter-options', saved.sources]].forEach(([id, values]) => {
+            const selected = new Set(Array.isArray(values) ? values : []);
+            $(`#${id}`).querySelectorAll('input[type="checkbox"]').forEach((input) => { input.checked = selected.has(input.value); });
+          });
+          setReaderSearchMode(saved.mode);
+        } catch { /* Usa i filtri predefiniti. */ }
+      }
       renderRecipes();
       renderAdminRecipeList();
       renderSourceList();
@@ -4154,7 +4197,10 @@
       populateAllSourceSelectors();
       renderSourceList();
       setAdminSource(adminSourceId);
-      if (!readerView.hidden) applyReaderDatasets();
+      if (!readerView.hidden) {
+        applyReaderDatasets();
+        restoreReaderHistory();
+      }
       setReaderContentReadyStatus();
       setStatus($('#recipe-admin-status'), `Fonti caricate: ${sourceCatalog.length} · ${flattenSourceDatasets().length} ricette.`, 'ok');
     }
@@ -4179,6 +4225,10 @@
       ensureUniqueRecipeIds();
       applyReaderDatasets();
       if (session.role === 'admin' && sourceCatalog.length) setAdminSource(adminSourceId || sourceCatalog[0].id);
+      if (!readerView.hidden) {
+        if (session.role === 'admin') applyReaderDatasets();
+        restoreReaderHistory();
+      }
       setReaderContentReadyStatus();
     }
 
@@ -4324,8 +4374,11 @@
       try {
         sessionStorage.removeItem(ADMIN_VIEW_KEY);
         sessionStorage.removeItem(ADMIN_PANEL_KEY);
+        sessionStorage.removeItem(READER_UI_KEY);
       } catch { /* Preferenza non disponibile. */ }
+      readerUiRestored = false;
       sessionGeneration += 1;
+      if (history.state?.ricettarioDetail || history.state?.ricettarioFilter) history.replaceState(null, '');
       markSessionLoggedOut();
       await clearRememberedSessionSecrets();
       document.querySelectorAll('.settings-menu[open]').forEach((menu) => { menu.open = false; });
@@ -4500,11 +4553,11 @@
     $('#show-admin-button').addEventListener('click', showAdminView);
     $('#manual-search-mode-button').addEventListener('click', () => setReaderSearchMode('manual', { focus: true }));
     $('#ingredient-search-mode-button').addEventListener('click', () => setReaderSearchMode('ingredients', { focus: true }));
-    $('#search-input').addEventListener('input', scheduleRecipeSearch);
+    $('#search-input').addEventListener('input', () => { saveReaderUi(); scheduleRecipeSearch(); });
     $('#random-recipe-button').addEventListener('click', showRandomRecipe);
     $('#load-more-recipes-button').addEventListener('click', () => renderRecipes({ append: true }));
     ['#category-filter-options', '#source-filter-options'].forEach((selector) => {
-      $(selector).addEventListener('change', renderRecipes);
+      $(selector).addEventListener('change', () => { saveReaderUi(); renderRecipes(); });
     });
     const readerFilterGroups = ['category-filter-group', 'source-filter-group'];
     function closeReaderFilter(group, { focus = false, fromHistory = false } = {}) {
@@ -4537,6 +4590,7 @@
       ['#category-filter-options', '#source-filter-options'].forEach((selector) => {
         $(selector).querySelectorAll('input[type="checkbox"]:checked').forEach((input) => { input.checked = false; });
       });
+      saveReaderUi();
       renderRecipes();
     });
     document.addEventListener('pointerdown', (event) => {
@@ -4554,6 +4608,7 @@
       clearTimeout(recipeSearchTimer);
       recipeSearchTimer = null;
       $('#search-input').value = '';
+      saveReaderUi();
       renderRecipes();
       $('#search-input').focus();
     });
