@@ -1381,6 +1381,8 @@
     const AI_MAX_RECIPE_TOTAL_BYTES = 80 * 1024 * 1024;
     const RECIPE_BATCH_SIZE = 100;
     const SESSION_ROLE_KEY = 'ricettario-session-role-v2';
+    const ADMIN_VIEW_KEY = 'ricettario-admin-view-v1';
+    const ADMIN_PANEL_KEY = 'ricettario-admin-panel-v1';
     const READER_SESSION_KEY = 'ricettario-reader-session-v1';
     const SESSION_SECRETS_DB = 'ricettario-session-secrets-v1';
     const SESSION_SECRETS_STORE = 'sessions';
@@ -4152,6 +4154,7 @@
       populateAllSourceSelectors();
       renderSourceList();
       setAdminSource(adminSourceId);
+      if (!readerView.hidden) applyReaderDatasets();
       setReaderContentReadyStatus();
       setStatus($('#recipe-admin-status'), `Fonti caricate: ${sourceCatalog.length} · ${flattenSourceDatasets().length} ricette.`, 'ok');
     }
@@ -4216,8 +4219,14 @@
       updatePageTitle(role);
       loginView.hidden = true;
       const isAdmin = role === 'admin';
-      readerView.hidden = isAdmin;
-      adminView.hidden = !isAdmin;
+      let savedView = 'reader';
+      let savedPanel = 'recipes';
+      try {
+        savedView = sessionStorage.getItem(ADMIN_VIEW_KEY) || 'reader';
+        savedPanel = sessionStorage.getItem(ADMIN_PANEL_KEY) || 'recipes';
+      } catch { /* Usa la vista predefinita. */ }
+      readerView.hidden = isAdmin && savedView === 'admin';
+      adminView.hidden = !isAdmin || savedView !== 'admin';
       $('#admin-session-notice').hidden = !(isAdmin && restored);
       $('#show-admin-button').hidden = !isAdmin;
       if (role === 'admin') {
@@ -4225,7 +4234,7 @@
         renderAccessRows();
         populateAllSourceSelectors();
         renderSourceList();
-        switchAdminPanel('recipes');
+        switchAdminPanel(['recipes', 'sources', 'access'].includes(savedPanel) ? savedPanel : 'recipes');
       }
       updateAiImportControls();
       updateIngredientSearchControls();
@@ -4270,6 +4279,7 @@
     }
 
     function switchAdminPanel(panelName) {
+      try { sessionStorage.setItem(ADMIN_PANEL_KEY, panelName); } catch { /* Preferenza non disponibile. */ }
       document.querySelectorAll('[data-admin-panel]').forEach((panel) => {
         panel.hidden = panel.dataset.adminPanel !== panelName;
       });
@@ -4278,11 +4288,12 @@
         tab.classList.toggle('active', active);
         tab.setAttribute('aria-selected', String(active));
       });
-      if (panelName === 'access') $('#reader-password-list input[data-field="password"]')?.focus();
+      if (panelName === 'access' && !adminView.hidden) $('#reader-password-list input[data-field="password"]')?.focus();
     }
 
     function showAdminView() {
       if (session.role !== 'admin') return;
+      try { sessionStorage.setItem(ADMIN_VIEW_KEY, 'admin'); } catch { /* Preferenza non disponibile. */ }
       document.querySelectorAll('.settings-menu[open]').forEach((menu) => { menu.open = false; });
       if (adminSourceId) setAdminSource(adminSourceId, { closeEditor: false });
       adminView.hidden = false;
@@ -4293,6 +4304,9 @@
 
     function showReaderView() {
       if (!session.role) return;
+      if (session.role === 'admin') {
+        try { sessionStorage.setItem(ADMIN_VIEW_KEY, 'reader'); } catch { /* Preferenza non disponibile. */ }
+      }
       document.querySelectorAll('.settings-menu[open]').forEach((menu) => { menu.open = false; });
       applyReaderDatasets();
       setReaderContentReadyStatus();
@@ -4307,6 +4321,10 @@
     }
 
     async function logout() {
+      try {
+        sessionStorage.removeItem(ADMIN_VIEW_KEY);
+        sessionStorage.removeItem(ADMIN_PANEL_KEY);
+      } catch { /* Preferenza non disponibile. */ }
       sessionGeneration += 1;
       markSessionLoggedOut();
       await clearRememberedSessionSecrets();
@@ -5320,7 +5338,7 @@
                   setStatus($('#content-status'), `Ricettario offline non disponibile: ${offlineError.message}`, 'error');
                 }
                 setStatus($('#recipe-admin-status'), 'La configurazione è cambiata. Inserisci la password Admin per riattivare la sessione.', 'error');
-                $('#admin-reauth-password').focus();
+                if (!adminView.hidden) $('#admin-reauth-password').focus();
               } else {
                 appConfig = latestConfig;
                 configSha = latestConfigFile.sha;
@@ -5341,7 +5359,7 @@
                   setStatus($('#content-status'), `Ricettario offline non disponibile: ${offlineError.message}`, 'error');
                 }
                 setStatus($('#recipe-admin-status'), 'GitHub non accetta più le credenziali salvate. Inserisci la password Admin per ripristinare la sessione.', 'error');
-                $('#admin-reauth-password').focus();
+                if (!adminView.hidden) $('#admin-reauth-password').focus();
               } else {
                 try {
                   await loadReaderContent();
@@ -5357,11 +5375,11 @@
             try {
               await loadReaderContent();
               setStatus($('#recipe-admin-status'), 'Inserisci la password Admin per ripristinare la sessione.', 'ok');
-              $('#admin-reauth-password').focus();
+              if (!adminView.hidden) $('#admin-reauth-password').focus();
             } catch (error) {
               setStatus($('#content-status'), error.message, 'error');
               setStatus($('#recipe-admin-status'), 'Sessione Admin senza credenziali. Inserisci la password per ripristinarla.', 'error');
-              $('#admin-reauth-password').focus();
+              if (!adminView.hidden) $('#admin-reauth-password').focus();
             }
           } else {
             const rememberedReader = await restoreRememberedSessionSecrets('reader');
